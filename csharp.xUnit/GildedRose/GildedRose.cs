@@ -18,52 +18,45 @@ public class GildedRose
     {
         foreach (var item in Items)
         {
-            if (item.Name == "Sulfuras, Hand of Ragnaros")
+            switch (item.Name)
             {
-                continue;
-            }
+                case "Sulfuras, Hand of Ragnaros":
+                    break;
 
-            if (item.Name != AgedBrie && item.Name != BackstagePass)
-            {
-                DecreaseQuality(item);
-            }
-            else
-            {
-                IncreaseQuality(item);
+                case AgedBrie:
+                    IncreaseQuality(item);
+                    item.SellIn = item.SellIn - 1;
+                    if (item.SellIn < 0)
+                    {
+                        IncreaseQuality(item);
+                    }
+                    break;
 
-                if (item.Name == BackstagePass)
-                {
+                case BackstagePass:
+                    IncreaseQuality(item);
                     if (item.SellIn < 11)
                     {
                         IncreaseQuality(item);
                     }
-
                     if (item.SellIn < 6)
                     {
                         IncreaseQuality(item);
                     }
-                }
-            }
+                    item.SellIn = item.SellIn - 1;
+                    if (item.SellIn < 0)
+                    {
+                        item.Quality = 0;
+                    }
+                    break;
 
-            item.SellIn = item.SellIn - 1;
-
-            if (item.SellIn < 0)
-            {
-                if (item.Name != AgedBrie)
-                {
-                    if (item.Name != BackstagePass)
+                default:
+                    DecreaseQuality(item);
+                    item.SellIn = item.SellIn - 1;
+                    if (item.SellIn < 0)
                     {
                         DecreaseQuality(item);
                     }
-                    else
-                    {
-                        item.Quality = item.Quality - item.Quality;
-                    }
-                }
-                else
-                {
-                    IncreaseQuality(item);
-                }
+                    break;
             }
         }
     }
