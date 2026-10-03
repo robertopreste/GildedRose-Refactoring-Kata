@@ -4,6 +4,9 @@ namespace GildedRoseKata;
 
 public class GildedRose
 {
+    private const string AgedBrie = "Aged Brie";
+    private const string BackstagePass = "Backstage passes to a TAFKAL80ETC concert";
+
     IList<Item> Items;
 
     public GildedRose(IList<Item> Items)
@@ -20,7 +23,7 @@ public class GildedRose
                 continue;
             }
 
-            if (item.Name != "Aged Brie" && item.Name != "Backstage passes to a TAFKAL80ETC concert")
+            if (item.Name != AgedBrie && item.Name != BackstagePass)
             {
                 if (item.Quality > 0)
                 {
@@ -33,7 +36,7 @@ public class GildedRose
                 {
                     item.Quality = item.Quality + 1;
 
-                    if (item.Name == "Backstage passes to a TAFKAL80ETC concert")
+                    if (item.Name == BackstagePass)
                     {
                         if (item.SellIn < 11)
                         {
@@ -58,9 +61,9 @@ public class GildedRose
 
             if (item.SellIn < 0)
             {
-                if (item.Name != "Aged Brie")
+                if (item.Name != AgedBrie)
                 {
-                    if (item.Name != "Backstage passes to a TAFKAL80ETC concert")
+                    if (item.Name != BackstagePass)
                     {
                         if (item.Quality > 0)
                         {
