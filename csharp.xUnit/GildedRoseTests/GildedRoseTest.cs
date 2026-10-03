@@ -10,11 +10,13 @@ public class GildedRoseTest
     private const string AgedBrie = "Aged Brie";
     private const string BackstagePass = "Backstage passes to a TAFKAL80ETC concert";
     private const string Sulfuras = "Sulfuras, Hand of Ragnaros";
+    private const string ConjuredItem = "Conjured Mana Cake";
 
     [Theory]
     [InlineData(NormalItem)]
     [InlineData(AgedBrie)]
     [InlineData(BackstagePass)]
+    [InlineData(ConjuredItem)]
     public void SellIn_DecreasesByOneEachDay(string name)
     {
         var item = UpdateOnce(name, sellIn: 5, quality: 10);
@@ -43,11 +45,43 @@ public class GildedRoseTest
     }
 
     [Theory]
-    [InlineData(5, 0)]
-    [InlineData(0, 1)]
-    public void Quality_IsNeverNegative(int sellIn, int quality)
+    [InlineData(10, 20, 18)]
+    [InlineData(1, 20, 18)]
+    public void ConjuredItem_QualityDegradesTwiceAsFastAsNormalItem_BeforeSellByDate(int sellIn, int quality, int expectedQuality)
     {
-        var item = UpdateOnce(NormalItem, sellIn, quality);
+        var item = UpdateOnce(ConjuredItem, sellIn, quality);
+
+        Assert.Equal(expectedQuality, item.Quality);
+    }
+
+    [Theory]
+    [InlineData(0, 20, 16)]
+    [InlineData(-1, 20, 16)]
+    public void ConjuredItem_QualityDegradesTwiceAsFastAsNormalItem_OnceSellByDateHasPassed(int sellIn, int quality, int expectedQuality)
+    {
+        var item = UpdateOnce(ConjuredItem, sellIn, quality);
+
+        Assert.Equal(expectedQuality, item.Quality);
+    }
+
+    [Theory]
+    [InlineData("Conjured Sword")]
+    [InlineData("Conjured Aged Brie")]
+    public void ConjuredItem_IsRecognisedByNamePrefix(string name)
+    {
+        var item = UpdateOnce(name, sellIn: 5, quality: 10);
+
+        Assert.Equal(8, item.Quality);
+    }
+
+    [Theory]
+    [InlineData(NormalItem, 5, 0)]
+    [InlineData(NormalItem, 0, 1)]
+    [InlineData(ConjuredItem, 5, 1)]
+    [InlineData(ConjuredItem, 0, 3)]
+    public void Quality_IsNeverNegative(string name, int sellIn, int quality)
+    {
+        var item = UpdateOnce(name, sellIn, quality);
 
         Assert.Equal(0, item.Quality);
     }
