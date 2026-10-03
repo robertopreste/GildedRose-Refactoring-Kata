@@ -5,6 +5,14 @@ value in this document was cross-checked by running the original code over the
 grid `SellIn ∈ {-1, 0, 1, 5, 6, 10, 11}` × `Quality ∈ {-1, 0, 1, 2, 47, 48, 49, 50, 51, 80}`
 for each item name below.
 
+> **Update (Conjured feature):** this document characterises the code *before*
+> Conjured items were implemented. Conjured items are now a separate category:
+> any name starting with `Conjured` (case-sensitive) degrades twice as fast as
+> a normal item. Entries Q2 and M4, and the other Conjured mentions marked
+> *superseded* below, describe the pre-feature behaviour. For the current
+> Conjured rules and edge cases, see `docs/ai/conjured-feature-analysis.md`.
+> Everything else in this document still describes the current behaviour.
+
 ## 1. How the algorithm is structured
 
 For each item, independently and in list order, `UpdateQuality()` runs three
@@ -27,7 +35,9 @@ Consequences:
 ## 2. Item categories and how they are recognised
 
 The code matches items by **exact, case-sensitive string equality** on the
-full name. Prefixes and partial matches are not recognised.
+full name. Prefixes and partial matches are not recognised. **Superseded for
+Conjured only:** Conjured items are matched by the `Conjured` prefix. The three
+categories below still require the exact full name.
 
 | Category | Recognised name (exact) | Anything else with a similar name |
 |---|---|---|
@@ -35,7 +45,7 @@ full name. Prefixes and partial matches are not recognised.
 | Backstage pass | `Backstage passes to a TAFKAL80ETC concert` | `Backstage passes to another concert` → Normal |
 | Sulfuras | `Sulfuras, Hand of Ragnaros` | `Sulfuras` → Normal |
 | Normal | any other name, including `null` | – |
-| *(Conjured)* | *not implemented*: `Conjured Mana Cake` → Normal | – |
+| *(Conjured)* | *not implemented*: `Conjured Mana Cake` → Normal. **Superseded:** now its own category, any name starting with `Conjured` | – |
 
 ## 3. Rules per category
 
@@ -96,7 +106,7 @@ needs a pinning test.
 | # | Quirk | Spec says | Code does |
 |---|---|---|---|
 | Q1 | Exact-name matching | "Sulfuras", "Backstage passes", "Aged Brie" read like categories | Only the three exact full strings are special. Case and wording variants are Normal. |
-| Q2 | Conjured not implemented | Conjured degrades ×2 | `Conjured Mana Cake` behaves as Normal (expected, since this is the future feature) |
+| Q2 | Conjured not implemented | Conjured degrades ×2 | `Conjured Mana Cake` behaves as Normal (expected, since this is the future feature). **Superseded:** Conjured items are now implemented. |
 | Q3 | Brie gains ×2 after sell date | Spec only says Brie "increases" | +2/day once `s <= 0` |
 | Q4 | Expiry judged after decrement | "once the sell by date has passed" | `s = 0` already counts as expired on this update |
 | Q5 | Bounds are guards, not clamps | Quality is never negative / never > 50 | Out-of-range input persists: Normal `q=80` decays from 80, Brie `q=80` stays 80, Normal `q=-1` stays −1 |
@@ -119,7 +129,7 @@ Each row is a candidate test case: input `(Name, SellIn, Quality)` and the
 expected values after **one** `UpdateQuality()`. All of these come from the
 probe of the original code.
 
-### Normal (`+5 Dexterity Vest`; same for `Elixir of the Mongoose`, `Conjured Mana Cake`, …)
+### Normal (`+5 Dexterity Vest`; same for `Elixir of the Mongoose`, …; `Conjured Mana Cake` before the Conjured feature)
 
 | ID | s | q | → s | → q | Rule exercised |
 |---|---|---|---|---|---|
@@ -186,7 +196,7 @@ probe of the original code.
 | M1 | `aged brie` | 5 | 10 | 4 | 9 | Normal |
 | M2 | `Backstage passes to another concert` | 5 | 10 | 4 | 9 | Normal |
 | M3 | `Sulfuras` | 5 | 10 | 4 | 9 | Normal |
-| M4 | `Conjured Mana Cake` | 3 | 6 | 2 | 5 | Normal (current behaviour) |
+| M4 | `Conjured Mana Cake` | 3 | 6 | 2 | 5 | Normal (pre-feature behaviour). **Superseded:** now (3, 6) → (2, 4) |
 
 ## 6. Golden-master input space (proposal for the next step)
 
