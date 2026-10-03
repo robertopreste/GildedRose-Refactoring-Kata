@@ -1,0 +1,3498 @@
+ ▐▛███▛█   Claude Code v2.1.288
+▝▜██████▀  Opus 5.5 · Claude Pro
+ ▝▝   ▝▝   ~/Data/Various/GildedRose-Refactoring-Kata
+
+▎ Your voice can help guide AI
+▎ Take 15 min to share your experiences with Anthropic Interviewer. Start now
+
+❯ We are going to work on refactoring this codebase, specifically the code in   
+  csharp.xUnit/. Follow the guidance provided in AGENTS.md and read the         
+  requirements in GildedRoseRequirements.md.                                    
+  We will start by performing a detailed analysis of the requirements and       
+  current implementation. Create a behaviour model that maps each item type to  
+  its rules, describes how their properties change and any constraints and      
+  boundaries, and highlights any unusual behaviour. Create a behaviour matrix   
+  that we can use later to design tests.                                        
+
+  Listed 1 directory, ran 1 shell command (ctrl+o to expand)
+
+⏺ Now let me run the existing tests to see the baseline state.
+
+⏺ Bash(dotnet --version && dotnet test 2>&1 | tail -40)
+  ⎿  10.0.401
+       GildedRose -> /Users/robertopreste/Data/Various/GildedRose-Refactori
+     ng-Kata/csharp.xUnit/GildedRose/bin/Debug/net10.0/GildedRose.dll
+     … +38 lines (ctrl+o to expand)
+  ⎿  Created csharp.xUnit/GildedRoseTests/ApprovalTest.Foo.verified.txt (+1
+     -0)
+      1 +                                                                
+
+⏺ Baseline check shows 2 of 3 tests failing on the untouched code, both kata
+  placeholders. Next I'll run the original UpdateQuality() against a grid of
+  inputs using a probe script in the scratchpad to verify my understanding of
+  the code.
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+⏺ The probe matched my reading of the code in every cell. Now I'll write the
+  behaviour model and matrix to a file in the repo.
+
+⏺ Write(docs/behaviour-model.md)
+  ⎿  Wrote 223 lines to docs/behaviour-model.md
+       1 # Gilded Rose: behaviour model of the legacy `UpdateQuality()`
+       3 Source of truth: `csharp.xUnit/GildedRose/GildedRose.cs` (unmodi
+         fied). Every
+       4 value in this document was cross-checked by running the original
+       5 grid `SellIn ∈ {-1, 0, 1, 5, 6, 10, 11}` × `Quality ∈ {-1, 0, 1,
+          2, 47, 48, 49, 50, 51, 80}`
+       7 
+       8 ## 1. How the algorithm is structured
+       9 
+         ` runs three
+     … +278 lines (ctrl+o to expand)
+
+⏺ I wrote the behaviour model and test matrix to docs/behaviour-model.md. It's a
+  new file and not committed. I didn't change any production or test code.
+
+  I checked the analysis against the code itself, not just by reading it. A
+  throwaway script outside the repo ran the original UpdateQuality() on every
+  combination of item name × SellIn {−1, 0, 1, 5, 6, 10, 11} × Quality {−1, 0,
+  1, 2, 47–51, 80}. Every value in the document comes from that run.
+
+  How the code works: it handles each item in three phases:
+  1. It changes the quality using the sell-by days before they count down.
+  2. It lowers SellIn by one.
+  3. If SellIn is now negative, it changes the quality a second time.
+
+  So an item with SellIn = 0 already gets the expired rate on that day.
+
+  ┌───────────┬──────────────────────────────────────────────────┬──────────┐
+  │ Category  │              Quality change per day              │  SellIn  │
+  ├───────────┼──────────────────────────────────────────────────┼──────────┤
+  │ Normal    │ −1, or −2 once expired; stops at 0               │ −1       │
+  ├───────────┼──────────────────────────────────────────────────┼──────────┤
+  │ Aged Brie │ +1, or +2 once expired; stops at 50              │ −1       │
+  ├───────────┼──────────────────────────────────────────────────┼──────────┤
+  │ Backstage │ +1 (11+ days left), +2 (6–10), +3 (1–5), 0 after │ −1       │
+  │           │  the concert                                     │          │
+  ├───────────┼──────────────────────────────────────────────────┼──────────┤
+  │ Sulfuras  │ no change                                        │ no       │
+  │           │                                                  │ change   │
+  └───────────┴──────────────────────────────────────────────────┴──────────┘
+
+  Unusual behaviour that the refactoring must keep (the full list is Q1–Q14 in
+  the doc):
+  - Exact name match: only the three full, case-sensitive names get special
+    rules. aged brie, Sulfuras and Backstage passes to another concert all
+    behave as normal items.
+  - Conjured isn't implemented: Conjured Mana Cake currently behaves as a normal
+    item.
+  - Aged Brie gains +2 a day after its sell-by date. The requirements don't say
+    this.
+  - The 0 and 50 limits are only checked when quality changes; out-of-range 
+    values are never corrected. A normal item at 80 drops to 79, Brie at 80
+    stays at 80, and a negative quality on a normal item stays negative.
+  - Backstage passes at 50 or above stop changing until the concert, then drop 
+    to 0. The drop to 0 also applies to negative values.
+  - Sulfuras keeps whatever quality it's given. It isn't forced to 80.
+
+  Behaviour matrix: section 5 has 44 one-day test cases, with IDs N1–10, B1–10,
+  P1–16, S1–4 and M1–4. Section 6 proposes the inputs for the golden master,
+  including a few extra values beyond the ones in AGENTS.md so that multi-day
+  runs cross every threshold from both sides.
+
+  Current test state: I ran dotnet test and got 2 failed, 1 passed. The two
+  failures come with the kata, not from anything I did:
+  - GildedRoseTest.foo checks for the name "fixme".
+  - ApprovalTest.Foo has no approved baseline file.
+
+  Also, the snapshot library Verify leaves out fields that have default values
+  (such as Quality: 0). So the golden master should write out its own plain-text
+  output instead of relying on Verify's default formatting.
+
+  Decision needed: AGENTS.md rule 6 says not to edit a failing test to make it
+  pass, but these two are kata starter tests, not tests of the shop's behaviour.
+  Can I replace them when I add the golden master, so the suite starts green?
+
+✻ Baked for 2m 2s · done 10:07 AM
+
+❯ yes, replace them when adding the golden master. Before writing any tests,    
+  let's design the testing strategy to make sure we keep the expected behaviour 
+  unchanged during refactoring. Use the existing requirements, the current      
+  implementation and the behaviour model as your sources. Design focused tests  
+  that explicitly test the business rules, and for each of them explain which   
+  business rule it documents; prefer a small number of high-value tests over    
+  exhaustive enumeration. Identify legacy behaviour that are useful to capture  
+  before refactoring, even though they might not necessarily be requirements.   
+  Do not create tests for pathological cases (e.g. null list elements), unless  
+  there is a clear reason to do so. Assess the existing approval tests and what 
+  they protect, needs for expanding them, what is lacking. Finally propose the  
+  test suite we should implement in the next step; use parameterised tests      
+  where they make the rule clearer, without forcing unrelated behaviours into   
+  one test.                                                                     
+
+⏺ Before designing, I'll check what the existing ThirtyDays snapshot actually
+  covers.
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+⏺ Correcting my earlier claim: ThirtyDays actually covers most main rules,
+  including every Backstage threshold, the 50-truncation, and the floor/cap—only
+  missing legacy quirks. I'll write this up as the strategy doc.
+
+⏺ Write(docs/testing-strategy.md)
+  ⎿  Wrote 210 lines to docs/testing-strategy.md
+      1 # Gilded Rose: testing strategy for the refactoring
+      2 
+        `, and
+      4 `docs/behaviour-model.md` (IDs such as `Q5` or `P11` refer to tha
+        t document).
+      6 ## 1. Goal and principles
+      7 
+      8 The tests must let us restructure `UpdateQuality()` freely while 
+      9 **any** change in observable behaviour, including the legacy quir
+        ks.
+     … +330 lines (ctrl+o to expand)
+
+⏺ I wrote the testing strategy to docs/testing-strategy.md. Nothing is
+  implemented yet, and I made no changes to code or tests.
+
+  Three layers, each with a different job:
+  1. Golden master: a large snapshot of the original code's output that catches
+     any behaviour change. It has 8 names × 8 SellIn values × 8 Quality values
+     (512 items), each run for 14 days. Each item gets one output line showing
+     its day-by-day values, so a failing diff points straight at the case that
+     changed. Writing our own plain text also avoids Verify leaving out zero
+     values.
+  2. Business-rule tests (R1–R9) in GildedRoseTest.cs: one test per requirement,
+     each tied to the sentence in the spec it documents. For example,
+     Quality_NeverIncreasesAbove50 has rows for both Brie and Backstage, because
+     "never above 50" is one rule that applies to both.
+     BackstagePass_QualityIncrease_DependsOnDaysUntilConcert has the rows 11→+1,
+     10→+2, 6→+2, 5→+3, 1→+3, which reads like the tier table in the spec.
+  3. Legacy-behaviour tests (L1–L5) in a separate class: behaviour the code has
+     but the spec doesn't state, or contradicts. Each one is something the
+     planned refactoring could easily change by accident:
+     - L1: Brie gains +2 a day after its sell-by date.
+     - L2: only the exact full names get special rules.
+     - L3: Conjured items currently behave like normal items. The Conjured
+       feature will edit this test on purpose.
+     - L4: quality outside 0–50 is never corrected. This is the riskiest one,
+       because AGENTS.md suggests "shared clamping in one place", and a
+       Math.Clamp would silently change it.
+     - L5: Sulfuras keeps whatever quality it's given, not just 80.
+
+  Keeping L1–L5 apart means fixing a quirk later shows up as an explicit edit to
+  that class, not as a quiet change to a requirement test.
+
+  What the existing tests protect:
+  - ThirtyDays: covers more than it looks. It hits every Backstage threshold,
+    the truncation at 50, the 0 floor, the Brie cap and the +2 after the sell-by
+    date. Its gap is out-of-range quality (L4), which is the riskiest case for
+    this refactoring. It also misses near-miss names and Sulfuras with a quality
+    other than 80. I'd keep it unchanged.
+  - Foo: never had an approved baseline, so I'd delete it and let the golden
+    master replace it.
+  - GildedRoseTest.foo: is replaced by R1–R9, as you agreed.
+
+  Left out on purpose:
+  - No named tests for pathological inputs (Q11–Q14, e.g. null names). Your shop
+    doesn't have these cases.
+  - No named tests for Q4, Q7, Q8 or Q10, because they're already covered by
+    rows in other tests or by the golden master. Section 5 of the doc gives the
+    reason for each.
+
+  Mutation testing: I chose the boundary rows so that the usual small code
+  changes Stryker makes (for example < → <= on 11, 6, 0 and 50) are caught by a
+  named test, not just by the golden master. That makes any survivors easier to
+  interpret later. The table is in section 6.
+
+  Plan: the suite comes to 2 approval tests and 14 named tests, about 40 test
+  cases in the runner. I'd add it in three steps, each its own diff for you to
+  review:
+  - T1: add the golden master and delete Foo.
+  - T2: replace the placeholder with R1–R9.
+  - T3: add L1–L5.
+
+  Want me to start T1?
+
+✻ Worked for 2m 30s · done 10:29 AM
+
+❯ yes, go ahead with T1. Implement the golden master without touching any       
+  production code, replace the two placeholder tests and don't delete anything  
+  else before asking me, finally run the tests to make sure they're all green.  
+
+⏺ I'll add the golden master to ApprovalTest.cs in place of Foo, and remove the
+  GildedRoseTest.foo placeholder. No production code changes.
+
+⏺ Bash(cd /Users/robertopreste/Data/Various/GildedRose-Refactoring-Kata/csharp.x
+      Unit/GildedRoseTests && python3 - <<'EOF'
+      p='ApprovalTest.cs'…)
+  ⎿   csharp.xUnit/GildedRoseTests/ApprovalTest.cs | 47 +++++++++++++++++++
+     +++++----
+      1 file changed, 41 insertions(+), 6 deletions(-)
+     … +15 lines (ctrl+o to expand)
+  ⎿  Updated csharp.xUnit/GildedRoseTests/ApprovalTest.cs (+41 -6)
+      1  using GildedRoseKata;
+      2  
+      3  using System;
+      4 +using System.Collections.Generic;                               
+      5  using System.IO;
+      6 +using System.Linq;                                              
+      7  using System.Text;
+      8  using System.Threading.Tasks;
+      9  
+     ...
+      16  public class ApprovalTest
+      17  {
+      18      [Fact]
+      17 -    public Task Foo()                                          
+      19 +    public Task GoldenMaster()                                 
+      20      {
+      19 -        Item[] items = { new Item { Name = "foo", SellIn = 0, Q
+         -uality = 0 } };                                                
+      20 -        GildedRose app = new GildedRose(items);                
+      21 -        app.UpdateQuality();                                   
+      22 -                                                               
+      23 -        return Verifier.Verify(items);                         
+      21 +        string[] names =                                       
+      22 +        {                                                      
+      23 +            "+5 Dexterity Vest",                               
+      24 +            "Conjured Mana Cake",                              
+      25 +            "Aged Brie",                                       
+      26 +            "Backstage passes to a TAFKAL80ETC concert",       
+      27 +            "Sulfuras, Hand of Ragnaros",                      
+      28 +            "aged brie",                                       
+      29 +            "Backstage passes to another concert",             
+      30 +            "Sulfuras"                                         
+      31 +        };                                                     
+      32 +        int[] sellIns = { -1, 0, 1, 5, 6, 10, 11, 12 };        
+      33 +        int[] qualities = { -1, 0, 1, 2, 48, 49, 50, 80 };     
+      34 +        const int days = 14;                                   
+      35 +                                                               
+      36 +        var items = new List<Item>();                          
+      37 +        foreach (var name in names)                            
+      38 +        foreach (var sellIn in sellIns)                        
+      39 +        foreach (var quality in qualities)                     
+      40 +        {                                                      
+     … 21 more lines (ctrl+o to expand)
+
+⏺ Next, the business-rule placeholder. R1–R9 arrive in T2, so for now I'll
+  remove only the foo method and leave the class empty for T2 to fill.
+
+⏺ Bash(python3 - <<'EOF'
+      p='GildedRoseTest.cs'…)
+  ⎿  namespace GildedRoseTests;
+
+     public class GildedRoseTest
+     … +9 lines (ctrl+o to expand)
+  ⎿  Created
+     csharp.xUnit/GildedRoseTests/ApprovalTest.GoldenMaster.verified.txt
+     (+1 -0)
+      1 +                                                                
+  ⎿  Updated csharp.xUnit/GildedRoseTests/GildedRoseTest.cs (+1 -13)
+       1 -using Xunit;                                                   
+       2 -using System.Collections.Generic;                              
+       3 -using GildedRoseKata;                                          
+       4 -                                                               
+       5 -namespace GildedRoseTests;                                     
+       1 +namespace GildedRoseTests;                                     
+       2  
+       3  public class GildedRoseTest
+       4  {
+       9 -    [Fact]                                                     
+      10 -    public void foo()                                          
+      11 -    {                                                          
+      12 -        IList<Item> Items = new List<Item> { new Item { Name = 
+         -"foo", SellIn = 0, Quality = 0 } };                            
+      13 -        GildedRose app = new GildedRose(Items);                
+      14 -        app.UpdateQuality();                                   
+      15 -        Assert.Equal("fixme", Items[0].Name);                  
+      16 -    }                                                          
+       5  }
+  ⎿  (timeout 5m)
+
+⏺ That failure is expected since Verify always fails on a new snapshot's first
+  run, writing output to .received.txt. I'll now cross-check the day-1 values
+  against the earlier probe results before approving it.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ All 448 day-1 values that the probe also covers match (the probe didn't
+  include SellIn = 12). The spot-checked lines behave as the model predicts.
+  Approving the baseline and re-running:
+
+⏺ Bash(mv ApprovalTest.GoldenMaster.received.txt
+      ApprovalTest.GoldenMaster.verified.txt && cd .. && dotnet test 2>&1 | tail
+      -5; cd .. && git status --short && git diff)
+  ⎿    GildedRoseTests -> /Users/robertopreste/Data/Various/GildedRose-Refa
+     ctoring-Kata/csharp.xUnit/GildedRoseTests/bin/Debug/net10.0/GildedRose
+     Tests.dll
+     … +101 lines (ctrl+o to expand)
+  ⎿  1 file changed (binary, mode only or too large to show)
+
+⏺ T1 is done. dotnet test reports 2 passed, 0 failed (GoldenMaster and
+  ThirtyDays), and no production code was touched.
+
+  What changed (diff shown above):
+  - ApprovalTest.cs: I replaced Foo with GoldenMaster. It runs 512 items (8
+    names × 8 SellIn × 8 Quality) for 14 days on a single GildedRose and writes
+    one line per item showing its day-by-day values. I added using System.Linq;
+    because Select/ToList are LINQ extension methods and this project doesn't
+    enable automatic ("implicit") usings.
+  - GildedRoseTest.cs: I removed the foo placeholder and its now-unused using
+    lines. The class is empty for now; T2 fills it with R1–R9. I kept the file
+    rather than deleting it and recreating it in the next step.
+  - New baseline file ApprovalTest.GoldenMaster.verified.txt: 512 lines,
+    generated from the original code.
+
+  How I checked the baseline before approving it:
+  - First run: it failed as expected, because Verify fails any snapshot that has
+    no approved file yet and writes the output to .received.txt.
+  - Independent check: I compared the day-1 values against the probe I ran on
+    the original code in the analysis step. All 448 cases they share match; the
+    probe didn't cover SellIn = 12, which accounts for the other 64.
+  - Spot checks: these lines also match the behaviour model:
+    - Aged Brie | sellIn 0 | quality 49 goes to 50 and stays there.
+    - Backstage starting at 12/48 gains +1, then gets cut off at 50, then drops
+      to 0 after the concert.
+    - The near-miss name Sulfuras decays like a normal item, starting from 80.
+  - Approval: I renamed the .received.txt file to .verified.txt and re-ran the
+    tests, which gave the green result above.
+
+  Before you commit: git status shows an untracked ApprovalTest.Foo.verified.txt
+  that I didn't create; your IDE may have approved the old snapshot. It belongs
+  to the deleted Foo test and is now unused, though it doesn't make anything
+  fail. There's also an ignored, leftover ApprovalTest.Foo.received.txt from the
+  original failing run. Can I delete both?
+
+  Suggested commit message: test: add combinatorial golden master, remove kata 
+  placeholder tests.
+
+✻ Sautéed for 1m 2s · done 10:44 AM
+
+❯ yes, delete both and go ahead with T2. Do not add any tests for Conjured      
+  behaviour beyond what the current implementation already does; Conjured items 
+  are a future feature and should not be implemented as part of this            
+  refactoring.                                                                  
+
+⏺ Deleting the two leftover Foo snapshot files first:
+
+⏺ Bash(cd /Users/robertopreste/Data/Various/GildedRose-Refactoring-Kata/csharp.x
+      Unit/GildedRoseTests && ls ApprovalTest.*; rm
+      ApprovalTest.Foo.verified.txt ApprovalTes…)
+  ⎿  ApprovalTest.Foo.received.txt
+     ApprovalTest.Foo.verified.txt
+     ApprovalTest.GoldenMaster.verified.txt
+     … +7 lines (ctrl+o to expand)
+  ⎿  Deleted csharp.xUnit/GildedRoseTests/ApprovalTest.Foo.verified.txt (+0
+     -1)
+      1 -                                                                
+⏺ Writing tests R1–R9 into GildedRoseTest.cs now, preserving the UTF-8 BOM so
+  the diff stays clean; I'm leaving Conjured untested here since it's only
+  pinned via T3's L3 and the golden master.
+
+⏺ Bash(python3 - <<'EOF'
+      src='''using GildedRoseKata;…)
+  ⎿  Passed!  - Failed:     0, Passed:    27, Skipped:     0, Total:    27,
+      Duration: 113 ms - GildedRoseTests.dll (net10.0)
+       Passed GildedRoseTests.GildedRoseTest.BackstagePass_QualityIncrease_
+     … +41 lines (ctrl+o to expand)
+  ⎿  Updated csharp.xUnit/GildedRoseTests/GildedRoseTest.cs (+114 -1)
+        1 -namespace GildedRoseTests;                                    
+        1 +using GildedRoseKata;                                         
+        2 +                                                              
+        3 +using Xunit;                                                  
+        4 +                                                              
+        5 +namespace GildedRoseTests;                                    
+        6  
+        7  public class GildedRoseTest
+        8  {
+        9 +    private const string NormalItem = "+5 Dexterity Vest";    
+       10 +    private const string AgedBrie = "Aged Brie";              
+       11 +    private const string BackstagePass = "Backstage passes to 
+          +a TAFKAL80ETC concert";                                       
+       12 +    private const string Sulfuras = "Sulfuras, Hand of Ragnaro
+          +s";                                                           
+       13 +                                                              
+       14 +    [Theory]                                                  
+       15 +    [InlineData(NormalItem)]                                  
+       16 +    [InlineData(AgedBrie)]                                    
+       17 +    [InlineData(BackstagePass)]                               
+       18 +    public void SellIn_DecreasesByOneEachDay(string name)     
+       19 +    {                                                         
+       20 +        var item = UpdateOnce(name, sellIn: 5, quality: 10);  
+       21 +                                                              
+       22 +        Assert.Equal(4, item.SellIn);                         
+       23 +    }                                                         
+       24 +                                                              
+       25 +    [Theory]                                                  
+       26 +    [InlineData(10, 20, 19)]                                  
+       27 +    [InlineData(1, 20, 19)]                                   
+       28 +    public void NormalItem_QualityDegradesByOne_BeforeSellByDa
+          +te(int sellIn, int quality, int expectedQuality)              
+       29 +    {                                                         
+       30 +        var item = UpdateOnce(NormalItem, sellIn, quality);   
+       31 +                                                              
+       32 +        Assert.Equal(expectedQuality, item.Quality);          
+       33 +    }                                                         
+       34 +                                                              
+       35 +    [Theory]                                                  
+       36 +    [InlineData(0, 20, 18)]                                   
+       37 +    [InlineData(-1, 20, 18)]                                  
+       38 +    public void NormalItem_QualityDegradesTwiceAsFast_OnceSell
+          +ByDateHasPassed(int sellIn, int quality, int expectedQuality) 
+       39 +    {                                                         
+     … 79 more lines (ctrl+o to expand)
+  ⎿  (timeout 5m)
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ T2 is done. dotnet test reports 27 passed, 0 failed: 25 business-rule cases
+  plus GoldenMaster and ThirtyDays. No production code was changed.
+
+  Deleted, as you approved: ApprovalTest.Foo.verified.txt and
+  ApprovalTest.Foo.received.txt.
+
+  Added to GildedRoseTest.cs: nine tests (R1–R9), one per business rule:
+
+  Test: SellIn_DecreasesByOneEachDay
+  Rule from the requirements: "lowers both values for every item" (SellIn part)
+  Cases: 3 names
+  ────────────────────────────────────────
+  Test: NormalItem_QualityDegradesByOne_BeforeSellByDate
+  Rule from the requirements: "lowers both values" (Quality part)
+  Cases: SellIn 10, 1
+  ────────────────────────────────────────
+  Test: NormalItem_QualityDegradesTwiceAsFast_OnceSellByDateHasPassed
+  Rule from the requirements: "degrades twice as fast"
+  Cases: SellIn 0, −1
+  ────────────────────────────────────────
+  Test: Quality_IsNeverNegative
+  Rule from the requirements: "never negative"
+  Cases: (5, 0), (0, 1)
+  ────────────────────────────────────────
+  Test: AgedBrie_QualityIncreasesWithAge
+  Rule from the requirements: "Aged Brie increases the older it gets"
+  Cases: SellIn 5, 1
+  ────────────────────────────────────────
+  Test: Quality_NeverIncreasesAbove50
+  Rule from the requirements: "never more than 50"
+  Cases: Brie ×2, Backstage ×2
+  ────────────────────────────────────────
+  Test: BackstagePass_QualityIncrease_DependsOnDaysUntilConcert
+  Rule from the requirements: +2 at ≤10 days, +3 at ≤5
+  Cases: 11→+1, 10→+2, 6→+2, 5→+3, 1→+3
+  ────────────────────────────────────────
+  Test: BackstagePass_QualityDropsToZero_AfterConcert
+  Rule from the requirements: "drops to 0 after the concert"
+  Cases: Quality 20, 50
+  ────────────────────────────────────────
+  Test: Sulfuras_NeverChanges
+  Rule from the requirements: "never has to be sold or decreases in Quality"
+  Cases: SellIn 5, 0, −1
+
+  There are no Conjured tests, as you asked. Conjured's current behaviour is
+  pinned only by the golden master, and later by the single L3 test planned for
+  T3.
+
+  C# notes on things in this file:
+  - private const string AgedBrie = ...: xUnit's [InlineData] arguments must be
+    compile-time constants, so the names are const fields.
+  - UpdateOnce(name, sellIn: 5, quality: 10): these are named arguments. They're
+    optional in C#, and I use them only where a bare number would be unclear.
+  - new GildedRose(new[] { item }): a C# array implements IList<Item>, so it
+    satisfies the constructor without building a List.
+  - Test output names: each [InlineData] row is reported as its own case in the
+    test output, for example (sellIn: 11, expectedIncrease: 1).
+
+  These tests can only have passed against the current code; nothing here shows
+  they would fail on a regression. That check is what Stryker does at the end. I
+  didn't break the production code on purpose to prove it, because these steps
+  aren't allowed to touch production code.
+
+  ⚠️ Your T1 commit looks incomplete. ApprovalTest.cs is committed, but
+  ApprovalTest.GoldenMaster.verified.txt is still untracked. Without it, the
+  golden master fails on a fresh checkout and the baseline isn't in the repo.
+  Please amend T1 to include it before committing T2.
+
+  Suggested commit message: test: document business rules with focused unit 
+  tests.
+
+  Next is T3, the legacy-behaviour tests L1–L5, when you're ready.
+
+✻ Cogitated for 48s · done 10:49 AM
+
+❯ go ahead with T3                                                              
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ Baseline committed and tree clean. Now adding LegacyBehaviourTests.cs with
+  tests L1–L5, including a class-level comment noting these pin legacy behaviour
+  rather than requirements.
+
+⏺ Bash(cd /Users/robertopreste/Data/Various/GildedRose-Refactoring-Kata/csharp.x
+      Unit/GildedRoseTests && python3 - <<'EOF'
+      src='''using GildedRoseKata;…)
+  ⎿  Passed!  - Failed:     0, Passed:    39, Skipped:     0, Total:    39,
+      Duration: 114 ms - GildedRoseTests.dll (net10.0)
+       Passed GildedRoseTests.LegacyBehaviourTests.Sulfuras_KeepsQualityOth
+     … +24 lines (ctrl+o to expand)
+  ⎿  Created csharp.xUnit/GildedRoseTests/LegacyBehaviourTests.cs (+77 -0)
+       1 +using GildedRoseKata;                                          
+       2 +                                                               
+       3 +using Xunit;                                                   
+       4 +                                                               
+       5 +namespace GildedRoseTests;                                     
+       6 +                                                               
+       7 +/// <summary>                                                  
+       8 +/// Pins behaviour of the legacy implementation that the requir
+         +ements do not state or contradict.                             
+       9 +/// These are not requirements: changing any of them is a produ
+         +ct decision, not a refactoring.                                
+      10 +/// </summary>                                                 
+      11 +public class LegacyBehaviourTests                              
+      12 +{                                                              
+      13 +    private const string NormalItem = "+5 Dexterity Vest";     
+      14 +    private const string AgedBrie = "Aged Brie";               
+      15 +    private const string BackstagePass = "Backstage passes to a
+         + TAFKAL80ETC concert";                                         
+      16 +    private const string Sulfuras = "Sulfuras, Hand of Ragnaros
+         +";                                                             
+      17 +    private const string ConjuredItem = "Conjured Mana Cake";  
+      18 +                                                               
+      19 +    [Theory]                                                   
+      20 +    [InlineData(0, 10, 12)]                                    
+      21 +    [InlineData(-1, 10, 12)]                                   
+      22 +    public void AgedBrie_QualityIncreasesTwiceAsFast_OnceSellBy
+         +DateHasPassed(int sellIn, int quality, int expectedQuality)    
+      23 +    {                                                          
+      24 +        var item = UpdateOnce(AgedBrie, sellIn, quality);      
+      25 +                                                               
+      26 +        Assert.Equal(expectedQuality, item.Quality);           
+      27 +    }                                                          
+      28 +                                                               
+      29 +    [Theory]                                                   
+      30 +    [InlineData("aged brie")]                                  
+      31 +    [InlineData("Backstage passes to another concert")]        
+      32 +    [InlineData("Sulfuras")]                                   
+      33 +    public void ItemCategory_IsMatchedByExactFullName(string na
+         +me)                                                            
+      34 +    {                                                          
+      35 +        var item = UpdateOnce(name, sellIn: 5, quality: 10);   
+      36 +                                                               
+      37 +        Assert.Equal(4, item.SellIn);                          
+      38 +        Assert.Equal(9, item.Quality);                         
+      39 +    }                                                          
+      40 +                                                               
+     … 37 more lines (ctrl+o to expand)
+  ⎿  (timeout 5m)
+
+⏺ T3 is done, so the full test suite is now in place. dotnet test reports 39 
+  passed, 0 failed: 2 approval tests, 25 business-rule cases and 12 legacy
+  cases. No production code was changed.
+
+  New file LegacyBehaviourTests.cs:
+
+  Test: AgedBrie_QualityIncreasesTwiceAsFast_OnceSellByDateHasPassed
+  Quirk pinned: Brie gains +2 a day after its sell-by date (Q3)
+  Cases: SellIn 0, −1
+  ────────────────────────────────────────
+  Test: ItemCategory_IsMatchedByExactFullName
+  Quirk pinned: Only the exact full names get special rules; near-misses act as
+  normal items (Q1)
+  Cases: aged brie, Backstage passes to another concert, Sulfuras
+  ────────────────────────────────────────
+  Test: ConjuredItem_CurrentlyDegradesLikeNormalItem
+  Quirk pinned: Conjured isn't implemented (Q2); the only Conjured test, as you
+  asked
+  Cases: (3, 6 → 5), (0, 6 → 4)
+  ────────────────────────────────────────
+  Test: QualityOutsideValidRange_IsNotCorrected
+  Quirk pinned: The 0/50 limits only stop a change; out-of-range values are
+  never
+  corrected (Q5, Q6)
+  Cases: Normal 80 → 79, Normal −1 → −1, Brie 80 → 80, Backstage 80 → 80
+  ────────────────────────────────────────
+  Test: Sulfuras_KeepsQualityOtherThan80
+  Quirk pinned: Sulfuras keeps whatever quality it's given (Q9)
+  Cases: (5, 10 → 10)
+
+  The /// <summary> block above the class is C#'s documentation-comment syntax:
+  IDEs show it on hover. It's the one comment in the file, and it explains why
+  the class exists. The test names carry the rest.
+
+  Two points for you to decide:
+  1. Duplication: the four name constants and the UpdateOnce helper are now
+     copied in both test classes. I kept each class self-contained so this step
+     stays a single new file. If you'd rather share them, I can move them into a
+     small static class in the test project as a separate step.
+  2. README notes: AGENTS.md rule 2 says pinned quirks should also be noted in
+     the README. The tests now pin Q1, Q2, Q3, Q5, Q6 and Q9, but no README
+     mentions them yet. I suggest adding a short "Known legacy behaviour"
+     section to csharp.xUnit/README.md before the first refactoring step.
+
+  Suggested commit message: test: pin legacy behaviour not covered by the 
+  requirements.
+
+  With this committed, the safety net from the strategy is complete and
+  production refactoring can start.
+
+✻ Crunched for 33s · done 10:55 AM
+
+❯ yes, add the README section on known legacy behaviour. Make sure you          
+  highlight it as current behaviour being preserved during refactoring, not     
+  recommendations for future design.                                            
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ Bash(cat >> csharp.xUnit/README.md <<'EOF'…)
+  ⎿   csharp.xUnit/README.md | 26 +++++++++++++++++++++++++-
+      1 file changed, 25 insertions(+), 1 deletion(-)
+     Passed!  - Failed:     0, Passed:    39, Skipped:     0, Total:    39,
+      Duration: 125 ms - GildedRoseTests.dll (net10.0)
+  ⎿  Updated csharp.xUnit/README.md (+25 -1)
+      21  
+      22  ``` cmd
+      23  dotnet test
+      24 -```                                                            
+      24 +```                                                            
+      25 +                                                               
+      26 +## Known legacy behaviour                                      
+      27 +                                                               
+      28 +> **This section describes current behaviour that is deliberate
+         +ly preserved                                                   
+      29 +> during the refactoring.** It is not a recommendation for futu
+         +re design.                                                     
+      30 +> Some of these behaviours contradict or go beyond `GildedRoseR
+         +equirements.md`.                                               
+      31 +> They are kept because the refactoring must not change observa
+         +ble behaviour.                                                 
+      32 +> Changing any of them is a separate product decision, made out
+         +side the                                                       
+      33 +> refactoring.                                                 
+      34 +                                                               
+      35 +Each behaviour is pinned by a named test in                    
+      36 +`GildedRoseTests/LegacyBehaviourTests.cs`, and also by the gold
+         +en master                                                      
+      37 +(`ApprovalTest.GoldenMaster`).                                 
+      38 +                                                               
+      39 +| Current behaviour | Example (`SellIn`, `Quality` → after one 
+         +day) | Pinned by |                                             
+      40 +|---|---|---|                                                  
+      41 +| Item categories are matched by exact, case-sensitive full nam
+         +e. Variants such as `aged brie`, `Sulfuras` or `Backstage passe
+         +s to another concert` are treated as normal items. | `Sulfuras`
+         +: (5, 10) → (4, 9) | `ItemCategory_IsMatchedByExactFullName` | 
+      42 +| Conjured items are not implemented yet and degrade like norma
+         +l items. | `Conjured Mana Cake`: (3, 6) → (2, 5) | `ConjuredIte
+         +m_CurrentlyDegradesLikeNormalItem` |                           
+      43 +| Aged Brie gains 2 quality per day once the sell-by date has p
+         +assed. The requirements only say it "increases". | `Aged Brie`:
+         + (0, 10) → (-1, 12) | `AgedBrie_QualityIncreasesTwiceAsFast_Onc
+         +eSellByDateHasPassed` |                                        
+      44 +| The 0 and 50 limits only stop quality from crossing them. A q
+         +uality that is already outside 0..50 is never corrected. | Norm
+         +al item: (5, 80) → (4, 79); (5, -1) → (4, -1). Aged Brie and Ba
+         +ckstage passes: (5, 80) → (4, 80) | `QualityOutsideValidRange_I
+         +sNotCorrected` |                                               
+      45 +| Sulfuras keeps whatever quality it has. 80 is not enforced. |
+         + `Sulfuras, Hand of Ragnaros`: (5, 10) → (5, 10) | `Sulfuras_Ke
+         +epsQualityOtherThan80` |                                       
+      46 +                                                               
+      47 +For the full analysis, including edge cases covered only by the
+         + golden master,                                                
+      48 +see `docs/behaviour-model.md`.                                 
+
+⏺ I added a "Known legacy behaviour" section to the end of
+  csharp.xUnit/README.md. The tests still pass: 39 passed, 0 failed.
+
+  - Framing: the section opens with a highlighted note saying this is current
+    behaviour kept on purpose during the refactoring, not a recommendation for
+    future design. The note also says some of it contradicts or goes beyond
+    GildedRoseRequirements.md, and that changing any of it is a separate product
+    decision.
+  - Table: one row for each of the five pinned behaviours, with a one-day
+    example and the name of the test that pins it:
+    - exact-name matching
+    - Conjured items behaving like normal items
+    - Aged Brie gaining +2 a day after its sell-by date
+    - quality outside 0–50 never being corrected
+    - Sulfuras keeping any quality, not just 80
+  - Pointer: a closing line refers to docs/behaviour-model.md for the edge cases
+    covered only by the golden master.
+
+  The diff shows "1 deletion" only because the file's last line had no trailing
+  newline. That line's text is unchanged.
+
+  Suggested commit message: docs: document known legacy behaviour preserved by 
+  the refactoring.
+
+  The tests and docs are now in place, so the first production refactoring step
+  can start once you've committed this.
+
+✻ Brewed for 21s · done 11:00 AM
+
+❯ Cool, before we start with the refactoring, I want to first review the        
+  proposed approach without you changing any files yet. Based on AGENTS.md, the 
+  current GildedRose.cs, Item.cs, the tests we created and behaviour-model.md,  
+  analyse the current GildedRose.UpdateQuality() method and propose the         
+  smallest sensible first refactoring step. Let's make sure we remove           
+  complexity rather than introducing it; provide pseudocode sketches if useful  
+  to better understand the changes proposed.                                    
+
+⏺ I haven't changed any files. Here's my analysis and recommendation.
+
+  What makes UpdateQuality() complex today
+
+  ┌─────────────────┬───────────────────────────┬──────────────────────────┐
+  │   Source of     │           Where           │          Effect          │
+  │   complexity    │                           │                          │
+  ├─────────────────┼───────────────────────────┼──────────────────────────┤
+  │ One item's      │ Each category's rules are │ To learn "what happens   │
+  │ rules are split │  spread over phase A      │ to Aged Brie" you have   │
+  │  across phases  │ (lines 18–53) and phase C │ to read the whole method │
+  │                 │  (lines 60–86)            │                          │
+  ├─────────────────┼───────────────────────────┼──────────────────────────┤
+  │                 │ != "Aged Brie" && !=      │ Each branch is defined   │
+  │ Negative name   │ "Backstage…", then !=     │ by what it is not, so    │
+  │ checks          │ "Sulfuras…" inside that   │ the "normal item" rule   │
+  │                 │                           │ never appears explicitly │
+  ├─────────────────┼───────────────────────────┼──────────────────────────┤
+  │ Sulfuras        │ 3 separate != "Sulfuras…" │ Sulfuras never changes,  │
+  │ handled by      │  checks (lines 22, 55,    │ but that fact is spread  │
+  │ exclusion       │ 68)                       │ across 3 places          │
+  ├─────────────────┼───────────────────────────┼──────────────────────────┤
+  │ Index access    │ Items[i] about 30 times   │ Visual noise that hides  │
+  │                 │                           │ the logic                │
+  ├─────────────────┼───────────────────────────┼──────────────────────────┤
+  │ Repeated string │ Each special name appears │ A typo creates a silent  │
+  │  literals       │  3 times                  │ new "normal" item        │
+  ├─────────────────┼───────────────────────────┼──────────────────────────┤
+  │ Obscure idiom   │ Quality - Quality         │ Just means = 0           │
+  └─────────────────┴───────────────────────────┴──────────────────────────┘
+
+  The guards themselves are not complexity to remove. if (Quality < 50) 
+  Quality++ and if (Quality > 0) Quality-- are exactly what produces legacy
+  behaviour Q5 (values outside 0–50 are never corrected). They must stay as
+  step-wise guards and never become a clamp.
+
+  Proposed first step: for → foreach
+
+  This is the smallest change that removes complexity: a mechanical rewrite with
+  no logic change, and it makes every later diff readable.
+
+  // before
+  for (var i = 0; i < Items.Count; i++)
+  {
+      if (Items[i].Name != "Aged Brie" && Items[i].Name != "Backstage passes…")
+      {
+          if (Items[i].Quality > 0) …
+
+  // after
+  foreach (var item in Items)
+  {
+      if (item.Name != "Aged Brie" && item.Name != "Backstage passes…")
+      {
+          if (item.Quality > 0) …
+
+  C# note: Item is a class, which makes it a reference type. So item points at
+  the same object stored in the list, and item.Quality = … updates the list's
+  item. If Item were a struct, item would be a copy and this refactoring would
+  silently break. It's a class and we can't change it, so it's safe.
+
+  Why this is behaviour-neutral:
+  - Same iteration order.
+  - Each element is still visited exactly once, so a duplicated instance (Q13)
+    is still updated twice.
+  - Nothing modifies the list during the loop, so foreach can't throw the
+    "collection was modified" exception.
+
+  Verification: all 39 tests, with the golden master unchanged.
+
+  Roadmap after step 1 (for context, one diff each)
+
+  ┌─────┬──────────────────────────────────────────┬────────────────────────┐
+  │  #  │                   Step                   │   Complexity removed   │
+  ├─────┼──────────────────────────────────────────┼────────────────────────┤
+  │     │ Sulfuras guard clause: if (item.Name ==  │ 3 nested conditions,   │
+  │ 2   │ Sulfuras) continue; at the top of the    │ plus "never changes"   │
+  │     │ loop, then delete the 3 != Sulfuras      │ becomes visible in one │
+  │     │ checks                                   │  line                  │
+  ├─────┼──────────────────────────────────────────┼────────────────────────┤
+  │ 3   │ Name constants (private const string     │ Repeated literals and  │
+  │     │ AgedBrie = "Aged Brie";)                 │ the typo risk          │
+  ├─────┼──────────────────────────────────────────┼────────────────────────┤
+  │     │ Extract the guarded steps:               │ 6 repeated if (<50) +1 │
+  │ 4   │ IncreaseQuality(item) and                │  / if (>0) −1 blocks   │
+  │     │ DecreaseQuality(item)                    │                        │
+  ├─────┼──────────────────────────────────────────┼────────────────────────┤
+  │     │ Split by category: a switch on the name, │ The phase interleaving │
+  │ 5   │  where each case holds that item's whole │  and the negative      │
+  │     │  day                                     │ checks. This is the    │
+  │     │                                          │ key step.              │
+  ├─────┼──────────────────────────────────────────┼────────────────────────┤
+  │     │ Extract per-category methods if the      │                        │
+  │ 6   │ switch cases are still more than a few   │ Readability            │
+  │     │ lines                                    │                        │
+  └─────┴──────────────────────────────────────────┴────────────────────────┘
+
+  Sketch of the target after step 5. Each branch was derived from the behaviour
+  model and keeps the exact order "change quality → age → expired adjustment":
+
+  UpdateQuality:
+    foreach item in Items:
+      switch item.Name:
+        case Sulfuras:      // never changes
+          continue
+        case AgedBrie:
+          IncreaseQuality(item)
+          item.SellIn -= 1
+          if item.SellIn < 0: IncreaseQuality(item)          // legacy Q3: +2
+  when expired
+        case BackstagePass:
+          IncreaseQuality(item)
+          if item.SellIn < 11: IncreaseQuality(item)         // thresholds use
+  SellIn before ageing (Q8)
+          if item.SellIn < 6:  IncreaseQuality(item)
+          item.SellIn -= 1
+          if item.SellIn < 0: item.Quality = 0               // also resets
+  negative quality (Q7)
+        default:            // normal items, near-miss names, Conjured (Q1, Q2)
+          DecreaseQuality(item)
+          item.SellIn -= 1
+          if item.SellIn < 0: DecreaseQuality(item)
+
+  IncreaseQuality(item): if item.Quality < 50: item.Quality += 1   // a guard,
+  not a clamp (Q5)
+  DecreaseQuality(item): if item.Quality > 0:  item.Quality -= 1
+
+  One check on the Backstage branch: the original wraps all three increments in
+  if (Quality < 50) { … }. Calling the guarded IncreaseQuality three times is
+  equivalent. If quality starts at 50 or more, all three calls do nothing, and
+  otherwise each step is guarded exactly as before.
+
+  Design recommendation: a switch, not IItemUpdater, for now
+
+  With four categories, each a few lines long, a switch plus two small helpers
+  already meets AGENTS.md's goals:
+  - no nested conditionals
+  - the quality guard lives in one place
+  - adding Conjured later means one case, with no change elsewhere
+
+  An IItemUpdater interface with one class per category plus a name lookup would
+  add five types and an indirection without removing any more complexity.
+  AGENTS.md lists both directions as acceptable, so I suggest we decide after
+  step 5. If the switch reads cleanly, we stop there.
+
+  Order of the first two steps
+
+  foreach first is the lowest-risk start, and it makes the Sulfuras diff trivial
+  to review. If you'd rather start with a step that visibly removes branching,
+  the Sulfuras guard clause (step 2) also works as step 1. It would just be
+  written with Items[i].
+
+  Should I go ahead with the foreach step?
+
+✻ Brewed for 43s · done 11:07 AM
+
+❯ Yes, let's replace the for loop with a foreach loop. Don't change any logic   
+  inside the loop just yet and don't introduce any other changes yet. Let's     
+  make sure the existing behaviour still holds by running the tests after the   
+  change.                                                                       
+
+⏺ I'll replace the loop header and every Items[i] with item, and change nothing
+  else.
+
+⏺ Bash(cd /Users/robertopreste/Data/Various/GildedRose-Refactoring-Kata && git
+      status --short && python3 - <<'EOF'
+      p='csharp.xUnit/GildedRose/GildedRose.cs'…)
+  ⎿  ?? .DS_Store
+     ?? .mcp.json
+     ?? .vscode/
+     … +109 lines (ctrl+o to expand)
+  ⎿  Updated csharp.xUnit/GildedRose/GildedRose.cs (+25 -25)
+      13  
+      14      public void UpdateQuality()
+      15      {
+      16 -        for (var i = 0; i < Items.Count; i++)                  
+      16 +        foreach (var item in Items)                            
+      17          {
+      18 -            if (Items[i].Name != "Aged Brie" && Items[i].Name !
+         -= "Backstage passes to a TAFKAL80ETC concert")                 
+      18 +            if (item.Name != "Aged Brie" && item.Name != "Backs
+         +tage passes to a TAFKAL80ETC concert")                         
+      19              {
+      20 -                if (Items[i].Quality > 0)                      
+      20 +                if (item.Quality > 0)                          
+      21                  {
+      22 -                    if (Items[i].Name != "Sulfuras, Hand of Rag
+         -naros")                                                        
+      22 +                    if (item.Name != "Sulfuras, Hand of Ragnaro
+         +s")                                                            
+      23                      {
+      24 -                        Items[i].Quality = Items[i].Quality - 1
+         -;                                                              
+      24 +                        item.Quality = item.Quality - 1;       
+      25                      }
+      26                  }
+      27              }
+      28              else
+      29              {
+      30 -                if (Items[i].Quality < 50)                     
+      30 +                if (item.Quality < 50)                         
+      31                  {
+      32 -                    Items[i].Quality = Items[i].Quality + 1;   
+      32 +                    item.Quality = item.Quality + 1;           
+      33  
+      34 -                    if (Items[i].Name == "Backstage passes to a
+         - TAFKAL80ETC concert")                                         
+      34 +                    if (item.Name == "Backstage passes to a TAF
+         +KAL80ETC concert")                                             
+      35                      {
+      36 -                        if (Items[i].SellIn < 11)              
+      36 +                        if (item.SellIn < 11)                  
+      37                          {
+      38 -                            if (Items[i].Quality < 50)         
+      38 +                            if (item.Quality < 50)             
+      39                              {
+      40 -                                Items[i].Quality = Items[i].Qua
+         -lity + 1;                                                      
+      40 +                                item.Quality = item.Quality + 1
+         +;                                                              
+      41                              }
+     … 59 more lines (ctrl+o to expand)
+  ⎿  (timeout 5m)
+
+⏺ The loop is now a foreach, and the tests still pass: 39 passed, 0 failed, so
+  the golden master output is unchanged and the build has no warnings or errors.
+
+  What changed: only GildedRose.cs, with 25 lines replaced (diff shown above).
+  - for (var i = 0; i < Items.Count; i++) became foreach (var item in Items).
+  - All 34 occurrences of Items[i] became item, and no other reference to i is
+    left.
+  - The conditions, the nesting, the string literals and the item.Quality - 
+    item.Quality line are all unchanged.
+
+  What I didn't touch: Item.cs, the constructor, the Items field, and every test
+  file. Before the edit, the working tree had no uncommitted changes, so this
+  diff is the whole step.
+
+  Suggested commit message: refactor: iterate items with foreach instead of 
+  index loop.
+
+  Next is step 2, the Sulfuras guard clause: if (item.Name == "Sulfuras, Hand of
+  Ragnaros") continue; at the top of the loop, plus removing the three !=
+  Sulfuras checks. I'll wait for your go-ahead.
+
+✻ Baked for 14s · done 11:12 AM
+
+❯ Perfect, now let's proceed with the Sulfuras guard clause.                    
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ The working tree is clean, confirming the foreach step is committed—this
+  change is behaviour-neutral since Sulfuras never changes anywhere in the
+  original code, so skipping it upfront and removing the redundant != Sulfuras
+  checks produces identical results for every other item.
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ Update(csharp.xUnit/GildedRose/GildedRose.cs)
+  ⎿  Added 6 lines, removed 4 lines
+      15      {
+      16          foreach (var item in Items)
+      17          {
+      18 +            if (item.Name == "Sulfuras, Hand of Ragnaros")     
+      19 +            {                                                  
+      20 +                continue;                                      
+      21 +            }                                                  
+      22 +                                                               
+      23              if (item.Name != "Aged Brie" && item.Name != "Backs
+          tage passes to a TAFKAL80ETC concert")
+      24              {
+      25                  if (item.Quality > 0)
+      26                  {
+      22 -                    if (item.Name != "Sulfuras, Hand of Ragnaro
+         -s")                                                            
+      23 -                    {                                          
+      24 -                        item.Quality = item.Quality - 1;       
+      25 -                    }                                          
+      27 +                    item.Quality = item.Quality - 1;           
+      28                  }
+      29              }
+      30              else
+
+⏺ Update(csharp.xUnit/GildedRose/GildedRose.cs)
+  ⎿  Added 1 line, removed 4 lines
+      54                  }
+      55              }
+      56  
+      57 -            if (item.Name != "Sulfuras, Hand of Ragnaros")     
+      58 -            {                                                  
+      59 -                item.SellIn = item.SellIn - 1;                 
+      60 -            }                                                  
+      57 +            item.SellIn = item.SellIn - 1;                     
+      58  
+      59              if (item.SellIn < 0)
+      60              {
+
+⏺ Update(csharp.xUnit/GildedRose/GildedRose.cs)
+  ⎿  Added 1 line, removed 4 lines
+      64                      {
+      65                          if (item.Quality > 0)
+      66                          {
+      67 -                            if (item.Name != "Sulfuras, Hand of
+         - Ragnaros")                                                    
+      68 -                            {                                  
+      69 -                                item.Quality = item.Quality - 1
+         -;                                                              
+      70 -                            }                                  
+      67 +                            item.Quality = item.Quality - 1;   
+      68                          }
+      69                      }
+      70                      else
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ Sulfuras is now handled by a single guard clause at the top of the loop, and
+  the tests still pass: 39 passed, 0 failed. The golden master output is
+  unchanged, and the build has no warnings or errors.
+
+  What changed: only GildedRose.cs, with 9 lines added and 12 removed (diff
+  shown above).
+  - New guard: at the top of the loop, if (item.Name == "Sulfuras, Hand of 
+    Ragnaros") { continue; }. In C#, continue skips to the next item in the
+    loop. I kept the braces to match the file's existing always-brace style.
+  - Removed checks: all three != "Sulfuras, Hand of Ragnaros" checks (on the
+    first decrease, the SellIn decrement and the expired decrease) are gone. The
+    code they wrapped is unchanged, just one level less nested. The Sulfuras
+    name now appears only once in the file.
+
+  Why the behaviour can't change:
+  - For Sulfuras: in the old code it already passed through every branch without
+    changing anything, so skipping it has the same effect.
+  - For every other item: those three checks were always true, so removing them
+    changes nothing.
+  - Tests: the tests that cover Sulfuras (Sulfuras_NeverChanges,
+    Sulfuras_KeepsQualityOtherThan80, the golden master rows and ThirtyDays) all
+    still pass.
+
+  Suggested commit message: refactor: handle Sulfuras with a guard clause.
+
+  Next on the roadmap is step 3, name constants: private const string AgedBrie =
+  "Aged Brie"; and the other names, replacing the repeated string literals.
+  I'll wait for your go-ahead.
+✻ Cogitated for 29s · done 11:19 AM
+
+❯ Go ahead with the name constants. Only introduce constants where they improve 
+  readability and simplify the code. Do not introduce them for ordinary item    
+  names or names occurring only once, unless there is a clear reason to do so.  
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ I'll add constants for "Backstage passes..." and "Aged Brie" since they're
+  repeated and error-prone, but leave "Sulfuras, Hand of Ragnaros" as a literal
+  since it only appears once.
+
+⏺ Bash(python3 - <<'EOF'
+      p='csharp.xUnit/GildedRose/GildedRose.cs'…)
+  ⎿  diff --git a/csharp.xUnit/GildedRose/GildedRose.cs b/csharp.xUnit/Gild
+     edRose/GildedRose.cs
+     index 02f931b..7ffb15c 100644
+     … +42 lines (ctrl+o to expand)
+  ⎿  Updated csharp.xUnit/GildedRose/GildedRose.cs (+7 -4)
+       4  
+       5  public class GildedRose
+       6  {
+       7 +    private const string AgedBrie = "Aged Brie";               
+       8 +    private const string BackstagePass = "Backstage passes to a
+         + TAFKAL80ETC concert";                                         
+       9 +                                                               
+      10      IList<Item> Items;
+      11  
+      12      public GildedRose(IList<Item> Items)
+     ...
+      23                  continue;
+      24              }
+      25  
+      23 -            if (item.Name != "Aged Brie" && item.Name != "Backs
+         -tage passes to a TAFKAL80ETC concert")                         
+      26 +            if (item.Name != AgedBrie && item.Name != Backstage
+         +Pass)                                                          
+      27              {
+      28                  if (item.Quality > 0)
+      29                  {
+     ...
+      36                  {
+      37                      item.Quality = item.Quality + 1;
+      38  
+      36 -                    if (item.Name == "Backstage passes to a TAF
+         -KAL80ETC concert")                                             
+      39 +                    if (item.Name == BackstagePass)            
+      40                      {
+      41                          if (item.SellIn < 11)
+      42                          {
+     ...
+      61  
+      62              if (item.SellIn < 0)
+      63              {
+      61 -                if (item.Name != "Aged Brie")                  
+      64 +                if (item.Name != AgedBrie)                     
+      65                  {
+      63 -                    if (item.Name != "Backstage passes to a TAF
+         -KAL80ETC concert")                                             
+      66 +                    if (item.Name != BackstagePass)            
+      67                      {
+      68                          if (item.Quality > 0)
+      69                          {
+
+⏺ I added constants for the two names that repeat, and the tests still pass: 39 
+  passed, 0 failed. The golden master output is unchanged, and the build has no
+  warnings or errors.
+
+  What changed: only GildedRose.cs (diff shown above).
+  - Two constants at the top of the class:
+    - AgedBrie replaces 2 literals.
+    - BackstagePass replaces 3 literals. It removes the most error-prone string,
+      since a typo there would silently turn passes into normal items.
+  - The main branch condition now reads item.Name != AgedBrie && item.Name != 
+    BackstagePass.
+
+  C# note: a const is replaced by its value at compile time, so comparing
+  against it is exactly the same as comparing against the literal.
+
+  What I didn't add, and why:
+  - Sulfuras: after the guard clause it occurs only once, so a constant would
+    add a line without simplifying anything.
+  - Ordinary item names: they don't appear in the production code at all.
+  - The 50 / 0 limits and the 11 / 6 thresholds: you asked for name constants
+    only. The quality limits may be better handled when the guarded steps become
+    IncreaseQuality / DecreaseQuality (step 4).
+
+  There's one point to revisit in step 5, when the code becomes a switch on the
+  name. Each special name will then appear once, as a case label, so the reason
+  for these two constants weakens. At that point we could either keep all three
+  names as constants for consistency, or go back to plain literals. I'll raise
+  it then.
+
+  Suggested commit message: refactor: name the repeated Aged Brie and Backstage 
+  pass item names.
+
+  Next is step 4: extracting the guarded IncreaseQuality(item) /
+  DecreaseQuality(item) helpers. I'll wait for your go-ahead.
+
+✻ Churned for 26s · done 11:23 AM
+
+❯ go ahead with the IncreaseQuality and DecreaseQuality helpers. Make sure they 
+  simply encapsulate the existing guarded increment and decrement behaviour,    
+  and don't turn the behaviour into a general clamp                             
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ I've identified six guarded steps—two decrements and four increments—five of
+  which follow a simple if (guard) step; pattern, while the one at line 35 also
+  wraps the Backstage bonus block. I'll refactor that one into a helper call by
+  un-nesting the bonus block, which is safe since those steps have their own < 
+  50 guard, and explain the equivalence after running the tests.
+
+⏺ Update(csharp.xUnit/GildedRose/GildedRose.cs)
+  ⎿  Added 28 lines, removed 30 lines
+      25  
+      26              if (item.Name != AgedBrie && item.Name != Backstage
+          Pass)
+      27              {
+      28 -                if (item.Quality > 0)                          
+      29 -                {                                              
+      30 -                    item.Quality = item.Quality - 1;           
+      31 -                }                                              
+      28 +                DecreaseQuality(item);                         
+      29              }
+      30              else
+      31              {
+      35 -                if (item.Quality < 50)                         
+      36 -                {                                              
+      37 -                    item.Quality = item.Quality + 1;           
+      32 +                IncreaseQuality(item);                         
+      33  
+      39 -                    if (item.Name == BackstagePass)            
+      34 +                if (item.Name == BackstagePass)                
+      35 +                {                                              
+      36 +                    if (item.SellIn < 11)                      
+      37                      {
+      41 -                        if (item.SellIn < 11)                  
+      42 -                        {                                      
+      43 -                            if (item.Quality < 50)             
+      44 -                            {                                  
+      45 -                                item.Quality = item.Quality + 1
+         -;                                                              
+      46 -                            }                                  
+      47 -                        }                                      
+      38 +                        IncreaseQuality(item);                 
+      39 +                    }                                          
+      40  
+      49 -                        if (item.SellIn < 6)                   
+      50 -                        {                                      
+      51 -                            if (item.Quality < 50)             
+      52 -                            {                                  
+      53 -                                item.Quality = item.Quality + 1
+         -;                                                              
+      54 -                            }                                  
+      55 -                        }                                      
+      41 +                    if (item.SellIn < 6)                       
+      42 +                    {                                          
+      43 +                        IncreaseQuality(item);                 
+      44                      }
+      45                  }
+      46              }
+     ...
+      53                  {
+      54                      if (item.Name != BackstagePass)
+      55                      {
+      68 -                        if (item.Quality > 0)                  
+      69 -                        {                                      
+      70 -                            item.Quality = item.Quality - 1;   
+      71 -                        }                                      
+      56 +                        DecreaseQuality(item);                 
+      57                      }
+      58                      else
+      59                      {
+     ...
+      62                  }
+      63                  else
+      64                  {
+      80 -                    if (item.Quality < 50)                     
+      81 -                    {                                          
+      82 -                        item.Quality = item.Quality + 1;       
+      83 -                    }                                          
+      65 +                    IncreaseQuality(item);                     
+      66                  }
+      67              }
+      68          }
+      69      }
+      70 +                                                               
+      71 +    private static void IncreaseQuality(Item item)             
+      72 +    {                                                          
+      73 +        if (item.Quality < 50)                                 
+      74 +        {                                                      
+      75 +            item.Quality = item.Quality + 1;                   
+      76 +        }                                                      
+      77 +    }                                                          
+      78 +                                                               
+      79 +    private static void DecreaseQuality(Item item)             
+      80 +    {                                                          
+      81 +        if (item.Quality > 0)                                  
+      82 +        {                                                      
+      83 +            item.Quality = item.Quality - 1;                   
+      84 +        }                                                      
+      85 +    }                                                          
+      86  }
+      87   No newline at end of file
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ The six guarded quality steps now go through two helpers, IncreaseQuality and
+  DecreaseQuality, and the tests still pass: 39 passed, 0 failed. The golden
+  master output is unchanged, and the build has no warnings or errors.
+
+  The helpers contain exactly the old guards, moved without change:
+  private static void IncreaseQuality(Item item) { if (item.Quality < 50)
+  item.Quality = item.Quality + 1; }
+  private static void DecreaseQuality(Item item) { if (item.Quality > 0)
+  item.Quality = item.Quality - 1; }
+  Each is still "take one step, unless already at or past the limit". There's no
+  Math.Clamp and nothing that moves a value back into range. So quality outside
+  0–50 is still never corrected, and QualityOutsideValidRange_IsNotCorrected
+  still passes (Normal 80 → 79, Brie and Backstage 80 → 80, −1 stays −1).
+
+  C# note: private static means the method belongs to the class itself, not to a
+  particular GildedRose object. These helpers only touch the Item passed in, so
+  they don't need an instance.
+
+  Call sites:
+  - 5 of the 6 sites were a plain if (guard) { step; } and became a single call.
+  - The one site that needed restructuring: the outer if (item.Quality < 50)
+    guarded the first increment and the whole Backstage bonus block. It's now
+    IncreaseQuality(item) followed by the bonus block, un-nested one level. This
+    is equivalent:
+    - Starting quality below 50: same as before, since each bonus step was
+      already guarded by its own < 50 check.
+    - Starting quality 50 or above: the old code skipped everything; now all
+      three calls do nothing, because quality never goes up.
+  - Tests covering it: QualityOutsideValidRange_IsNotCorrected (Backstage 80
+    → 80), the 50 → 50 and 49/48 → 50 rows in Quality_NeverIncreasesAbove50, and
+    the golden master's quality 50 and 80 rows.
+
+  item.Quality - item.Quality is still there. I'll replace it with = 0 in the
+  category split.
+
+  Diff: 28 lines added, 30 removed, only in GildedRose.cs. Suggested commit
+  message: refactor: extract guarded IncreaseQuality and DecreaseQuality 
+  helpers.
+
+  Next is step 5, the key one: splitting the method into a switch on the item
+  name, with each item category's whole day in one branch. I'll wait for your
+  go-ahead.
+
+✻ Churned for 34s · done 11:27 AM
+
+❯ go ahead with the switch on item name. Make sure the switch makes it possible 
+  to read each category's quality behaviour in one place, and do not change     
+  the order of operations.                                                      
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ I've confirmed each category follows the same pattern: update quality,
+  decrement SellIn, then adjust for expiration. I'll structure each case to
+  mirror this exact sequence.
+
+⏺ Update(csharp.xUnit/GildedRose/GildedRose.cs)
+  ⎿  Added 24 lines, removed 31 lines
+      18      {
+      19          foreach (var item in Items)
+      20          {
+      21 -            if (item.Name == "Sulfuras, Hand of Ragnaros")     
+      21 +            switch (item.Name)                                 
+      22              {
+      23 -                continue;                                      
+      24 -            }                                                  
+      23 +                case "Sulfuras, Hand of Ragnaros":             
+      24 +                    break;                                     
+      25  
+      26 -            if (item.Name != AgedBrie && item.Name != Backstage
+         -Pass)                                                          
+      27 -            {                                                  
+      28 -                DecreaseQuality(item);                         
+      29 -            }                                                  
+      30 -            else                                               
+      31 -            {                                                  
+      32 -                IncreaseQuality(item);                         
+      26 +                case AgedBrie:                                 
+      27 +                    IncreaseQuality(item);                     
+      28 +                    item.SellIn = item.SellIn - 1;             
+      29 +                    if (item.SellIn < 0)                       
+      30 +                    {                                          
+      31 +                        IncreaseQuality(item);                 
+      32 +                    }                                          
+      33 +                    break;                                     
+      34  
+      34 -                if (item.Name == BackstagePass)                
+      35 -                {                                              
+      35 +                case BackstagePass:                            
+      36 +                    IncreaseQuality(item);                     
+      37                      if (item.SellIn < 11)
+      38                      {
+      39                          IncreaseQuality(item);
+      40                      }
+      40 -                                                               
+      41                      if (item.SellIn < 6)
+      42                      {
+      43                          IncreaseQuality(item);
+      44                      }
+      45 -                }                                              
+      46 -            }                                                  
+      45 +                    item.SellIn = item.SellIn - 1;             
+      46 +                    if (item.SellIn < 0)                       
+      47 +                    {                                          
+      48 +                        item.Quality = 0;                      
+      49 +                    }                                          
+      50 +                    break;                                     
+      51  
+      48 -            item.SellIn = item.SellIn - 1;                     
+      49 -                                                               
+      50 -            if (item.SellIn < 0)                               
+      51 -            {                                                  
+      52 -                if (item.Name != AgedBrie)                     
+      53 -                {                                              
+      54 -                    if (item.Name != BackstagePass)            
+      52 +                default:                                       
+      53 +                    DecreaseQuality(item);                     
+      54 +                    item.SellIn = item.SellIn - 1;             
+      55 +                    if (item.SellIn < 0)                       
+      56                      {
+      57                          DecreaseQuality(item);
+      58                      }
+      58 -                    else                                       
+      59 -                    {                                          
+      60 -                        item.Quality = item.Quality - item.Qual
+         -ity;                                                           
+      61 -                    }                                          
+      62 -                }                                              
+      63 -                else                                           
+      64 -                {                                              
+      65 -                    IncreaseQuality(item);                     
+      66 -                }                                              
+      59 +                    break;                                     
+      60              }
+      61          }
+      62      }
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ UpdateQuality() is now a switch on the item name, with each category's whole
+  day in one case. The tests still pass: 39 passed, 0 failed. The golden master
+  output is unchanged, and the build has no warnings or errors. The full file is
+  shown above (24 lines added, 31 removed).
+
+  Each category now reads top to bottom in one place:
+
+  ┌──────────────────────────────┬──────────────────────────────────────────┐
+  │             case             │     Sequence (same order as before)      │
+  ├──────────────────────────────┼──────────────────────────────────────────┤
+  │ "Sulfuras, Hand of Ragnaros" │ nothing happens                          │
+  ├──────────────────────────────┼──────────────────────────────────────────┤
+  │ AgedBrie                     │ increase → SellIn − 1 → increase again   │
+  │                              │ if expired                               │
+  ├──────────────────────────────┼──────────────────────────────────────────┤
+  │                              │ increase → +1 if SellIn < 11 → +1 if     │
+  │ BackstagePass                │ SellIn < 6 → SellIn − 1 → quality 0 if   │
+  │                              │ expired                                  │
+  ├──────────────────────────────┼──────────────────────────────────────────┤
+  │ default (normal items,       │ decrease → SellIn − 1 → decrease again   │
+  │ Conjured, near-miss names)   │ if expired                               │
+  └──────────────────────────────┴──────────────────────────────────────────┘
+
+  C# notes:
+  - Each case in a C# switch must end in break (or return and the like). Unlike
+    C or Java, C# never falls through from one case to the next.
+  - default catches every name not listed, including a null name, so those items
+    still behave like normal items as before.
+
+  Order of operations: before editing, I traced each category through the old
+  code, and each case keeps that exact sequence.
+  - The Backstage tiers still check SellIn before the decrement (Q8).
+  - The "expired" check still runs after it (Q4).
+  - Items are still processed one after another in list order.
+
+  Changes beyond regrouping, all equivalent:
+  - Sulfuras guard moved into the switch: it's now a case that does nothing.
+    That's a break instead of continue; nothing follows the switch in the loop,
+    so the effect is the same. All four categories are now visible in one place.
+  - item.Quality - item.Quality → item.Quality = 0: x - x is 0 for every
+    integer, including negative values. The Backstage reset of negative quality
+    (Q7) is unchanged, and the golden master's quality −1 rows still pass.
+
+  Decision for you (I left it untouched in this step): each special name now
+  appears only once, as a case label. That's why the switch mixes AgedBrie and
+  BackstagePass constants with a plain Sulfuras string, which is inconsistent.
+  Under your rule ("no constants for names occurring only once"), the constants
+  no longer earn their place. Options:
+  1. Inline all three as literals (I recommend this): case "Aged Brie":, case 
+     "Backstage passes to a TAFKAL80ETC concert":. The switch then reads as a
+     plain catalogue of names, with no extra declarations.
+  2. Constants for all three: consistent, but against your "used only once"
+     rule.
+  3. Leave as is.
+
+  Suggested commit message: refactor: group item update rules by category in a 
+  switch.
+
+  Once you've decided on the constants, the next decision is whether we stop
+  here. The original roadmap's step 6 (extracting per-category methods) may no
+  longer be worth it: each case is 4–13 lines long and already readable.
+
+✻ Cogitated for 42s · done 11:31 AM
+
+❯ yes, let's remove the unnecessary constants and just inline them              
+
+⏺ Bash(cd /Users/robertopreste/Data/Various/GildedRose-Refactoring-Kata && git
+      status --short && git log --oneline -1 && python3 - <<'EOF'
+      p='csharp.xUnit/GildedRose/G…)
+  ⎿  ?? .DS_Store
+     ?? .mcp.json
+     ?? .vscode/
+     … +35 lines (ctrl+o to expand)
+  ⎿  Updated csharp.xUnit/GildedRose/GildedRose.cs (+2 -5)
+       4  
+       5  public class GildedRose
+       6  {
+       7 -    private const string AgedBrie = "Aged Brie";               
+       8 -    private const string BackstagePass = "Backstage passes to a
+         - TAFKAL80ETC concert";                                         
+       9 -                                                               
+       7      IList<Item> Items;
+       8  
+       9      public GildedRose(IList<Item> Items)
+     ...
+      20                  case "Sulfuras, Hand of Ragnaros":
+      21                      break;
+      22  
+      26 -                case AgedBrie:                                 
+      23 +                case "Aged Brie":                              
+      24                      IncreaseQuality(item);
+      25                      item.SellIn = item.SellIn - 1;
+      26                      if (item.SellIn < 0)
+     ...
+      29                      }
+      30                      break;
+      31  
+      35 -                case BackstagePass:                            
+      32 +                case "Backstage passes to a TAFKAL80ETC concert
+         +":                                                             
+      33                      IncreaseQuality(item);
+      34                      if (item.SellIn < 11)
+      35                      {
+
+⏺ I removed the two name constants and put the names directly in the case
+  labels. The tests still pass: 39 passed, 0 failed. The golden master output is
+  unchanged, and the build has no warnings or errors.
+
+  What changed: only GildedRose.cs, as shown in the diff above.
+  - The AgedBrie and BackstagePass declarations are gone, along with the blank
+    line after them.
+  - case AgedBrie: is now case "Aged Brie":.
+  - case BackstagePass: is now case "Backstage passes to a TAFKAL80ETC 
+    concert":.
+
+  The switch now lists all three special names the same way, as plain strings,
+  so it reads as a catalogue of item categories. Nothing else changed. In C#, a
+  const is substituted with its value when the code compiles, so the compiled
+  comparisons are identical to before.
+
+  The class is now 76 lines: the original field and constructor, UpdateQuality()
+  with the switch, and the two quality helpers.
+
+  Suggested commit message: refactor: inline special item names into switch 
+  cases.
+
+  Next decision: do we stop the structural refactoring here? My view is that the
+  code already meets AGENTS.md's goals:
+  - There are no nested conditionals.
+  - The quality guard lives in one place.
+  - Adding Conjured would mean one new case.
+
+  The remaining options are small and optional:
+  - (a) Extract one method per category (e.g. UpdateBackstagePass(item)). With
+    cases of 4–13 lines, I don't think it adds much.
+  - (b) Tidy the Items field. It has no access modifier, isn't readonly, and
+    uses a PascalCase name for a private field. This is cosmetic, and the
+    requirements file says the Items property belongs to the goblin. The
+    constructor and public API wouldn't change either way.
+  - (c) Stop the refactoring and run Stryker mutation testing, as AGENTS.md
+    specifies.
+
+  I'd go with (c).
+
+✻ Cogitated for 14s · done 11:35 AM
+
+❯ yes, let's stop the refactoring here and proceed with the mutation testing.   
+  Do not immediately fix any surviving mutants, but present the results so we   
+  can review them and decide the next steps                                     
+
+⏺ I'll run Stryker.NET with dnx, the .NET 10 runner that executes a tool package
+  without installing it, so nothing is added to the repo or your global tools.
+  I'll point the reports to the scratchpad so the working tree stays clean.
+  First, checking what's available:
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+⏺ Stryker is available. I'll run it at its default mutation level on
+  GildedRose.csproj, covering the whole production project, including Program.cs
+  and Item.cs:
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ The table is cut off by the terminal width. I'll pull the details from the
+  JSON report:
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ I ran Stryker.NET 5.0.0 on the refactored code. GildedRose.cs scored 100%: all
+  34 testable mutants were caught. The overall score is 98.70% because of one
+  surviving mutant in Program.cs, the console demo, which we didn't refactor. I
+  haven't changed anything; the working tree is clean, and the reports are in
+  the scratchpad.
+
+  How to read the results: Stryker makes small changes to the code ("mutants")
+  and reruns the 39 tests. A mutant is killed if a test fails, and survives if
+  every test still passes.
+
+  Results
+
+  ┌──────────────┬───────┬─────────┬────────┬────────┬────────┬────────┐
+  │              │ Kille │ Survive │ Timeou │ Compil │ Ignore │        │
+  │     File     │   d   │    d    │   t    │   e    │   d    │ Score  │
+  │              │       │         │        │ error  │        │        │
+  ├──────────────┼───────┼─────────┼────────┼────────┼────────┼────────┤
+  │ GildedRose.c │ 34    │ 0       │ 0      │ 3      │ 6      │ 100%   │
+  │ s            │       │         │        │        │        │        │
+  ├──────────────┼───────┼─────────┼────────┼────────┼────────┼────────┤
+  │ Program.cs   │ 41    │ 1       │ 1      │ 3      │ 4      │ 97.7%  │
+  ├──────────────┼───────┼─────────┼────────┼────────┼────────┼────────┤
+  │              │       │         │        │        │        │ no mut │
+  │ Item.cs      │ –     │ –       │ –      │ –      │ –      │ able   │
+  │              │       │         │        │        │        │ logic  │
+  ├──────────────┼───────┼─────────┼────────┼────────┼────────┼────────┤
+  │              │       │         │        │        │        │ 98.70% │
+  │ Total        │ 75    │ 1       │ 1      │ 6      │ 10     │  (76/7 │
+  │              │       │         │        │        │        │ 7)     │
+  └──────────────┴───────┴─────────┴────────┴────────┴────────┴────────┘
+
+  Mutants killed in GildedRose.cs:
+  - 14 comparison changes, such as < 11 → <= 11, < 50 → <= 50 and > 0 → >= 0.
+  - 7 removed statements.
+  - 7 negated conditions.
+  - 5 arithmetic changes, such as + 1 → - 1.
+  - 1 removed block.
+
+  Every boundary in the business rules is pinned.
+
+  The one survivor (Program.cs:44)
+
+  if (args.Length > 0)      // mutant: args.Length >= 0
+      days = int.Parse(args[0]) + 1;
+
+  - Why it survives: the only test that calls Main is ThirtyDays, and it always
+    passes "30". With an argument present, > 0 and >= 0 take the same branch.
+  - What the mutant would break: with no arguments, the mutant crashes when it
+    reads args[0], which doesn't exist. So it's a real gap, not an equivalent
+    mutant, but it's in the console demo program, not in the item update rules.
+
+  Non-survivors worth understanding
+
+  Status: Compile error ×3 in GildedRose.cs
+  What it is: Stryker tried to change each case name to "". C# case labels must
+  be compile-time constants, so Stryker can't swap them at runtime and the
+  mutant doesn't compile.
+  Is it a gap?: Not a gap in practice, but Stryker can't measure it. A changed
+  name would fail ItemCategory_IsMatchedByExactFullName, the business-rule
+  tests and the golden master.
+  ────────────────────────────────────────
+  Status: Compile error ×3 in Program.cs
+  What it is: Type-invalid mutants, such as string - int
+  Is it a gap?: No
+  ────────────────────────────────────────
+  Status: Ignored ×10
+  What it is: "Block already covered": Stryker skips removing a whole { } block
+  when it already mutates every statement inside it
+  Is it a gap?: No
+  ────────────────────────────────────────
+  Status: Timeout ×1 (Program.cs:49, i++ → i--)
+  What it is: Creates an infinite loop; Stryker counts timeouts as detected
+  Is it a gap?: No
+
+  Decisions for you
+
+  1. What to do about the Program.cs survivor. My recommendation is option (a):
+     - (a) Accept it and document it as out of scope: Program is the kata's demo
+       harness, not the refactoring target.
+     - (b) Add a test that runs Main with no arguments. It would be another test
+       that redirects console output globally, which the strategy advised
+       against.
+     - (c) Exclude Program.cs from future runs, e.g. -m "!**/Program.cs". I'd
+       rather not hide it.
+  2. Record the results? A short docs/mutation-testing.md (or a README section)
+     with:
+     - the command used
+     - the score
+     - the survivor and the decision on it
+     - the note about the compile-error mutants
+
+     This would sit alongside your decision log in docs/ai/.
+  3. Optional check of the testing strategy. The strategy (section 6) claimed
+     that the named tests alone catch the boundary mutants, not just the golden
+     master. I can rerun Stryker with the golden master and ThirtyDays filtered
+     out, to check that claim. It's a read-only check, with nothing changed in
+     the repo.
+
+  To reproduce the run, from csharp.xUnit/GildedRoseTests/:
+  dotnet dnx dotnet-stryker --yes -- -p GildedRose.csproj
+  That command writes its report into StrykerOutput/ inside that directory,
+  which isn't ignored by git. That's why I added -O <scratchpad> to keep the
+  reports out of the repo.
+
+✻ Sautéed for 1m 26s · done 11:40 AM
+
+❯ accept the survivor, document the results in docs/mutation-testing.md and run 
+  the optional check                                                            
+
+⏺ I'll run the optional check first, so the document can include its results.
+  I'm checking how Stryker can exclude tests:
+  Ran 2 shell commands (ctrl+o to expand)
+
+⏺ I'll create a temporary Stryker config in the scratchpad that excludes
+  ApprovalTest, keeping the 37 named test cases, and scopes mutation testing to
+  GildedRose.cs.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ All 34 named tests passed (37 discovered), confirming the filter worked
+  correctly—that trailing "fatal" line was just git status run from the wrong
+  directory. Next I'll confirm the repo is clean and check which named test
+  caught each mutant to verify section 6's claims.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ The named tests catch every mutant and the repo's clean, but I'll double-check
+  one gap first: no mutant showed up for item.Quality = 0 at Backstage line 45,
+  despite the strategy expecting one.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ Confirmed: Stryker generated no mutant at all for item.Quality = 0. That's a
+  blind spot of the tool, not of the tests, so I'll document it honestly.
+  Writing the document:
+
+⏺ Write(docs/mutation-testing.md)
+  ⎿  Wrote 119 lines to docs/mutation-testing.md
+       1 # Gilded Rose: mutation testing results
+       3 Mutation testing checks that the test suite would actually catch
+          regressions.
+         de, such as
+       5 `<` → `<=`, `+` → `-`, a negated condition or a removed statemen
+       6 the tests. A mutant is **killed** if at least one test fails, an
+         d **survives**
+       8 
+       9 - **Tool:** Stryker.NET 5.0.0, default mutation level (`Standard
+      10 - **Code under test:** commit `a0f4ea1` (refactoring complete)
+     … +160 lines (ctrl+o to expand)
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ The check confirms the named tests are strong on their own: with the golden
+  master and ThirtyDays switched off, the 37 named test cases still catch all 34
+  of 34 mutants in GildedRose.cs (100%). The survivor is accepted, and the
+  results are written up in docs/mutation-testing.md. That's the only new file;
+  no code changed, so I didn't rerun dotnet test. Stryker's reports stayed in
+  the scratchpad.
+
+  Strategy predictions:
+  - Confirmed: 6 of the 7 predictions in section 6 of the strategy hold. Each
+    boundary mutant is caught by the specific named test we planned for it, for
+    example <= 11 / <= 6 by
+    BackstagePass_QualityIncrease_DependsOnDaysUntilConcert and >= 0 by
+    Quality_IsNeverNegative.
+  - Not measurable: the 7th prediction was that removing the Backstage reset
+    (Quality = 0) would be caught by R8. That can't be checked, because Stryker
+    never generates that mutant.
+
+  A tool blind spot to know about: at its default level, Stryker.NET doesn't
+  remove plain assignments like item.Quality = 0 and doesn't change number
+  literals (11, 6, 50). So the 100% score doesn't mean every possible change was
+  tried. Our tests still cover those cases by design: R8 expects 0 after the
+  concert, and the boundary rows sit on both sides of every threshold. The
+  document says this explicitly.
+
+  What's in docs/mutation-testing.md:
+  - The tool, version, commit a0f4ea1 and date.
+  - Run 1 (full suite): results per file (98.70% overall, 100% for
+    GildedRose.cs).
+  - The Program.cs survivor: why it survives, and the decision to accept it,
+    with the reason (it's the demo harness, and testing it would need another
+    console-redirecting test).
+  - Mutants that weren't tested and why they aren't gaps: compile errors on the
+    case labels, "block already covered" skips, and one timeout.
+  - Run 2 (named tests only): a table comparing each prediction from the
+    strategy with the test that actually caught the mutant.
+  - The blind-spot section described above.
+  - How to reproduce: both commands, the filter config shown inline, and a
+    warning that Stryker's default StrykerOutput/ folder isn't git-ignored.
+
+  Suggested commit message: docs: record mutation testing results.
+
+  With this, the refactoring and its verification are complete. The remaining
+  item in AGENTS.md is the Conjured feature, which I'll only start when you ask.
+
+✻ Worked for 1m 36s · done 11:45 AM
+
+❯ Yes, now let's move to implementing the Conjured feature. Before changing any 
+  file, read again all the sources we listed and identify the exact             
+  requirements for Conjured items and describe how their quality should change  
+  in the different conditions. Be aware that the previously characterised       
+  behaviour in the golden standard will change with this feature; this is not a 
+  regression. Identify which existing tests and golden master expectations      
+  will change as a result of supporting this feature, and propose a small set   
+  of tests to implement before changing the production code                     
+
+⏺ I'll start by re-reading the sources, as you asked.
+
+  Ran 2 shell commands (ctrl+o to expand)
+
+⏺ That grep turned up something unexpected: an
+  ApprovalTest.ThirtyDays.received.txt file exists. I'll check where it came
+  from before going on.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ Those two timestamped files are just leftover Verify snapshots from Stryker's
+  mutation test run—they're git-ignored and harmless, so I'll leave them as-is
+  for now. Next, I'll simulate the "twice as fast" rule with its guarded steps
+  against the approved baselines to work out exactly which golden master and
+  ThirtyDays lines would need to change.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ I haven't changed any files. Below are the Conjured requirements, what will
+  change in the existing tests and baselines, and the tests I propose to write
+  first. One decision needs your input before I write anything.
+
+  1. What the sources say about Conjured
+
+  Source: GildedRoseRequirements.md:26-28
+  Statement: "We have recently signed a supplier of conjured items… "Conjured" 
+  items degrade in Quality twice as fast as normal items"
+  ────────────────────────────────────────
+  Source: GildedRoseRequirements.md (general rules, which still apply)
+  Statement: SellIn decreases daily; "Once the sell by date has passed, Quality
+  degrades twice as fast"; "Quality is never negative"
+  ────────────────────────────────────────
+  Source: AGENTS.md
+  Statement: Conjured is a feature: build it test-first, in separate commits,
+  only after the refactoring
+  ────────────────────────────────────────
+  Source: Program.cs:37-38
+  Statement: The only example name is Conjured Mana Cake, with the comment "this
+
+  conjured item does not work properly yet"
+  ────────────────────────────────────────
+  Source: Behaviour model Q2, README, LegacyBehaviourTests L3
+  Statement: Pin the current behaviour: Conjured degrades like a normal item
+
+  That single requirement line is all the spec says about Conjured. It defines
+  Conjured only relative to normal items.
+
+  2. How Conjured quality should change
+
+  "Twice as fast as normal items", applied to each normal-item rule:
+
+  ┌────────────────────────┬──────────┬─────────────────┬──────────────────┐
+  │  Condition (start of   │ Normal   │                 │ Example (SellIn, │
+  │          day)          │  item    │    Conjured     │  Quality → after │
+  │                        │  today   │                 │     one day)     │
+  ├────────────────────────┼──────────┼─────────────────┼──────────────────┤
+  │ Before the sell-by     │ −1       │ −2              │ (10, 20) → (9,   │
+  │ date (SellIn >= 1)     │          │                 │ 18)              │
+  ├────────────────────────┼──────────┼─────────────────┼──────────────────┤
+  │ Sell-by date passed    │          │                 │ (0, 20) → (−1,   │
+  │ (SellIn <= 0, as for   │ −2       │ −4              │ 16)              │
+  │ normal items, Q4)      │          │                 │                  │
+  ├────────────────────────┼──────────┼─────────────────┼──────────────────┤
+  │                        │ stops at │                 │ (5, 1) → (4, 0); │
+  │ Close to 0             │  0       │ stops at 0      │  (0, 3) → (−1,   │
+  │                        │          │                 │ 0)               │
+  ├────────────────────────┼──────────┼─────────────────┼──────────────────┤
+  │                        │          │ −1 (Conjured    │                  │
+  │ SellIn                 │ −1       │ isn't           │                  │
+  │                        │          │ legendary)      │                  │
+  └────────────────────────┴──────────┴─────────────────┴──────────────────┘
+
+  Implementation consequence: I'd implement this by calling the existing guarded
+  DecreaseQuality twice, where a normal item calls it once. That gives the 0
+  floor automatically, with no new limit logic. It also means Conjured follows
+  the same "a guard, not a clamp" behaviour as normal items when quality is
+  outside 0–50: 80 → 78, and −1 stays −1. The spec doesn't cover those values,
+  and this choice keeps Conjured consistent with normal items. The golden master
+  will show these cases. I don't propose named tests for them.
+
+  3. ⚠️ Decision needed: which items count as "Conjured"?
+
+  The spec says "Conjured" items, a category from a supplier, which suggests
+  many names. The code's other categories match exact full names (Q1). Two
+  options:
+
+  Option: A. Name starts with "Conjured" (case-sensitive) — recommended
+  Matches: Conjured Mana Cake, Conjured Sword, …
+  Effect: Fits "a supplier of conjured items". Implemented as case string name 
+  when name.StartsWith("Conjured", StringComparison.Ordinal):
+  ────────────────────────────────────────
+  Option: B. Exact name "Conjured Mana Cake"
+  Matches: only that item
+  Effect: Same style as the existing categories, but every new Conjured product
+  would need a code change
+
+  C# notes on option A:
+  - Why case string name when …: this is a type pattern with a guard. I'd use it
+    instead of case var name when …, because a var pattern also matches null,
+    and name.StartsWith would then throw for a null name. Today, a null name
+    behaves as a normal item, and the type pattern keeps that.
+  - Why StringComparison.Ordinal: it makes the match an exact character
+    comparison. By default, StartsWith(string) uses culture rules, which can
+    vary by machine settings.
+
+  Option A has one consequence: a name like "Conjured Aged Brie" would be
+  treated as Conjured, not as Brie. The spec doesn't define such combinations,
+  and no current item has one. I'd leave that untested and just document it.
+
+  4. What will change in the existing tests and baselines
+
+  Changes, all expected (the feature, not a regression):
+
+  Artefact: LegacyBehaviourTests.ConjuredItem_CurrentlyDegradesLikeNormalItem
+  (L3)
+  Change: Fails by design. Delete it in the implementation commit; the new
+  business-rule tests replace it.
+  Size: 1 test, 2 cases
+  ────────────────────────────────────────
+  Artefact: ApprovalTest.GoldenMaster.verified.txt
+  Change: Re-approve. Only Conjured Mana Cake lines may change.
+  Size: 38 of 512 lines. The other 26 Conjured lines stay identical: those
+  starting at quality −1, 0 or 1, and those at quality 2 that are already
+  expired. Both rules reach the same values there.
+  ────────────────────────────────────────
+  Artefact: ApprovalTest.ThirtyDays.verified.txt
+  Change: Re-approve
+  Size: 4 lines, the Conjured Mana Cake on days 1–4: 2,5→2,4, 1,4→1,2, 0,3→0,0,
+  -1,1→-1,0. From day 5 both reach …, 0.
+  ────────────────────────────────────────
+  Artefact: csharp.xUnit/README.md, "Known legacy behaviour"
+  Change: Remove the Conjured row
+  Size: 1 row
+  ────────────────────────────────────────
+  Artefact: docs/behaviour-model.md (Q2, M4)
+  Change: Mark these as superseded by the feature
+  Size: 2 entries
+  ────────────────────────────────────────
+  Artefact: Program.cs:37 comment "does not work properly yet"
+  Change: Becomes false; remove it
+  Size: 1 line
+
+  I computed those counts by simulating the new rule against the approved files.
+  When I re-approve, I'll check the diff against them: no line other than these
+  may change. That's what makes re-approving the snapshots safe instead of a
+  blind accept.
+
+  Unchanged: all of R1–R9, L1, L2, L4 and L5, and the remaining 474
+  golden-master lines.
+
+  5. Proposed tests to write first (in GildedRoseTest.cs, since Conjured is now 
+  a requirement)
+
+  #: C1
+  Test: ConjuredItem_QualityDegradesTwiceAsFastAsNormalItem_BeforeSellByDate
+  (new)
+  Rule: "twice as fast as normal items"
+  Cases (SellIn, Quality → expected): (10, 20 → 18), (1, 20 → 18)
+  Red before the change?: ❌ both
+  ────────────────────────────────────────
+  #: C2
+  Test:
+  ConjuredItem_QualityDegradesTwiceAsFastAsNormalItem_OnceSellByDateHasPassed
+  (new)
+  Rule: the same rule after the sell-by date: 2 × 2
+  Cases (SellIn, Quality → expected): (0, 20 → 16), (−1, 20 → 16)
+  Red before the change?: ❌ both
+  ────────────────────────────────────────
+  #: C3
+  Test: Quality_IsNeverNegative (existing R4): add a name parameter and two
+  Conjured rows
+  Rule: "never negative" applies to the faster decrease too
+  Cases (SellIn, Quality → expected): (Conjured, 5, 1 → 0), (Conjured, 0, 3 → 0)
+  Red before the change?: (0, 3) ❌; (5, 1) ✅ (guards against an implementation
+
+  that subtracts 2 directly)
+  ────────────────────────────────────────
+  #: C4
+  Test: SellIn_DecreasesByOneEachDay (existing R1): add one Conjured row
+  Rule: SellIn still decreases by 1
+  Cases (SellIn, Quality → expected): Conjured Mana Cake
+  Red before the change?: ✅ (guards against a Conjured case that forgets the
+  decrement)
+  ────────────────────────────────────────
+  #: C5 (option A only)
+  Test: ConjuredItem_IsRecognisedByNamePrefix (new)
+  Rule: which items count as Conjured
+  Cases (SellIn, Quality → expected): Conjured Sword (5, 10 → 8)
+  Red before the change?: ❌
+
+  C3 changes an existing test's parameters but keeps its existing rows, the same
+  rule-centred style as Quality_NeverIncreasesAbove50. That's 3–4 tests and
+  about 9 cases in total.
+
+  6. Proposed commit sequence
+
+  1. Tests: add C1–C5. Expected result: the new rows are red; everything else,
+     including L3 and both snapshots, stays green. I'll show the red output.
+  2. Feature:
+     - add the Conjured case
+     - delete L3
+     - re-approve both snapshots after checking the 38 + 4 lines described in
+       section 4
+     - remove the outdated Program.cs comment
+
+     Expected result: everything green.
+  3. Docs: update the README legacy table and the behaviour model.
+
+  Commit 1 contains tests that fail on purpose. AGENTS.md asks for tests first,
+  in a separate commit. If you'd rather every commit stayed green, I can merge
+  steps 1 and 2 and show you the red run before implementing.
+
+  Housekeeping: can I delete the two leftover *.received.txt files from the
+  Stryker run? I'd also add one line to docs/mutation-testing.md noting that
+  Stryker leaves these files behind.
+
+  My question for you: which items are Conjured, A (name starts with "Conjured")
+  or B (exact "Conjured Mana Cake")?
+
+✻ Worked for 1m 42s · done 2:05 PM
+
+❯ let's save these findings to a dedicated md file in docs/ai first of all      
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ Write(docs/ai/conjured-feature-analysis.md)
+  ⎿  Wrote 177 lines to docs/ai/conjured-feature-analysis.md
+       1 # Conjured items: feature analysis
+       3 - **Status:** analysis only, no files changed. **Open decisions:
+         ** see §3 and §7.
+         g complete, mutation testing documented).
+       5 - **Date:** 2026-10-03
+       7 Conjured support is a **feature**, not part of the refactoring (
+         AGENTS.md).
+         ade like normal
+       9 items, will change on purpose. The resulting test and golden-mas
+      10 are expected and are **not regressions**.
+     … +248 lines (ctrl+o to expand)
+
+⏺ I saved the analysis to docs/ai/conjured-feature-analysis.md. That's the only
+  file I changed: no code or tests, and no commit.
+
+  It has the same content as my previous answer:
+  1. The source statements about Conjured, with file and line references.
+  2. The expected quality behaviour: −2 a day, −4 once expired, stopping at 0,
+     with SellIn still going down by 1. It includes the implementation sketch
+     and the C# notes on case string name when and StringComparison.Ordinal.
+  3. The name-matching decision: A (name starts with "Conjured", my
+     recommendation) or B (exact name "Conjured Mana Cake").
+  4. What will change in existing tests, snapshots and docs, including the exact
+     snapshot counts: 38 of 512 golden-master lines, and 4 ThirtyDays lines
+     (days 1–4). Before re-approving, the diff must match those predictions
+     exactly.
+  5. The proposed tests C1–C5.
+  6. The proposed commit sequence, and the alternative if you want every commit
+     green.
+  7. The leftover *.received.txt files from the Stryker run.
+
+  Sections 3, 6 and 7 each have a Decision: pending line that I'll fill in once
+  you've decided, so the file also records your choices.
+
+  Suggested commit message: docs: add Conjured feature analysis.
+
+  Still open:
+  - Name matching: A or B?
+  - Commit sequence: commit the failing tests separately first, or keep every
+    commit green?
+  - Housekeeping: OK to delete the two leftover *.received.txt files?
+
+✻ Crunched for 37s · done 2:07 PM
+
+❯ let's go with option A, but document the edge cases such as Conjured Aged     
+  Brie properly in the feature analysis document. Remove the leftover files and 
+  add a note to mutation-testing.md as suggested; also is fine to have a        
+  commit with failing test while we implement this. Thus update the             
+  conjured-feature-analysis.md document to remove points 6 and 7 related to     
+  these questions. I'll review the document and commit before proceeding with   
+  the implementation                                                            
+
+⏺ I'll start with the housekeeping: deleting the two leftover snapshot files and
+  adding the note to docs/mutation-testing.md.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ Update(docs/mutation-testing.md)
+  ⎿  Added 6 lines
+      117  Stryker writes its reports to `StrykerOutput/` in the current 
+           directory,
+      118  which is not git-ignored. Use `-O <path>` to write them elsewh
+           ere, or delete
+      119  the folder after the run.
+      120 +                                                              
+      121 +Stryker runs the approval tests against mutated code. Each tim
+          +e a mutant makes                                              
+      122 +a snapshot test fail, Verify writes `*.received.txt` files nex
+          +t to the test                                                 
+      123 +files in `GildedRoseTests/`. They are git-ignored, but they co
+          +ntain output from                                             
+      124 +mutated code, not from the real implementation, and can be mis
+          +taken for a real                                              
+      125 +failure. Delete them after a Stryker run.                     
+
+⏺ Now the analysis document. It will record option A, gain a dedicated
+  edge-cases section, and lose sections 6 and 7. I'm rewriting it as a whole so
+  the section numbering stays consistent.
+
+⏺ Write(docs/ai/conjured-feature-analysis.md)
+  ⎿  Added 85 lines, removed 57 lines
+      1  # Conjured items: feature analysis
+      2  
+      3 -- **Status:** analysis only, no files changed. **Open decisions:
+        -** see §3 and §7.                                               
+      3 +- **Status:** analysis complete, decisions recorded. No producti
+        +on or test code changed yet.                                    
+      4  - **Code at the time of analysis:** commit `c468a41` (refactorin
+         g complete, mutation testing documented).
+      5  - **Date:** 2026-10-03
+      6  
+     ...
+      36  **Implementation consequence.** Call the existing guarded `Decr
+          easeQuality`
+      37  twice where a normal item calls it once. This gives the 0 floor
+           with no new
+      38  limit logic. It also means Conjured items follow the same "a gu
+          ard, not a
+      39 -clamp" behaviour as normal items when quality is outside 0..50:
+         - 80 → 78, and                                                  
+      40 -−1 stays −1. The spec says nothing about these values, and the 
+         -choice keeps                                                   
+      41 -Conjured consistent with normal items. The golden master shows 
+         -these cases;                                                   
+      42 -no named tests are proposed for them.                          
+      39 +clamp" behaviour as normal items when quality is outside 0..50 
+         +(see §4).                                                      
+      40  
+      41  Sketch:
+      42  
+      43  ```csharp
+      47 -case string name when name.StartsWith("Conjured", StringCompari
+         -son.Ordinal):   // option A, see §3                            
+      44 +case string name when name.StartsWith("Conjured", StringCompari
+         +son.Ordinal):                                                  
+      45      DecreaseQuality(item);
+      46      DecreaseQuality(item);
+      47      item.SellIn = item.SellIn - 1;
+     ...
+      53      break;
+      54  ```
+      55  
+      59 -## 3. Open decision: which items count as "Conjured"?          
+      56 +This `case` goes after the three exact-name cases and before `d
+         +efault`.                                                       
+      57  
+      58 +## 3. Which items count as "Conjured"                          
+      59 +                                                               
+      60  The spec says **"Conjured" items**, a category from a supplier,
+           which suggests
+      61  many names. The existing categories match exact full names (Q1)
+          .
+      62  
+      63  | Option | Matches | Effect |
+      64  |---|---|---|
+      66 -| **A. Name starts with `"Conjured"`, case-sensitive (recommend
+         -ed)** | `Conjured Mana Cake`, `Conjured Sword`, … | Fits "a sup
+         -plier of conjured items". Implemented as `case string name when
+         - name.StartsWith("Conjured", StringComparison.Ordinal):` |     
+      65 +| **A. Name starts with `"Conjured"`, case-sensitive** | `Conju
+         +red Mana Cake`, `Conjured Sword`, … | Fits "a supplier of conju
+         +red items" |                                                   
+      66  | B. Exact name `"Conjured Mana Cake"` | only that item | Same 
+          style as the existing categories, but every new Conjured produc
+          t needs a code change |
+      67  
+      69 -C# notes for option A:                                         
+      68 +**Decision: option A** (developer, 2026-10-03).                
+      69  
+      70 +C# notes:                                                      
+      71 +                                                               
+      72  - **`case string name when …`** is a *type pattern with a guard
+          *. It is used
+      73    instead of `case var name when …` because a `var` pattern als
+          o matches
+      74    `null`, and `name.StartsWith` would then throw for a `null` n
+          ame. Today a
+     ...
+       77    comparison. By default, `StartsWith(string)` uses culture ru
+           les, which can
+       78    vary by machine settings.
+       79  
+       79 -Consequence of option A: a name like `"Conjured Aged Brie"` wo
+          -uld be treated                                                
+       80 -as Conjured, not as Aged Brie, because the exact-name cases do
+          - not match it.                                                
+       81 -The spec does not define such combinations and no current item
+          - has one. The                                                 
+       82 -proposal is to leave this untested and document it.           
+       80 +## 4. Edge cases of option A                                  
+       81  
+       84 -**Decision:** _pending_                                       
+       82 +These follow from the rule "name starts with `Conjured` (ordin
+          +al,                                                           
+       83 +case-sensitive)" combined with the `case` order in §2. Exact-n
+          +ame cases are                                                 
+       84 +checked first, then the Conjured prefix, then `default`.      
+       85  
+       86 -## 4. Impact on existing tests, baselines and docs            
+       86 +### 4.1 Combinations with special items                       
+       87  
+       88 +The spec defines Conjured only relative to *normal* items. It 
+          +says nothing                                                  
+       89 +about conjured versions of Aged Brie, Backstage passes or Sulf
+          +uras. Under                                                   
+       90 +option A, the special categories still require their **exact f
+          +ull name**                                                    
+       91 +(Q1). Any name that starts with `Conjured` therefore never mat
+          +ches them, and                                                
+       92 +is treated as a plain Conjured item that **degrades**:        
+       93 +                                                              
+       94 +| Name | Treated as | Day result from (5, 10) | Notably *not* 
+          +|                                                             
+       95 +|---|---|---|---|                                             
+       96 +| `Conjured Aged Brie` | Conjured | (4, 8) | does not increase
+          + with age |                                                   
+       97 +| `Conjured Backstage passes to a TAFKAL80ETC concert` | Conju
+          +red | (4, 8); from (0, 10): (−1, 6) | no +2/+3 tiers, no drop 
+          +to 0 after the concert |                                      
+       98 +| `Conjured Sulfuras, Hand of Ragnaros` | Conjured | (4, 8) | 
+          +not legendary: `SellIn` and `Quality` both change |           
+       99 +                                                              
+      100 +This is a consequence of the existing exact-name matching, not
+          + a choice made                                                
+      101 +for this feature. If the inn ever stocks conjured special item
+          +s, the intended                                               
+      102 +behaviour (e.g. "Conjured Aged Brie increases twice as fast"?)
+          + is a **product                                               
+      103 +decision** that the spec does not answer, and it would be a se
+          +parate feature.                                               
+      104 +                                                              
+      105 +### 4.2 Name matching                                         
+      106 +                                                              
+      107 +| Name | Treated as | Why |                                   
+      108 +|---|---|---|                                                 
+      109 +| `Conjured Mana Cake`, `Conjured Sword` | Conjured | prefix m
+          +atch |                                                        
+      110 +| `Conjured` (exactly) | Conjured | a string starts with itsel
+          +f |                                                           
+      111 +| `ConjuredSword` (no space) | Conjured | the prefix has no wo
+          +rd-boundary requirement |                                     
+      112 +| `conjured mana cake`, `CONJURED Sword` | Normal | ordinal co
+          +mparison is case-sensitive, consistent with Q1 |              
+      113 +| ` Conjured Mana Cake` (leading space) | Normal | the name do
+          +es not start with `C` |                                       
+      114 +| `Mana Cake (Conjured)`, `Extra Conjured Cake` | Normal | `Co
+          +njured` is not at the start |                                 
+      115 +| `null` | Normal | the type pattern `string name` does not ma
+          +tch `null` (Q11 preserved) |                                  
+      116 +| `""` (empty) | Normal | an empty string does not start with 
+          +`Conjured` |                                                  
+      117 +                                                              
+      118 +### 4.3 Quality outside 0..50                                 
+      119 +                                                              
+      120 +Conjured items reuse the guarded `DecreaseQuality`, so out-of-
+          +range values                                                  
+      121 +behave like normal items (Q5): each step is skipped at 0, and 
+          +nothing is                                                    
+      122 +pulled back into range.                                       
+      123 +                                                              
+      124 +| Start (`SellIn`, `Quality`) | After one day |               
+      125 +|---|---|                                                     
+      126 +| (5, 80) | (4, 78) |                                         
+      127 +| (0, 80) | (−1, 76) |                                        
+      128 +| (5, 51) | (4, 49) |                                         
+      129 +| (5, −1) | (4, −1) |                                         
+      130 +| (5, 0) | (4, 0) |                                           
+      131 +                                                              
+      132 +The spec does not cover these inputs. The golden master record
+          +s the                                                         
+      133 +`Conjured Mana Cake` trajectories for quality −1, 0, 80 and th
+          +e rest of the                                                 
+      134 +grid after re-approval. No named tests are proposed for them. 
+      135 +                                                              
+      136 +### 4.4 Which edge cases get named tests                      
+      137 +                                                              
+      138 +- **Tested:** `Conjured Sword` (other Conjured names) and `Con
+          +jured Aged Brie`                                              
+      139 +  (precedence of the special categories). Both are rows of C5 
+          +in §6.                                                        
+      140 +- **Documented only:** the rest of §4.2 and §4.3. They follow 
+          +mechanically                                                  
+      141 +  from `StartsWith` + `Ordinal` and from reusing `DecreaseQual
+          +ity`, and none                                                
+      142 +  is a scenario the inn has today.                            
+      143 +                                                              
+      144 +## 5. Impact on existing tests, baselines and docs            
+      145 +                                                              
+      146  **Expected to change (the feature, not a regression):**
+      147  
+      148  | Artefact | Change | Size |
+     ...
+      162    same values:
+      163    - every line starting at quality −1, 0 or 1 (8 `SellIn` valu
+           es each)
+      164    - quality 2 with `SellIn` −1 or 0
+      107 -- The remaining 448 lines (all other names) must stay byte-ide
+          -ntical.                                                       
+      165 +- The remaining 448 lines (all other names) must stay byte-ide
+          +ntical. None of                                               
+      166 +  the other golden-master names starts with `Conjured`, so opt
+          +ion A affects                                                 
+      167 +  only `Conjured Mana Cake`.                                  
+      168  
+      169  **ThirtyDays detail.** Only the `Conjured Mana Cake` line on d
+           ays 1–4 changes.
+      170  From day 5 both rules give `…, 0`.
+     ...
+      185  **Unchanged:** R1–R9 (except for the rows added below), L1, L2
+           , L4, L5, and
+      186  the other 474 golden-master lines.
+      187  
+      128 -## 5. Tests to write before changing production code          
+      188 +## 6. Tests to write before changing production code          
+      189  
+      130 -All in `GildedRoseTest.cs`, since Conjured becomes a business 
+          -rule.                                                         
+      190 +All in `GildedRoseTest.cs`, since Conjured becomes a business 
+          +rule. These                                                   
+      191 +tests are committed first, while they still fail, and the impl
+          +ementation                                                    
+      192 +follows in a separate commit.                                 
+      193  
+      132 -| # | Test | Rule documented | Cases `(SellIn, Quality → expec
+          -ted)` | Red before implementation? |                          
+      194 +| # | Test | Rule documented | Cases `(name, SellIn, Quality →
+          + expected)` | Red before implementation? |                    
+      195  |---|---|---|---|---|
+      196  | C1 | `ConjuredItem_QualityDegradesTwiceAsFastAsNormalItem_Be
+           foreSellByDate` (new) | "twice as fast as normal items" | (10,
+            20 → 18), (1, 20 → 18) | ❌ both |
+      197  | C2 | `ConjuredItem_QualityDegradesTwiceAsFastAsNormalItem_On
+           ceSellByDateHasPassed` (new) | the same rule after the sell-by
+            date: 2 × 2 | (0, 20 → 16), (−1, 20 → 16) | ❌ both |
+      198  | C3 | `Quality_IsNeverNegative` (existing R4): add a `name` p
+           arameter and two Conjured rows | "never negative" applies to t
+           he faster decrease | (Conjured, 5, 1 → 0), (Conjured, 0, 3 → 0
+           ) | (0, 3) ❌; (5, 1) ✅, which guards against an implementati
+           on that subtracts 2 directly |
+      199  | C4 | `SellIn_DecreasesByOneEachDay` (existing R1): add one C
+           onjured row | `SellIn` still decreases by 1 | `Conjured Mana C
+           ake` | ✅, which guards against a Conjured case that forgets t
+           he decrement |
+      138 -| C5 | `ConjuredItem_IsRecognisedByNamePrefix` (new, **option 
+          -A only**) | which items count as Conjured | `Conjured Sword` (
+          -5, 10 → 8) | ❌ |                                             
+      200 +| C5 | `ConjuredItem_IsRecognisedByNamePrefix` (new) | which i
+          +tems count as Conjured (§3, §4.1) | (`Conjured Sword`, 5, 10 →
+          + 8), (`Conjured Aged Brie`, 5, 10 → 8) | ❌ both (today `Conju
+          +red Sword` → 9 and `Conjured Aged Brie` → 9 as normal items) |
+      201  
+      202  C3 changes an existing test's parameters but keeps its existin
+           g rows,
+      141 -following the rule-centred style of `Quality_NeverIncreasesAbo
+          -ve50`. That's                                                 
+      142 -3–4 tests and about 9 cases in total.                         
+      143 -                                                              
+      144 -## 6. Proposed commit sequence                                
+      145 -                                                              
+      146 -1. **Tests:** add C1–C5. Expected result: the new rows are red
+          -; everything                                                  
+      147 -   else, including L3 and both snapshots, stays green.        
+      148 -2. **Feature:**                                               
+      149 -   - add the Conjured `case`                                  
+      150 -   - delete L3                                                
+      151 -   - re-approve both snapshots after the §4 check             
+      152 -   - remove the outdated `Program.cs` comment                 
+      153 -                                                              
+      154 -   Expected result: everything green.                         
+      155 -3. **Docs:** update the README legacy table and the behaviour 
+          -model.                                                        
+      156 -                                                              
+      157 -Commit 1 contains tests that fail on purpose, which follows AG
+          -ENTS.md's                                                     
+      158 -"test-first, in separate commits". If every commit must stay g
+          -reen, merge                                                   
+      159 -steps 1 and 2 and show the red run before implementing.       
+      160 -                                                              
+      161 -**Decision:** _pending_                                       
+      162 -                                                              
+      163 -## 7. Housekeeping found during the analysis                  
+      164 -                                                              
+      165 -The first Stryker run left two git-ignored files in           
+      166 -`csharp.xUnit/GildedRoseTests/`: `ApprovalTest.GoldenMaster.re
+          -ceived.txt` and                                               
+      167 -`ApprovalTest.ThirtyDays.received.txt`, both dated 11:39. They
+          - contain output                                               
+      168 -from mutated code. When a mutant made a snapshot test fail, Ve
+          -rify wrote the                                                
+      169 -received output next to the test files. They are harmless but 
+          -misleading.                                                   
+      170 -                                                              
+      171 -Proposal:                                                     
+      172 -                                                              
+      173 -- delete both files                                           
+      174 -- add a note to `docs/mutation-testing.md` that Stryker runs l
+          -eave these files                                              
+      175 -  behind                                                      
+      176 -                                                              
+      177 -**Decision:** _pending_                                       
+      203 +following the rule-centred style of `Quality_NeverIncreasesAbo
+          +ve50`. That's 3                                               
+      204 +new tests, 2 extended tests, and 10 new cases in total, 7 of w
+          +hich are red                                                  
+      205 +before the implementation.                                    
+
+⏺ I'll correct a miscount in the closing sentence: 2 + 2 + 2 + 1 + 2 is 9 new
+  cases, not 10.
+
+⏺ Update(docs/ai/conjured-feature-analysis.md)
+  ⎿  Added 1 line, removed 1 line
+      201  
+      202  C3 changes an existing test's parameters but keeps its existin
+           g rows,
+      203  following the rule-centred style of `Quality_NeverIncreasesAbo
+           ve50`. That's 3
+      204 -new tests, 2 extended tests, and 10 new cases in total, 7 of w
+          -hich are red                                                  
+      204 +new tests, 2 extended tests, and 9 new cases in total, 7 of wh
+          +ich are red                                                   
+      205  before the implementation.
+
+  Ran 1 shell command (ctrl+o to expand)
+⏺ The analysis document is updated, the two leftover files are deleted, and the
+  note is added to the mutation-testing doc. I didn't change any code or tests,
+  so I didn't run them.
+
+  Housekeeping:
+  - Deleted: the two *.received.txt files left behind by the Stryker run. No
+    *.received.* files remain in GildedRoseTests/.
+  - docs/mutation-testing.md: added 6 lines to "How to reproduce". They explain
+    that Stryker leaves *.received.txt files next to the tests, that those
+    contain output from mutated code (so they can look like a real failure), and
+    that they should be deleted after a run.
+
+  docs/ai/conjured-feature-analysis.md (still untracked):
+  - Option A recorded in section 3 as your decision, dated 2026-10-03. The
+    status line at the top now says the decisions are recorded.
+  - New section 4, edge cases:
+    - 4.1, combinations with special items: Conjured Aged Brie, Conjured 
+      Backstage passes… and Conjured Sulfuras… are all treated as plain Conjured
+      items that degrade by 2. Brie doesn't gain quality, Backstage gets no
+      tiers or drop to 0, and Sulfuras isn't legendary. This follows from the
+      existing exact-name matching, not from a choice made for this feature.
+      What a "conjured special item" should do is flagged as an unanswered
+      product decision.
+    - 4.2, name matching: examples covering the exact word Conjured, a name with
+      no space (ConjuredSword), different capitalisation, a leading space,
+      "Conjured" in the middle of a name, null and the empty string.
+    - 4.3, quality outside 0–50: 80 → 78, expired 80 → 76, 51 → 49, −1 stays −1.
+    - 4.4, which edge cases get named tests: only Conjured Sword and Conjured 
+      Aged Brie; the rest are documented only.
+  - C5 now has two rows: Conjured Sword and Conjured Aged Brie (5, 10 → 8). The
+    second pins the precedence rule from 4.1. That brings the new tests to 9
+    cases, 7 of which fail before the implementation.
+  - Removed: the old sections 6 (commit sequence) and 7 (housekeeping), since
+    both questions are settled. The plan for committing failing tests first is
+    now one sentence in section 6 (the tests, renumbered from 5).
+
+  Suggested commit messages:
+  - docs: add Conjured feature analysis
+  - docs: note leftover Verify files after Stryker runs
+
+  When you've reviewed and committed, the next step is writing tests C1–C5 so
+  they fail as expected, without touching production code.
+
+✻ Brewed for 1m 9s · done 2:29 PM
+
+❯ go ahead with writing the failing Conjured tests                              
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ Since the tree is clean, I'll add tests to GildedRoseTest.cs without touching
+  production code: a ConjuredItem constant, Conjured cases added to the sell-in
+  and quality tests, and three new tests (C1, C2, C5) placed after the
+  normal-item tests.
+
+⏺ Update(csharp.xUnit/GildedRoseTests/GildedRoseTest.cs)
+  ⎿  Added 2 lines
+      10      private const string AgedBrie = "Aged Brie";
+      11      private const string BackstagePass = "Backstage passes to a
+           TAFKAL80ETC concert";
+      12      private const string Sulfuras = "Sulfuras, Hand of Ragnaros
+          ";
+      13 +    private const string ConjuredItem = "Conjured Mana Cake";  
+      14  
+      15      [Theory]
+      16      [InlineData(NormalItem)]
+      17      [InlineData(AgedBrie)]
+      18      [InlineData(BackstagePass)]
+      19 +    [InlineData(ConjuredItem)]                                 
+      20      public void SellIn_DecreasesByOneEachDay(string name)
+      21      {
+      22          var item = UpdateOnce(name, sellIn: 5, quality: 10);
+
+⏺ Update(csharp.xUnit/GildedRoseTests/GildedRoseTest.cs)
+  ⎿  Added 36 lines, removed 4 lines
+      45      }
+      46  
+      47      [Theory]
+      48 -    [InlineData(5, 0)]                                         
+      49 -    [InlineData(0, 1)]                                         
+      50 -    public void Quality_IsNeverNegative(int sellIn, int quality
+         -)                                                              
+      48 +    [InlineData(10, 20, 18)]                                   
+      49 +    [InlineData(1, 20, 18)]                                    
+      50 +    public void ConjuredItem_QualityDegradesTwiceAsFastAsNormal
+         +Item_BeforeSellByDate(int sellIn, int quality, int expectedQual
+         +ity)                                                           
+      51      {
+      52 -        var item = UpdateOnce(NormalItem, sellIn, quality);    
+      52 +        var item = UpdateOnce(ConjuredItem, sellIn, quality);  
+      53  
+      54 +        Assert.Equal(expectedQuality, item.Quality);           
+      55 +    }                                                          
+      56 +                                                               
+      57 +    [Theory]                                                   
+      58 +    [InlineData(0, 20, 16)]                                    
+      59 +    [InlineData(-1, 20, 16)]                                   
+      60 +    public void ConjuredItem_QualityDegradesTwiceAsFastAsNormal
+         +Item_OnceSellByDateHasPassed(int sellIn, int quality, int expec
+         +tedQuality)                                                    
+      61 +    {                                                          
+      62 +        var item = UpdateOnce(ConjuredItem, sellIn, quality);  
+      63 +                                                               
+      64 +        Assert.Equal(expectedQuality, item.Quality);           
+      65 +    }                                                          
+      66 +                                                               
+      67 +    [Theory]                                                   
+      68 +    [InlineData("Conjured Sword")]                             
+      69 +    [InlineData("Conjured Aged Brie")]                         
+      70 +    public void ConjuredItem_IsRecognisedByNamePrefix(string na
+         +me)                                                            
+      71 +    {                                                          
+      72 +        var item = UpdateOnce(name, sellIn: 5, quality: 10);   
+      73 +                                                               
+      74 +        Assert.Equal(8, item.Quality);                         
+      75 +    }                                                          
+      76 +                                                               
+      77 +    [Theory]                                                   
+      78 +    [InlineData(NormalItem, 5, 0)]                             
+      79 +    [InlineData(NormalItem, 0, 1)]                             
+      80 +    [InlineData(ConjuredItem, 5, 1)]                           
+      81 +    [InlineData(ConjuredItem, 0, 3)]                           
+      82 +    public void Quality_IsNeverNegative(string name, int sellIn
+         +, int quality)                                                 
+      83 +    {                                                          
+      84 +        var item = UpdateOnce(name, sellIn, quality);          
+      85 +                                                               
+      86          Assert.Equal(0, item.Quality);
+      87      }
+      88  
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ The Conjured tests are in place and fail exactly as the analysis predicted.
+  dotnet test reports 48 total: 7 failed, 41 passed, which is the existing 39
+  plus 9 new cases. Only GildedRoseTest.cs changed (38 lines added, 4 removed);
+  production code is untouched.
+
+  The 7 failures, all expected: the code currently treats every Conjured item as
+  a normal item.
+
+  Test: C1 ConjuredItem_QualityDegradesTwiceAsFastAsNormalItem_BeforeSellByDate
+  Case: (10, 20), (1, 20)
+  Expected: 18
+  Actual (normal-item behaviour): 19
+  ────────────────────────────────────────
+  Test: C2 …_OnceSellByDateHasPassed
+  Case: (0, 20), (−1, 20)
+  Expected: 16
+  Actual (normal-item behaviour): 18
+  ────────────────────────────────────────
+  Test: C3 Quality_IsNeverNegative
+  Case: (Conjured, 0, 3)
+  Expected: 0
+  Actual (normal-item behaviour): 1
+  ────────────────────────────────────────
+  Test: C5 ConjuredItem_IsRecognisedByNamePrefix
+  Case: Conjured Sword, Conjured Aged Brie
+  Expected: 8
+  Actual (normal-item behaviour): 9
+
+  Green as predicted:
+  - C3 row (Conjured, 5, 1 → 0): it guards against an implementation that just
+    subtracts 2.
+  - C4 row in SellIn_DecreasesByOneEachDay: it guards against a Conjured case
+    that forgets to decrease SellIn.
+  - Everything else is still green: that includes L3
+    (ConjuredItem_CurrentlyDegradesLikeNormalItem) and both snapshot tests, as
+    expected before the implementation.
+
+  What changed in GildedRoseTest.cs:
+  - New constant: ConjuredItem = "Conjured Mana Cake", used in 3 places.
+  - C4: one more [InlineData(ConjuredItem)] row in SellIn_DecreasesByOneEachDay.
+  - C3: Quality_IsNeverNegative now takes name as its first parameter. Its two
+    original rows are unchanged apart from the explicit NormalItem, plus the two
+    Conjured rows.
+  - C1, C2, C5: three new tests, placed after the normal-item tests so the
+    degradation rules read together.
+
+  Suggested commit message: test: specify Conjured item behaviour (failing until
+  implemented).
+
+  Next is the implementation commit:
+  - add the Conjured case
+  - delete L3
+  - remove the outdated Program.cs comment
+  - re-approve both snapshots, but only after checking that exactly the
+    predicted 38 golden-master lines and 4 ThirtyDays lines changed
+
+✻ Brewed for 33s · done 2:32 PM
+
+❯ go ahead with the Conjured implementation                                     
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ The failing tests are committed. First, the production change: a Conjured case
+  between the exact-name cases and default, plus using System;, which
+  StringComparison needs.
+
+⏺ Bash(cd
+      /Users/robertopreste/Data/Various/GildedRose-Refactoring-Kata/csharp.xUnit
+      && python3 - <<'EOF'
+      p='GildedRose/GildedRose.cs'…)
+  ⎿  diff --git a/csharp.xUnit/GildedRose/GildedRose.cs b/csharp.xUnit/Gild
+     edRose/GildedRose.cs
+     index 2c92851..e6b2ef7 100644
+     … +37 lines (ctrl+o to expand)
+  ⎿  Updated csharp.xUnit/GildedRose/GildedRose.cs (+13 -1)
+      1 -using System.Collections.Generic;                               
+      1 +using System;                                                   
+      2 +using System.Collections.Generic;                               
+      3  
+      4  namespace GildedRoseKata;
+      5  
+     ...
+      47                      }
+      48                      break;
+      49  
+      50 +                case string name when name.StartsWith("Conjured
+         +", StringComparison.Ordinal):                                  
+      51 +                    DecreaseQuality(item);                     
+      52 +                    DecreaseQuality(item);                     
+      53 +                    item.SellIn = item.SellIn - 1;             
+      54 +                    if (item.SellIn < 0)                       
+      55 +                    {                                          
+      56 +                        DecreaseQuality(item);                 
+      57 +                        DecreaseQuality(item);                 
+      58 +                    }                                          
+      59 +                    break;                                     
+      60 +                                                               
+      61                  default:
+      62                      DecreaseQuality(item);
+      63                      item.SellIn = item.SellIn - 1;
+  ⎿  Updated csharp.xUnit/GildedRose/Program.cs (+0 -1)
+      34                  SellIn = 5,
+      35                  Quality = 49
+      36              },
+      37 -            // this conjured item does not work properly yet   
+      37              new Item {Name = "Conjured Mana Cake", SellIn = 3, 
+          Quality = 6}
+      38          };
+      39  
+
+⏺ Next I'll run the tests before deleting L3. The goal is to confirm that the
+  only failures are the three predicted ones: L3 and the two snapshots.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ All 7 new Conjured cases pass as expected, with only L3 and the two snapshots
+  still failing. I'll now verify the received snapshots against the predictions
+  line by line before approving anything.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ Both snapshot diffs match the predicted changes exactly—38 Conjured Mana Cake
+  lines in the golden master and 4 days in ThirtyDays, with everything else
+  identical. Now I'll delete L3 along with the now-unused ConjuredItem constant.
+
+⏺ Bash(python3 - <<'EOF'
+      p='LegacyBehaviourTests.cs'…)
+  ⎿  diff --git a/csharp.xUnit/GildedRoseTests/LegacyBehaviourTests.cs b/cs
+     harp.xUnit/GildedRoseTests/LegacyBehaviourTests.cs
+     index fde8da3..201368f 100644
+     … +26 lines (ctrl+o to expand)
+  ⎿  Updated csharp.xUnit/GildedRoseTests/LegacyBehaviourTests.cs (+0 -11)
+      14      private const string AgedBrie = "Aged Brie";
+      15      private const string BackstagePass = "Backstage passes to a
+           TAFKAL80ETC concert";
+      16      private const string Sulfuras = "Sulfuras, Hand of Ragnaros
+          ";
+      17 -    private const string ConjuredItem = "Conjured Mana Cake";  
+      17  
+      18      [Theory]
+      19      [InlineData(0, 10, 12)]
+     ...
+      37          Assert.Equal(9, item.Quality);
+      38      }
+      39  
+      41 -    [Theory]                                                   
+      42 -    [InlineData(3, 6, 5)]                                      
+      43 -    [InlineData(0, 6, 4)]                                      
+      44 -    public void ConjuredItem_CurrentlyDegradesLikeNormalItem(in
+         -t sellIn, int quality, int expectedQuality)                    
+      45 -    {                                                          
+      46 -        var item = UpdateOnce(ConjuredItem, sellIn, quality);  
+      47 -                                                               
+      48 -        Assert.Equal(expectedQuality, item.Quality);           
+      49 -    }                                                          
+      50 -                                                               
+      40      [Theory]
+      41      [InlineData(NormalItem, 80, 79)]
+      42      [InlineData(NormalItem, -1, -1)]
+
+⏺ Now I'll approve the two checked snapshots and run the full suite:
+
+⏺ Bash(mv ApprovalTest.GoldenMaster.received.txt
+      ApprovalTest.GoldenMaster.verified.txt && mv
+      ApprovalTest.ThirtyDays.received.txt
+      ApprovalTest.ThirtyDays.verified.txt…)
+  ⎿  Passed!  - Failed:     0, Passed:    46, Skipped:     0, Total:    46,
+      Duration: 338 ms - GildedRoseTests.dll (net10.0)
+      M csharp.xUnit/GildedRose/GildedRose.cs
+     … +16 lines (ctrl+o to expand)
+  ⎿  Updated
+     csharp.xUnit/GildedRoseTests/ApprovalTest.GoldenMaster.verified.txt
+     (+38 -38)
+       66  Conjured Mana Cake | sellIn -1 | quality 0 -> -2/0 -3/0 -4/0 -
+           5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0 -15/0
+       67  Conjured Mana Cake | sellIn -1 | quality 1 -> -2/0 -3/0 -4/0 -
+           5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0 -15/0
+       68  Conjured Mana Cake | sellIn -1 | quality 2 -> -2/0 -3/0 -4/0 -
+           5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0 -15/0
+       69 -Conjured Mana Cake | sellIn -1 | quality 48 -> -2/46 -3/44 -4/
+          -42 -5/40 -6/38 -7/36 -8/34 -9/32 -10/30 -11/28 -12/26 -13/24 -
+          -14/22 -15/20                                                  
+       70 -Conjured Mana Cake | sellIn -1 | quality 49 -> -2/47 -3/45 -4/
+          -43 -5/41 -6/39 -7/37 -8/35 -9/33 -10/31 -11/29 -12/27 -13/25 -
+          -14/23 -15/21                                                  
+       71 -Conjured Mana Cake | sellIn -1 | quality 50 -> -2/48 -3/46 -4/
+          -44 -5/42 -6/40 -7/38 -8/36 -9/34 -10/32 -11/30 -12/28 -13/26 -
+          -14/24 -15/22                                                  
+       72 -Conjured Mana Cake | sellIn -1 | quality 80 -> -2/78 -3/76 -4/
+          -74 -5/72 -6/70 -7/68 -8/66 -9/64 -10/62 -11/60 -12/58 -13/56 -
+          -14/54 -15/52                                                  
+       69 +Conjured Mana Cake | sellIn -1 | quality 48 -> -2/44 -3/40 -4/
+          +36 -5/32 -6/28 -7/24 -8/20 -9/16 -10/12 -11/8 -12/4 -13/0 -14/
+          +0 -15/0                                                       
+       70 +Conjured Mana Cake | sellIn -1 | quality 49 -> -2/45 -3/41 -4/
+          +37 -5/33 -6/29 -7/25 -8/21 -9/17 -10/13 -11/9 -12/5 -13/1 -14/
+          +0 -15/0                                                       
+       71 +Conjured Mana Cake | sellIn -1 | quality 50 -> -2/46 -3/42 -4/
+          +38 -5/34 -6/30 -7/26 -8/22 -9/18 -10/14 -11/10 -12/6 -13/2 -14
+          +/0 -15/0                                                      
+       72 +Conjured Mana Cake | sellIn -1 | quality 80 -> -2/76 -3/72 -4/
+          +68 -5/64 -6/60 -7/56 -8/52 -9/48 -10/44 -11/40 -12/36 -13/32 -
+          +14/28 -15/24                                                  
+       73  Conjured Mana Cake | sellIn 0 | quality -1 -> -1/-1 -2/-1 -3/-
+           1 -4/-1 -5/-1 -6/-1 -7/-1 -8/-1 -9/-1 -10/-1 -11/-1 -12/-1 -13
+           /-1 -14/-1
+       74  Conjured Mana Cake | sellIn 0 | quality 0 -> -1/0 -2/0 -3/0 -4
+           /0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0
+       75  Conjured Mana Cake | sellIn 0 | quality 1 -> -1/0 -2/0 -3/0 -4
+           /0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0
+       76  Conjured Mana Cake | sellIn 0 | quality 2 -> -1/0 -2/0 -3/0 -4
+           /0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0
+       77 -Conjured Mana Cake | sellIn 0 | quality 48 -> -1/46 -2/44 -3/4
+          -2 -4/40 -5/38 -6/36 -7/34 -8/32 -9/30 -10/28 -11/26 -12/24 -13
+          -/22 -14/20                                                    
+       78 -Conjured Mana Cake | sellIn 0 | quality 49 -> -1/47 -2/45 -3/4
+          -3 -4/41 -5/39 -6/37 -7/35 -8/33 -9/31 -10/29 -11/27 -12/25 -13
+          -/23 -14/21                                                    
+       79 -Conjured Mana Cake | sellIn 0 | quality 50 -> -1/48 -2/46 -3/4
+          -4 -4/42 -5/40 -6/38 -7/36 -8/34 -9/32 -10/30 -11/28 -12/26 -13
+          -/24 -14/22                                                    
+       80 -Conjured Mana Cake | sellIn 0 | quality 80 -> -1/78 -2/76 -3/7
+          -4 -4/72 -5/70 -6/68 -7/66 -8/64 -9/62 -10/60 -11/58 -12/56 -13
+          -/54 -14/52                                                    
+       77 +Conjured Mana Cake | sellIn 0 | quality 48 -> -1/44 -2/40 -3/3
+          +6 -4/32 -5/28 -6/24 -7/20 -8/16 -9/12 -10/8 -11/4 -12/0 -13/0 
+          +-14/0                                                         
+       78 +Conjured Mana Cake | sellIn 0 | quality 49 -> -1/45 -2/41 -3/3
+          +7 -4/33 -5/29 -6/25 -7/21 -8/17 -9/13 -10/9 -11/5 -12/1 -13/0 
+          +-14/0                                                         
+       79 +Conjured Mana Cake | sellIn 0 | quality 50 -> -1/46 -2/42 -3/3
+          +8 -4/34 -5/30 -6/26 -7/22 -8/18 -9/14 -10/10 -11/6 -12/2 -13/0
+          + -14/0                                                        
+       80 +Conjured Mana Cake | sellIn 0 | quality 80 -> -1/76 -2/72 -3/6
+          +8 -4/64 -5/60 -6/56 -7/52 -8/48 -9/44 -10/40 -11/36 -12/32 -13
+          +/28 -14/24                                                    
+       81  Conjured Mana Cake | sellIn 1 | quality -1 -> 0/-1 -1/-1 -2/-1
+            -3/-1 -4/-1 -5/-1 -6/-1 -7/-1 -8/-1 -9/-1 -10/-1 -11/-1 -12/-
+           1 -13/-1
+       82  Conjured Mana Cake | sellIn 1 | quality 0 -> 0/0 -1/0 -2/0 -3/
+           0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0
+       83  Conjured Mana Cake | sellIn 1 | quality 1 -> 0/0 -1/0 -2/0 -3/
+           0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0
+       84 -Conjured Mana Cake | sellIn 1 | quality 2 -> 0/1 -1/0 -2/0 -3/
+          -0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0       
+       85 -Conjured Mana Cake | sellIn 1 | quality 48 -> 0/47 -1/45 -2/43
+          - -3/41 -4/39 -5/37 -6/35 -7/33 -8/31 -9/29 -10/27 -11/25 -12/2
+          -3 -13/21                                                      
+       86 -Conjured Mana Cake | sellIn 1 | quality 49 -> 0/48 -1/46 -2/44
+          - -3/42 -4/40 -5/38 -6/36 -7/34 -8/32 -9/30 -10/28 -11/26 -12/2
+          -4 -13/22                                                      
+       87 -Conjured Mana Cake | sellIn 1 | quality 50 -> 0/49 -1/47 -2/45
+          - -3/43 -4/41 -5/39 -6/37 -7/35 -8/33 -9/31 -10/29 -11/27 -12/2
+          -5 -13/23                                                      
+       88 -Conjured Mana Cake | sellIn 1 | quality 80 -> 0/79 -1/77 -2/75
+          - -3/73 -4/71 -5/69 -6/67 -7/65 -8/63 -9/61 -10/59 -11/57 -12/5
+          -5 -13/53                                                      
+       84 +Conjured Mana Cake | sellIn 1 | quality 2 -> 0/0 -1/0 -2/0 -3/
+          +0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0       
+       85 +Conjured Mana Cake | sellIn 1 | quality 48 -> 0/46 -1/42 -2/38
+          + -3/34 -4/30 -5/26 -6/22 -7/18 -8/14 -9/10 -10/6 -11/2 -12/0 -
+          +13/0                                                          
+       86 +Conjured Mana Cake | sellIn 1 | quality 49 -> 0/47 -1/43 -2/39
+          + -3/35 -4/31 -5/27 -6/23 -7/19 -8/15 -9/11 -10/7 -11/3 -12/0 -
+          +13/0                                                          
+       87 +Conjured Mana Cake | sellIn 1 | quality 50 -> 0/48 -1/44 -2/40
+          + -3/36 -4/32 -5/28 -6/24 -7/20 -8/16 -9/12 -10/8 -11/4 -12/0 -
+          +13/0                                                          
+       88 +Conjured Mana Cake | sellIn 1 | quality 80 -> 0/78 -1/74 -2/70
+          + -3/66 -4/62 -5/58 -6/54 -7/50 -8/46 -9/42 -10/38 -11/34 -12/3
+          +0 -13/26                                                      
+       89  Conjured Mana Cake | sellIn 5 | quality -1 -> 4/-1 3/-1 2/-1 1
+           /-1 0/-1 -1/-1 -2/-1 -3/-1 -4/-1 -5/-1 -6/-1 -7/-1 -8/-1 -9/-1
+       90  Conjured Mana Cake | sellIn 5 | quality 0 -> 4/0 3/0 2/0 1/0 0
+           /0 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0
+       91  Conjured Mana Cake | sellIn 5 | quality 1 -> 4/0 3/0 2/0 1/0 0
+           /0 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0
+       92 -Conjured Mana Cake | sellIn 5 | quality 2 -> 4/1 3/0 2/0 1/0 0
+          -/0 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0               
+     … 64 more lines (ctrl+o to expand)
+  ⎿  Updated
+     csharp.xUnit/GildedRoseTests/ApprovalTest.ThirtyDays.verified.txt (+4 
+     -4)
+      21  Backstage passes to a TAFKAL80ETC concert, 14, 21
+      22  Backstage passes to a TAFKAL80ETC concert, 9, 50
+      23  Backstage passes to a TAFKAL80ETC concert, 4, 50
+      24 -Conjured Mana Cake, 2, 5                                       
+      24 +Conjured Mana Cake, 2, 4                                       
+      25  
+      26  -------- day 2 --------
+      27  name, sellIn, quality
+     ...
+      33  Backstage passes to a TAFKAL80ETC concert, 13, 22
+      34  Backstage passes to a TAFKAL80ETC concert, 8, 50
+      35  Backstage passes to a TAFKAL80ETC concert, 3, 50
+      36 -Conjured Mana Cake, 1, 4                                       
+      36 +Conjured Mana Cake, 1, 2                                       
+      37  
+      38  -------- day 3 --------
+      39  name, sellIn, quality
+     ...
+      45  Backstage passes to a TAFKAL80ETC concert, 12, 23
+      46  Backstage passes to a TAFKAL80ETC concert, 7, 50
+      47  Backstage passes to a TAFKAL80ETC concert, 2, 50
+      48 -Conjured Mana Cake, 0, 3                                       
+      48 +Conjured Mana Cake, 0, 0                                       
+      49  
+      50  -------- day 4 --------
+      51  name, sellIn, quality
+     ...
+      57  Backstage passes to a TAFKAL80ETC concert, 11, 24
+      58  Backstage passes to a TAFKAL80ETC concert, 6, 50
+      59  Backstage passes to a TAFKAL80ETC concert, 1, 50
+      60 -Conjured Mana Cake, -1, 1                                      
+      60 +Conjured Mana Cake, -1, 0                                      
+      61  
+      62  -------- day 5 --------
+      63  name, sellIn, quality
+
+⏺ The Conjured feature is implemented and all tests pass: 46 passed, 0 failed.
+  That's the previous 48 cases minus L3's two, and there are no build warnings.
+  Git's diff stats confirm the snapshot changes: 76 lines (38 changed) in the
+  golden master and 8 lines (4 changed) in ThirtyDays.
+
+  Production code:
+  - GildedRose.cs: a new case string name when name.StartsWith("Conjured", 
+    StringComparison.Ordinal): sits between the exact-name cases and default. It
+    is the normal-item sequence with each DecreaseQuality called twice: −2
+    before the sell-by date, −4 after, stopping at 0 with no clamping. I also
+    added using System; for StringComparison.
+  - Program.cs: removed the outdated comment "this conjured item does not work
+    properly yet".
+
+  Tests:
+  - Before deleting anything, I ran the suite with the new code. The only
+    failures were the predicted ones: L3 (2 cases) and the two snapshots. All 7
+    previously failing Conjured cases passed.
+  - Deleted from LegacyBehaviourTests: L3
+    (ConjuredItem_CurrentlyDegradesLikeNormalItem) and its ConjuredItem
+    constant, which nothing else in the class used. The new business-rule tests
+    replace it.
+
+  Snapshot re-approval: before approving, I checked both received files with a
+  script that compared every line to the independent simulation from the
+  analysis.
+
+  ┌────────────┬─────────────┬───────────────────┬────────────────────────┐
+  │  Snapshot  │  Predicted  │      Actual       │   Other differences    │
+  ├────────────┼─────────────┼───────────────────┼────────────────────────┤
+  │ Golden     │ 38 Conjured │ 38, every one     │ none: the other 474    │
+  │ master     │  lines      │ with the          │ lines are              │
+  │            │             │ simulated values  │ byte-identical         │
+  ├────────────┼─────────────┼───────────────────┼────────────────────────┤
+  │            │ 4 lines     │ 4: 2,5→2,4,       │                        │
+  │ ThirtyDays │ (days 1–4)  │ 1,4→1,2, 0,3→0,0, │ none                   │
+  │            │             │  -1,1→-1,0        │                        │
+  └────────────┴─────────────┴───────────────────┴────────────────────────┘
+
+  Only after that check did I approve both files by renaming them to
+  .verified.txt. No *.received.txt files are left.
+
+  Suggested commit message: feat: Conjured items degrade twice as fast as normal
+  items.
+
+  The last planned step is the docs commit:
+  - remove the Conjured row from the README's "Known legacy behaviour" table
+  - mark Q2 and M4 in docs/behaviour-model.md as superseded by the feature
+  - optionally, set the analysis document's status to "implemented"
+
+✻ Churned for 53s · done 2:35 PM
+
+❯ go ahead with the docs update, leave the feature-analysis doc unchanged (it   
+  refers to the analysis we made before implementing the feature)               
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ The feature changes aren't committed yet: git status still shows the five
+  feature files as modified. I'll edit only the docs, so you can commit the
+  feature and the docs as two separate commits.
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ The behaviour model describes the original code. So rather than rewriting it,
+  I'll keep its content, add a note at the top, and mark the Conjured entries as
+  superseded where they appear:
+
+⏺ Bash(python3 - <<'EOF'
+      p='docs/behaviour-model.md'…)
+  ⎿  diff --git a/csharp.xUnit/README.md b/csharp.xUnit/README.md
+     index 3955c7b..20c6ae9 100644
+     --- a/csharp.xUnit/README.md
+     … +68 lines (ctrl+o to expand)
+  ⎿  Updated csharp.xUnit/README.md (+0 -1)
+      39  | Current behaviour | Example (`SellIn`, `Quality` → after one 
+          day) | Pinned by |
+      40  |---|---|---|
+      41  | Item categories are matched by exact, case-sensitive full nam
+          e. Variants such as `aged brie`, `Sulfuras` or `Backstage passe
+          s to another concert` are treated as normal items. | `Sulfuras`
+          : (5, 10) → (4, 9) | `ItemCategory_IsMatchedByExactFullName` |
+      42 -| Conjured items are not implemented yet and degrade like norma
+         -l items. | `Conjured Mana Cake`: (3, 6) → (2, 5) | `ConjuredIte
+         -m_CurrentlyDegradesLikeNormalItem` |                           
+      42  | Aged Brie gains 2 quality per day once the sell-by date has p
+          assed. The requirements only say it "increases". | `Aged Brie`:
+           (0, 10) → (-1, 12) | `AgedBrie_QualityIncreasesTwiceAsFast_Onc
+          eSellByDateHasPassed` |
+      43  | The 0 and 50 limits only stop quality from crossing them. A q
+          uality that is already outside 0..50 is never corrected. | Norm
+          al item: (5, 80) → (4, 79); (5, -1) → (4, -1). Aged Brie and Ba
+          ckstage passes: (5, 80) → (4, 80) | `QualityOutsideValidRange_I
+          sNotCorrected` |
+      44  | Sulfuras keeps whatever quality it has. 80 is not enforced. |
+           `Sulfuras, Hand of Ragnaros`: (5, 10) → (5, 10) | `Sulfuras_Ke
+          epsQualityOtherThan80` |
+  ⎿  Updated docs/behaviour-model.md (+12 -4)
+       5  grid `SellIn ∈ {-1, 0, 1, 5, 6, 10, 11}` × `Quality ∈ {-1, 0, 1
+          , 2, 47, 48, 49, 50, 51, 80}`
+       6  for each item name below.
+       7  
+       8 +> **Update (Conjured feature):** this document characterises th
+         +e code *before*                                                
+       9 +> Conjured items were implemented. Conjured items are now a sep
+         +arate category:                                                
+      10 +> any name starting with `Conjured` (case-sensitive) degrades t
+         +wice as fast as                                                
+      11 +> a normal item. Entries Q2 and M4, and the other Conjured ment
+         +ions marked                                                    
+      12 +> *superseded* below, describe the pre-feature behaviour. For t
+         +he current                                                     
+      13 +> Conjured rules and edge cases, see `docs/ai/conjured-feature-
+         +analysis.md`.                                                  
+      14 +> Everything else in this document still describes the current 
+         +behaviour.                                                     
+      15 +                                                               
+      16  ## 1. How the algorithm is structured
+      17  
+      18  For each item, independently and in list order, `UpdateQuality(
+          )` runs three
+     ...
+      43  | Backstage pass | `Backstage passes to a TAFKAL80ETC concert` 
+          | `Backstage passes to another concert` → Normal |
+      44  | Sulfuras | `Sulfuras, Hand of Ragnaros` | `Sulfuras` → Normal
+           |
+      45  | Normal | any other name, including `null` | – |
+      38 -| *(Conjured)* | *not implemented*: `Conjured Mana Cake` → Norm
+         -al | – |                                                       
+      46 +| *(Conjured)* | *not implemented*: `Conjured Mana Cake` → Norm
+         +al. **Superseded:** now its own category, any name starting wit
+         +h `Conjured` | – |                                             
+      47  
+      48  ## 3. Rules per category
+      49  
+     ...
+      104  | # | Quirk | Spec says | Code does |
+      105  |---|---|---|---|
+      106  | Q1 | Exact-name matching | "Sulfuras", "Backstage passes", "
+           Aged Brie" read like categories | Only the three exact full st
+           rings are special. Case and wording variants are Normal. |
+       99 -| Q2 | Conjured not implemented | Conjured degrades ×2 | `Conj
+          -ured Mana Cake` behaves as Normal (expected, since this is the
+          - future feature) |                                            
+      107 +| Q2 | Conjured not implemented | Conjured degrades ×2 | `Conj
+          +ured Mana Cake` behaves as Normal (expected, since this is the
+          + future feature). **Superseded:** Conjured items are now imple
+          +mented. |                                                     
+      108  | Q3 | Brie gains ×2 after sell date | Spec only says Brie "in
+           creases" | +2/day once `s <= 0` |
+      109  | Q4 | Expiry judged after decrement | "once the sell by date 
+           has passed" | `s = 0` already counts as expired on this update
+            |
+      110  | Q5 | Bounds are guards, not clamps | Quality is never negati
+           ve / never > 50 | Out-of-range input persists: Normal `q=80` d
+           ecays from 80, Brie `q=80` stays 80, Normal `q=-1` stays −1 |
+     ...
+      127  expected values after **one** `UpdateQuality()`. All of these 
+           come from the
+      128  probe of the original code.
+      129  
+      122 -### Normal (`+5 Dexterity Vest`; same for `Elixir of the Mongo
+          -ose`, `Conjured Mana Cake`, …)                                
+      130 +### Normal (`+5 Dexterity Vest`; same for `Elixir of the Mongo
+          +ose`, …; `Conjured Mana Cake` before the Conjured feature)    
+      131  
+      132  | ID | s | q | → s | → q | Rule exercised |
+      133  |---|---|---|---|---|---|
+     ...
+      194  | M1 | `aged brie` | 5 | 10 | 4 | 9 | Normal |
+      195  | M2 | `Backstage passes to another concert` | 5 | 10 | 4 | 9 
+           | Normal |
+     … 6 more lines (ctrl+o to expand)
+
+⏺ The note I added says "everything else still describes the current behaviour".
+  That's not true for one sentence in section 2, so I'll check it:
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+⏺ Update(docs/behaviour-model.md)
+  ⎿  Added 3 lines, removed 1 line
+      35  ## 2. Item categories and how they are recognised
+      36  
+      37  The code matches items by **exact, case-sensitive string equali
+          ty** on the
+      38 -full name. Prefixes and partial matches are not recognised.    
+      38 +full name. Prefixes and partial matches are not recognised. **S
+         +uperseded for                                                  
+      39 +Conjured only:** Conjured items are matched by the `Conjured` p
+         +refix. The three                                               
+      40 +categories below still require the exact full name.            
+      41  
+      42  | Category | Recognised name (exact) | Anything else with a sim
+          ilar name |
+      43  |---|---|---|
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ I've updated the README and the behaviour model, and left the feature-analysis
+  document unchanged. The tests still pass: 46 passed, 0 failed.
+
+  csharp.xUnit/README.md: I removed the Conjured row from "Known legacy
+  behaviour". That row was pinned by the test I deleted (L3), and Conjured is no
+  longer legacy behaviour. The table now lists the four remaining quirks, each
+  still pinned by a test in LegacyBehaviourTests.
+
+  docs/behaviour-model.md: this document describes the code before the feature,
+  so I kept its original content and marked what changed:
+  - Note at the top: Conjured is now its own category (any name starting with
+    Conjured, degrading twice as fast). Entries marked superseded describe the
+    old behaviour, and the current rules and edge cases are in
+    docs/ai/conjured-feature-analysis.md.
+  - Section 2 (name matching): the sentence "prefixes are not recognised" is
+    marked as superseded for Conjured only. The three special categories still
+    need their exact full names. Without this, the note's "everything else is
+    still current" would have been false.
+  - Conjured row in the category table, and Q2: marked as superseded.
+  - Normal heading in the matrix: now says Conjured Mana Cake belonged there
+    only before the feature.
+  - M4: now reads "pre-feature behaviour, superseded: now (3, 6) → (2, 4)".
+
+  Not changed:
+  - docs/ai/conjured-feature-analysis.md, as you asked.
+  - docs/testing-strategy.md: it's the plan written before the tests and still
+    mentions L3 and the old Conjured behaviour. It's the same kind of historical
+    document as the analysis, so I left it alone. If you'd like a pointer there
+    too, I can add the same kind of note.
+
+  Committing: the feature changes are still uncommitted in the same working
+  tree, so commit in two steps:
+  git add csharp.xUnit/GildedRose csharp.xUnit/GildedRoseTests
+  git commit -m "feat: Conjured items degrade twice as fast as normal items"
+  git add csharp.xUnit/README.md docs/behaviour-model.md
+  git commit -m "docs: update legacy behaviour docs for the Conjured feature"
+
+  That completes everything AGENTS.md asks for: tests first, the refactoring,
+  mutation testing, and the Conjured feature.
+
+✻ Baked for 48s · done 2:38 PM
+
+❯ /export                                                                       
+  ⎿  Export cancelled
+
+❯ let's move all the docs in docs/ to docs/ai/ for consistency                  
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ Since everything's committed, I'll use git mv to move the files cleanly as
+  renames, then update the three path references outside the analysis doc.
+
+⏺ Bash(git mv docs/behaviour-model.md docs/ai/behaviour-model.md && git mv
+      docs/testing-strategy.md docs/ai/testing-strategy.md && git mv
+      docs/mutation-testing.md docs…)
+  ⎿  M  csharp.xUnit/README.md
+     R  docs/behaviour-model.md -> docs/ai/behaviour-model.md
+     R  docs/mutation-testing.md -> docs/ai/mutation-testing.md
+     … +20 lines (ctrl+o to expand)
+  ⎿  Updated csharp.xUnit/README.md (+1 -1)
+      44  | Sulfuras keeps whatever quality it has. 80 is not enforced. |
+           `Sulfuras, Hand of Ragnaros`: (5, 10) → (5, 10) | `Sulfuras_Ke
+          epsQualityOtherThan80` |
+      45  
+      46  For the full analysis, including edge cases covered only by the
+           golden master,
+      47 -see `docs/behaviour-model.md`.                                 
+      47 +see `docs/ai/behaviour-model.md`.                              
+  ⎿  Created docs/ai/behaviour-model.md (+233 -0)
+        1 +# Gilded Rose: behaviour model of the legacy `UpdateQuality()`
+        2 +                                                              
+        3 +Source of truth: `csharp.xUnit/GildedRose/GildedRose.cs` (unmo
+          +dified). Every                                                
+        4 +value in this document was cross-checked by running the origin
+          +al code over the                                              
+        5 +grid `SellIn ∈ {-1, 0, 1, 5, 6, 10, 11}` × `Quality ∈ {-1, 0, 
+          +1, 2, 47, 48, 49, 50, 51, 80}`                                
+        6 +for each item name below.                                     
+        7 +                                                              
+        8 +> **Update (Conjured feature):** this document characterises t
+          +he code *before*                                              
+        9 +> Conjured items were implemented. Conjured items are now a se
+          +parate category:                                              
+       10 +> any name starting with `Conjured` (case-sensitive) degrades 
+          +twice as fast as                                              
+       11 +> a normal item. Entries Q2 and M4, and the other Conjured men
+          +tions marked                                                  
+       12 +> *superseded* below, describe the pre-feature behaviour. For 
+          +the current                                                   
+       13 +> Conjured rules and edge cases, see `docs/ai/conjured-feature
+          +-analysis.md`.                                                
+       14 +> Everything else in this document still describes the current
+          + behaviour.                                                   
+       15 +                                                              
+       16 +## 1. How the algorithm is structured                         
+       17 +                                                              
+       18 +For each item, independently and in list order, `UpdateQuality
+          +()` runs three                                                
+       19 +phases:                                                       
+       20 +                                                              
+       21 +| Phase | What happens | Uses `SellIn` value |                
+       22 +|---|---|---|                                                 
+       23 +| **A. Daily quality change** | Brie/Backstage: `+1` if `Quali
+          +ty < 50` (Backstage adds up to two more bonus points). Others:
+          + `-1` if `Quality > 0`, except Sulfuras. | *before* decrement 
+          +|                                                             
+       24 +| **B. Age** | `SellIn -= 1`, except Sulfuras. | – |          
+       25 +| **C. Expired adjustment** | Only if `SellIn < 0` **after** p
+          +hase B. Brie: another `+1` if `< 50`. Backstage: `Quality = 0`
+          +. Others: another `-1` if `> 0`, except Sulfuras. | *after* de
+          +crement |                                                     
+       26 +                                                              
+       27 +Consequences:                                                 
+       28 +                                                              
+       29 +- An item is "expired" for the current update when its **start
+          +ing** `SellIn <= 0`.                                          
+       30 +  So an item with `SellIn = 0` already gets the double rate on
+          + that update.                                                 
+       31 +- The `0` floor and the `50` cap are **guards on each ±1 step*
+          +*, not clamps.                                                
+       32 +  The code never pulls an out-of-range value back into range. 
+          +It only refuses                                               
+       33 +  to step further past the boundary.                          
+       34 +                                                              
+       35 +## 2. Item categories and how they are recognised             
+       36 +                                                              
+       37 +The code matches items by **exact, case-sensitive string equal
+          +ity** on the                                                  
+       38 +full name. Prefixes and partial matches are not recognised. **
+          +Superseded for                                                
+       39 +Conjured only:** Conjured items are matched by the `Conjured` 
+          +prefix. The three                                             
+       40 +categories below still require the exact full name.           
+     … 193 more lines (ctrl+o to expand)
+  ⎿  Created docs/ai/mutation-testing.md (+125 -0)
+        1 +# Gilded Rose: mutation testing results                       
+        2 +                                                              
+        3 +Mutation testing checks that the test suite would actually cat
+          +ch regressions.                                               
+        4 +Stryker.NET makes small changes ("mutants") to the production 
+          +code, such as                                                 
+        5 +`<` → `<=`, `+` → `-`, a negated condition or a removed statem
+          +ent, and reruns                                               
+        6 +the tests. A mutant is **killed** if at least one test fails, 
+          +and **survives**                                              
+        7 +if all tests still pass.                                      
+        8 +                                                              
+        9 +- **Tool:** Stryker.NET 5.0.0, default mutation level (`Standa
+          +rd`)                                                          
+       10 +- **Code under test:** commit `a0f4ea1` (refactoring complete)
+       11 +- **Date:** 2026-10-03                                        
+       12 +                                                              
+       13 +## Run 1: full test suite                                     
+       14 +                                                              
+       15 +All 39 test cases, mutating the whole `GildedRose` project.   
+       16 +                                                              
+       17 +| File | Killed | Survived | Timeout | Compile error | Ignored
+          + | Score |                                                    
+       18 +|---|---|---|---|---|---|---|                                 
+       19 +| `GildedRose.cs` | 34 | 0 | 0 | 3 | 6 | **100%** |           
+       20 +| `Program.cs` | 41 | 1 | 1 | 3 | 4 | 97.7% |                 
+       21 +| `Item.cs` | – | – | – | – | – | no mutable logic |          
+       22 +| **Total** | 75 | 1 | 1 | 6 | 10 | **98.70%** (76/77) |      
+       23 +                                                              
+       24 +Mutants killed in `GildedRose.cs`: 14 comparison changes, 7 re
+          +moved                                                         
+       25 +statements, 7 negated conditions, 5 arithmetic changes and 1 r
+          +emoved block.                                                 
+       26 +                                                              
+       27 +### Surviving mutant: accepted                                
+       28 +                                                              
+       29 +`Program.cs:44`: `args.Length > 0` → `args.Length >= 0`       
+       30 +                                                              
+       31 +- **Why it survives:** the only test that calls `Program.Main`
+          + is                                                           
+       32 +  `ApprovalTest.ThirtyDays`, which always passes one argument 
+          +(`"30"`). With                                                
+       33 +  an argument present, both conditions take the same branch. W
+          +ithout one, the                                               
+       34 +  mutant would crash reading `args[0]`.                       
+       35 +- **Decision: accepted, no test added.** `Program` is the kata
+          +'s console demo,                                              
+       36 +  not the code being refactored. A test calling `Main` without
+          + arguments would                                              
+       37 +  be another console-redirecting test, which the testing strat
+          +egy advises                                                   
+       38 +  against. The item update rules in `GildedRose.cs` have no su
+          +rvivors.                                                      
+       39 +                                                              
+       40 +### Mutants that were not tested (not gaps)                   
+     … 85 more lines (ctrl+o to expand)
+  ⎿  Created docs/ai/testing-strategy.md (+210 -0)
+        1 +# Gilded Rose: testing strategy for the refactoring           
+        2 +                                                              
+        3 +Sources: `GildedRoseRequirements.md`, the original `GildedRose
+          +.cs`, and                                                     
+        4 +`docs/ai/behaviour-model.md` (IDs such as `Q5` or `P11` refer 
+          +to that document).                                            
+        5 +                                                              
+        6 +## 1. Goal and principles                                     
+        7 +                                                              
+        8 +The tests must let us restructure `UpdateQuality()` freely whi
+          +le detecting                                                  
+        9 +**any** change in observable behaviour, including the legacy q
+          +uirks.                                                        
+       10 +                                                              
+       11 +The suite has three layers, each with a distinct job:         
+       12 +                                                              
+       13 +| Layer | Job | Fails when… | Reader |                        
+       14 +|---|---|---|---|                                             
+       15 +| **Golden master** (approval test) | Safety net: exhaustive, 
+          +mechanical comparison against the original code's output | any
+          + input/day combination changes | the refactorer |             
+       16 +| **Business-rule tests** | Living documentation of the requir
+          +ements, one test per rule | a specified rule is broken | anyon
+          +e learning the domain |                                       
+       17 +| **Legacy-behaviour tests** | Make deliberate, non-obvious qu
+          +irks visible and pinned | a quirk is "accidentally fixed" | wh
+          +oever decides on bug fixes or adds Conjured |                 
+       18 +                                                              
+       19 +Principles:                                                   
+       20 +                                                              
+       21 +- The golden master is generated from the **original** code an
+          +d committed                                                   
+       22 +  **before** any production change (AGENTS.md rule 3). During 
+          +refactoring it                                                
+       23 +  is never re-approved. A red golden master means revert (rule
+          + 6).                                                          
+       24 +- Named tests are few and readable. Each one documents a rule,
+          + and the golden                                               
+       25 +  master gives the breadth.                                   
+       26 +- Business rules and legacy quirks live in **separate test cla
+          +sses**. If the                                                
+       27 +  team later decides to fix a quirk, the change shows up as an
+          + edit to                                                      
+       28 +  `LegacyBehaviourTests`, never as a silent change to a "requi
+          +rement" test.                                                 
+       29 +- No tests for pathological inputs (Q11–Q14: `null` names or e
+          +lements,                                                      
+       30 +  `int.MinValue`, the same instance listed twice). None of the
+          +m is a scenario                                               
+       31 +  the inn has. The golden master would catch changes there any
+          +way if it                                                     
+       32 +  contained them, and it doesn't need to.                     
+       33 +                                                              
+       34 +## 2. Assessment of the existing tests                        
+       35 +                                                              
+       36 +### `ApprovalTest.ThirtyDays`: keep unchanged                 
+       37 +                                                              
+       38 +It runs `Program.Main` for 30 days and snapshots the console o
+          +utput. I checked                                              
+       39 +the approved file against the behaviour model. It covers more 
+          +than it seems                                                 
+       40 +to:                                                           
+     … 170 more lines (ctrl+o to expand)
+  ⎿  Deleted docs/behaviour-model.md (+0 -233)
+        1 -# Gilded Rose: behaviour model of the legacy `UpdateQuality()`
+        2 -                                                              
+        3 -Source of truth: `csharp.xUnit/GildedRose/GildedRose.cs` (unmo
+          -dified). Every                                                
+        4 -value in this document was cross-checked by running the origin
+          -al code over the                                              
+        5 -grid `SellIn ∈ {-1, 0, 1, 5, 6, 10, 11}` × `Quality ∈ {-1, 0, 
+          -1, 2, 47, 48, 49, 50, 51, 80}`                                
+        6 -for each item name below.                                     
+        7 -                                                              
+        8 -> **Update (Conjured feature):** this document characterises t
+          -he code *before*                                              
+        9 -> Conjured items were implemented. Conjured items are now a se
+          -parate category:                                              
+       10 -> any name starting with `Conjured` (case-sensitive) degrades 
+          -twice as fast as                                              
+       11 -> a normal item. Entries Q2 and M4, and the other Conjured men
+          -tions marked                                                  
+       12 -> *superseded* below, describe the pre-feature behaviour. For 
+          -the current                                                   
+       13 -> Conjured rules and edge cases, see `docs/ai/conjured-feature
+          --analysis.md`.                                                
+       14 -> Everything else in this document still describes the current
+          - behaviour.                                                   
+       15 -                                                              
+       16 -## 1. How the algorithm is structured                         
+       17 -                                                              
+       18 -For each item, independently and in list order, `UpdateQuality
+          -()` runs three                                                
+       19 -phases:                                                       
+       20 -                                                              
+       21 -| Phase | What happens | Uses `SellIn` value |                
+       22 -|---|---|---|                                                 
+       23 -| **A. Daily quality change** | Brie/Backstage: `+1` if `Quali
+          -ty < 50` (Backstage adds up to two more bonus points). Others:
+          - `-1` if `Quality > 0`, except Sulfuras. | *before* decrement 
+          -|                                                             
+       24 -| **B. Age** | `SellIn -= 1`, except Sulfuras. | – |          
+       25 -| **C. Expired adjustment** | Only if `SellIn < 0` **after** p
+          -hase B. Brie: another `+1` if `< 50`. Backstage: `Quality = 0`
+          -. Others: another `-1` if `> 0`, except Sulfuras. | *after* de
+          -crement |                                                     
+       26 -                                                              
+       27 -Consequences:                                                 
+       28 -                                                              
+       29 -- An item is "expired" for the current update when its **start
+          -ing** `SellIn <= 0`.                                          
+       30 -  So an item with `SellIn = 0` already gets the double rate on
+          - that update.                                                 
+       31 -- The `0` floor and the `50` cap are **guards on each ±1 step*
+          -*, not clamps.                                                
+       32 -  The code never pulls an out-of-range value back into range. 
+          -It only refuses                                               
+       33 -  to step further past the boundary.                          
+       34 -                                                              
+       35 -## 2. Item categories and how they are recognised             
+       36 -                                                              
+       37 -The code matches items by **exact, case-sensitive string equal
+          -ity** on the                                                  
+       38 -full name. Prefixes and partial matches are not recognised. **
+          -Superseded for                                                
+       39 -Conjured only:** Conjured items are matched by the `Conjured` 
+          -prefix. The three                                             
+       40 -categories below still require the exact full name.           
+     … 193 more lines (ctrl+o to expand)
+  ⎿  … 2 more files changed
+
+⏺ The three docs are now in docs/ai/, and I've staged the change. I haven't
+  committed anything, and since no code changed I didn't run the tests.
+
+  Moved with git mv (Git shows them as renames, so their history carries over):
+  - docs/behaviour-model.md → docs/ai/behaviour-model.md
+  - docs/testing-strategy.md → docs/ai/testing-strategy.md
+  - docs/mutation-testing.md → docs/ai/mutation-testing.md
+
+  Path references updated (3 lines):
+  - csharp.xUnit/README.md: the pointer at the end of "Known legacy behaviour".
+  - docs/ai/testing-strategy.md: the "Sources" line at the top.
+  - docs/ai/mutation-testing.md: the reference to section 6 of the testing
+    strategy.
+
+  The behaviour model's link to docs/ai/conjured-feature-analysis.md was already
+  correct.
+
+  docs/ now holds only ai/, apart from your untracked .DS_Store, which I didn't
+  touch.
+
+  Decision needed: docs/ai/conjured-feature-analysis.md still points to the old
+  path docs/behaviour-model.md, on lines 20 and 154. You asked me to leave that
+  document unchanged, so I haven't edited it, but those two references are now
+  broken. Should I update just those two paths? It's a link fix, not a content
+  change.
+
+  Suggested commit message: docs: move all project docs into docs/ai.
+
+✻ Churned for 22s · done 2:41 PM
+
+❯ yes, update just those two paths                                              
+
+⏺ Bash(sed -i '' 's#`docs/behaviour-model.md`#`docs/ai/behaviour-model.md`#g'
+      docs/ai/conjured-feature-analysis.md && git diff
+      docs/ai/conjured-feature-analysis.md &&…)
+  ⎿  diff --git a/docs/ai/conjured-feature-analysis.md b/docs/ai/conjured-f
+     eature-analysis.md
+     index cf82854..3cf269b 100644
+     … +30 lines (ctrl+o to expand)
+  ⎿  Updated docs/ai/conjured-feature-analysis.md (+2 -2)
+      17  | `GildedRoseRequirements.md` (general rules, still apply) | `S
+          ellIn` decreases daily; "Once the sell by date has passed, Qual
+          ity degrades twice as fast"; "The Quality of an item is never n
+          egative" |
+      18  | `AGENTS.md` | Conjured is a feature: test-first, in separate 
+          commits, only after the refactoring is complete and green |
+      19  | `csharp.xUnit/GildedRose/Program.cs:37-38` | The only example
+           name is `Conjured Mana Cake`, with the comment "this conjured 
+          item does not work properly yet" |
+      20 -| `docs/behaviour-model.md` (Q2, M4), `csharp.xUnit/README.md`,
+         - `LegacyBehaviourTests` (L3) | Pin the current behaviour: Conju
+         -red degrades like a normal item |                              
+      20 +| `docs/ai/behaviour-model.md` (Q2, M4), `csharp.xUnit/README.m
+         +d`, `LegacyBehaviourTests` (L3) | Pin the current behaviour: Co
+         +njured degrades like a normal item |                           
+      21  
+      22  That one requirement line is the entire Conjured specification.
+           It defines
+      23  Conjured items only **relative to normal items**.
+     ...
+      151  | `ApprovalTest.GoldenMaster.verified.txt` | Re-approve. Only 
+           `Conjured Mana Cake` lines may change. | **38 of 512 lines** |
+      152  | `ApprovalTest.ThirtyDays.verified.txt` | Re-approve | **4 li
+           nes** (see below) |
+      153  | `csharp.xUnit/README.md`, "Known legacy behaviour" | Remove 
+           the Conjured row | 1 row |
+      154 -| `docs/behaviour-model.md` (Q2, M4) | Mark as superseded by t
+          -he feature | 2 entries |                                      
+      154 +| `docs/ai/behaviour-model.md` (Q2, M4) | Mark as superseded b
+          +y the feature | 2 entries |                                   
+      155  | `csharp.xUnit/GildedRose/Program.cs:37` comment "this conjur
+           ed item does not work properly yet" | Becomes false: remove | 
+           1 line |
+      156  
+      157  **Golden master detail.** The counts come from simulating the 
+           new rule
+
+⏺ I've updated the two paths in docs/ai/conjured-feature-analysis.md from
+  docs/behaviour-model.md to docs/ai/behaviour-model.md. Those are the only
+  changes to that document.
+
+  A search of all Markdown files finds no references left to the old docs/
+  paths.
+
+  Everything for the move is staged and ready to commit together:
+  - the three renames into docs/ai/
+  - the path fix in csharp.xUnit/README.md
+  - the path fix in docs/ai/conjured-feature-analysis.md
+
+  Suggested commit message: docs: move all project docs into docs/ai.
+
+✻ Churned for 7s · done 2:41 PM
