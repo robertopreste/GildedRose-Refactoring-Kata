@@ -1,0 +1,512 @@
+﻿+5 Dexterity Vest | sellIn -1 | quality -1 -> -2/-1 -3/-1 -4/-1 -5/-1 -6/-1 -7/-1 -8/-1 -9/-1 -10/-1 -11/-1 -12/-1 -13/-1 -14/-1 -15/-1
++5 Dexterity Vest | sellIn -1 | quality 0 -> -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0 -15/0
++5 Dexterity Vest | sellIn -1 | quality 1 -> -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0 -15/0
++5 Dexterity Vest | sellIn -1 | quality 2 -> -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0 -15/0
++5 Dexterity Vest | sellIn -1 | quality 48 -> -2/46 -3/44 -4/42 -5/40 -6/38 -7/36 -8/34 -9/32 -10/30 -11/28 -12/26 -13/24 -14/22 -15/20
++5 Dexterity Vest | sellIn -1 | quality 49 -> -2/47 -3/45 -4/43 -5/41 -6/39 -7/37 -8/35 -9/33 -10/31 -11/29 -12/27 -13/25 -14/23 -15/21
++5 Dexterity Vest | sellIn -1 | quality 50 -> -2/48 -3/46 -4/44 -5/42 -6/40 -7/38 -8/36 -9/34 -10/32 -11/30 -12/28 -13/26 -14/24 -15/22
++5 Dexterity Vest | sellIn -1 | quality 80 -> -2/78 -3/76 -4/74 -5/72 -6/70 -7/68 -8/66 -9/64 -10/62 -11/60 -12/58 -13/56 -14/54 -15/52
++5 Dexterity Vest | sellIn 0 | quality -1 -> -1/-1 -2/-1 -3/-1 -4/-1 -5/-1 -6/-1 -7/-1 -8/-1 -9/-1 -10/-1 -11/-1 -12/-1 -13/-1 -14/-1
++5 Dexterity Vest | sellIn 0 | quality 0 -> -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0
++5 Dexterity Vest | sellIn 0 | quality 1 -> -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0
++5 Dexterity Vest | sellIn 0 | quality 2 -> -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0
++5 Dexterity Vest | sellIn 0 | quality 48 -> -1/46 -2/44 -3/42 -4/40 -5/38 -6/36 -7/34 -8/32 -9/30 -10/28 -11/26 -12/24 -13/22 -14/20
++5 Dexterity Vest | sellIn 0 | quality 49 -> -1/47 -2/45 -3/43 -4/41 -5/39 -6/37 -7/35 -8/33 -9/31 -10/29 -11/27 -12/25 -13/23 -14/21
++5 Dexterity Vest | sellIn 0 | quality 50 -> -1/48 -2/46 -3/44 -4/42 -5/40 -6/38 -7/36 -8/34 -9/32 -10/30 -11/28 -12/26 -13/24 -14/22
++5 Dexterity Vest | sellIn 0 | quality 80 -> -1/78 -2/76 -3/74 -4/72 -5/70 -6/68 -7/66 -8/64 -9/62 -10/60 -11/58 -12/56 -13/54 -14/52
++5 Dexterity Vest | sellIn 1 | quality -1 -> 0/-1 -1/-1 -2/-1 -3/-1 -4/-1 -5/-1 -6/-1 -7/-1 -8/-1 -9/-1 -10/-1 -11/-1 -12/-1 -13/-1
++5 Dexterity Vest | sellIn 1 | quality 0 -> 0/0 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0
++5 Dexterity Vest | sellIn 1 | quality 1 -> 0/0 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0
++5 Dexterity Vest | sellIn 1 | quality 2 -> 0/1 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0
++5 Dexterity Vest | sellIn 1 | quality 48 -> 0/47 -1/45 -2/43 -3/41 -4/39 -5/37 -6/35 -7/33 -8/31 -9/29 -10/27 -11/25 -12/23 -13/21
++5 Dexterity Vest | sellIn 1 | quality 49 -> 0/48 -1/46 -2/44 -3/42 -4/40 -5/38 -6/36 -7/34 -8/32 -9/30 -10/28 -11/26 -12/24 -13/22
++5 Dexterity Vest | sellIn 1 | quality 50 -> 0/49 -1/47 -2/45 -3/43 -4/41 -5/39 -6/37 -7/35 -8/33 -9/31 -10/29 -11/27 -12/25 -13/23
++5 Dexterity Vest | sellIn 1 | quality 80 -> 0/79 -1/77 -2/75 -3/73 -4/71 -5/69 -6/67 -7/65 -8/63 -9/61 -10/59 -11/57 -12/55 -13/53
++5 Dexterity Vest | sellIn 5 | quality -1 -> 4/-1 3/-1 2/-1 1/-1 0/-1 -1/-1 -2/-1 -3/-1 -4/-1 -5/-1 -6/-1 -7/-1 -8/-1 -9/-1
++5 Dexterity Vest | sellIn 5 | quality 0 -> 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0
++5 Dexterity Vest | sellIn 5 | quality 1 -> 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0
++5 Dexterity Vest | sellIn 5 | quality 2 -> 4/1 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0
++5 Dexterity Vest | sellIn 5 | quality 48 -> 4/47 3/46 2/45 1/44 0/43 -1/41 -2/39 -3/37 -4/35 -5/33 -6/31 -7/29 -8/27 -9/25
++5 Dexterity Vest | sellIn 5 | quality 49 -> 4/48 3/47 2/46 1/45 0/44 -1/42 -2/40 -3/38 -4/36 -5/34 -6/32 -7/30 -8/28 -9/26
++5 Dexterity Vest | sellIn 5 | quality 50 -> 4/49 3/48 2/47 1/46 0/45 -1/43 -2/41 -3/39 -4/37 -5/35 -6/33 -7/31 -8/29 -9/27
++5 Dexterity Vest | sellIn 5 | quality 80 -> 4/79 3/78 2/77 1/76 0/75 -1/73 -2/71 -3/69 -4/67 -5/65 -6/63 -7/61 -8/59 -9/57
++5 Dexterity Vest | sellIn 6 | quality -1 -> 5/-1 4/-1 3/-1 2/-1 1/-1 0/-1 -1/-1 -2/-1 -3/-1 -4/-1 -5/-1 -6/-1 -7/-1 -8/-1
++5 Dexterity Vest | sellIn 6 | quality 0 -> 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0
++5 Dexterity Vest | sellIn 6 | quality 1 -> 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0
++5 Dexterity Vest | sellIn 6 | quality 2 -> 5/1 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0
++5 Dexterity Vest | sellIn 6 | quality 48 -> 5/47 4/46 3/45 2/44 1/43 0/42 -1/40 -2/38 -3/36 -4/34 -5/32 -6/30 -7/28 -8/26
++5 Dexterity Vest | sellIn 6 | quality 49 -> 5/48 4/47 3/46 2/45 1/44 0/43 -1/41 -2/39 -3/37 -4/35 -5/33 -6/31 -7/29 -8/27
++5 Dexterity Vest | sellIn 6 | quality 50 -> 5/49 4/48 3/47 2/46 1/45 0/44 -1/42 -2/40 -3/38 -4/36 -5/34 -6/32 -7/30 -8/28
++5 Dexterity Vest | sellIn 6 | quality 80 -> 5/79 4/78 3/77 2/76 1/75 0/74 -1/72 -2/70 -3/68 -4/66 -5/64 -6/62 -7/60 -8/58
++5 Dexterity Vest | sellIn 10 | quality -1 -> 9/-1 8/-1 7/-1 6/-1 5/-1 4/-1 3/-1 2/-1 1/-1 0/-1 -1/-1 -2/-1 -3/-1 -4/-1
++5 Dexterity Vest | sellIn 10 | quality 0 -> 9/0 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0
++5 Dexterity Vest | sellIn 10 | quality 1 -> 9/0 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0
++5 Dexterity Vest | sellIn 10 | quality 2 -> 9/1 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0
++5 Dexterity Vest | sellIn 10 | quality 48 -> 9/47 8/46 7/45 6/44 5/43 4/42 3/41 2/40 1/39 0/38 -1/36 -2/34 -3/32 -4/30
++5 Dexterity Vest | sellIn 10 | quality 49 -> 9/48 8/47 7/46 6/45 5/44 4/43 3/42 2/41 1/40 0/39 -1/37 -2/35 -3/33 -4/31
++5 Dexterity Vest | sellIn 10 | quality 50 -> 9/49 8/48 7/47 6/46 5/45 4/44 3/43 2/42 1/41 0/40 -1/38 -2/36 -3/34 -4/32
++5 Dexterity Vest | sellIn 10 | quality 80 -> 9/79 8/78 7/77 6/76 5/75 4/74 3/73 2/72 1/71 0/70 -1/68 -2/66 -3/64 -4/62
++5 Dexterity Vest | sellIn 11 | quality -1 -> 10/-1 9/-1 8/-1 7/-1 6/-1 5/-1 4/-1 3/-1 2/-1 1/-1 0/-1 -1/-1 -2/-1 -3/-1
++5 Dexterity Vest | sellIn 11 | quality 0 -> 10/0 9/0 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0
++5 Dexterity Vest | sellIn 11 | quality 1 -> 10/0 9/0 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0
++5 Dexterity Vest | sellIn 11 | quality 2 -> 10/1 9/0 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0
++5 Dexterity Vest | sellIn 11 | quality 48 -> 10/47 9/46 8/45 7/44 6/43 5/42 4/41 3/40 2/39 1/38 0/37 -1/35 -2/33 -3/31
++5 Dexterity Vest | sellIn 11 | quality 49 -> 10/48 9/47 8/46 7/45 6/44 5/43 4/42 3/41 2/40 1/39 0/38 -1/36 -2/34 -3/32
++5 Dexterity Vest | sellIn 11 | quality 50 -> 10/49 9/48 8/47 7/46 6/45 5/44 4/43 3/42 2/41 1/40 0/39 -1/37 -2/35 -3/33
++5 Dexterity Vest | sellIn 11 | quality 80 -> 10/79 9/78 8/77 7/76 6/75 5/74 4/73 3/72 2/71 1/70 0/69 -1/67 -2/65 -3/63
++5 Dexterity Vest | sellIn 12 | quality -1 -> 11/-1 10/-1 9/-1 8/-1 7/-1 6/-1 5/-1 4/-1 3/-1 2/-1 1/-1 0/-1 -1/-1 -2/-1
++5 Dexterity Vest | sellIn 12 | quality 0 -> 11/0 10/0 9/0 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0
++5 Dexterity Vest | sellIn 12 | quality 1 -> 11/0 10/0 9/0 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0
++5 Dexterity Vest | sellIn 12 | quality 2 -> 11/1 10/0 9/0 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0
++5 Dexterity Vest | sellIn 12 | quality 48 -> 11/47 10/46 9/45 8/44 7/43 6/42 5/41 4/40 3/39 2/38 1/37 0/36 -1/34 -2/32
++5 Dexterity Vest | sellIn 12 | quality 49 -> 11/48 10/47 9/46 8/45 7/44 6/43 5/42 4/41 3/40 2/39 1/38 0/37 -1/35 -2/33
++5 Dexterity Vest | sellIn 12 | quality 50 -> 11/49 10/48 9/47 8/46 7/45 6/44 5/43 4/42 3/41 2/40 1/39 0/38 -1/36 -2/34
++5 Dexterity Vest | sellIn 12 | quality 80 -> 11/79 10/78 9/77 8/76 7/75 6/74 5/73 4/72 3/71 2/70 1/69 0/68 -1/66 -2/64
+Conjured Mana Cake | sellIn -1 | quality -1 -> -2/-1 -3/-1 -4/-1 -5/-1 -6/-1 -7/-1 -8/-1 -9/-1 -10/-1 -11/-1 -12/-1 -13/-1 -14/-1 -15/-1
+Conjured Mana Cake | sellIn -1 | quality 0 -> -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0 -15/0
+Conjured Mana Cake | sellIn -1 | quality 1 -> -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0 -15/0
+Conjured Mana Cake | sellIn -1 | quality 2 -> -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0 -15/0
+Conjured Mana Cake | sellIn -1 | quality 48 -> -2/44 -3/40 -4/36 -5/32 -6/28 -7/24 -8/20 -9/16 -10/12 -11/8 -12/4 -13/0 -14/0 -15/0
+Conjured Mana Cake | sellIn -1 | quality 49 -> -2/45 -3/41 -4/37 -5/33 -6/29 -7/25 -8/21 -9/17 -10/13 -11/9 -12/5 -13/1 -14/0 -15/0
+Conjured Mana Cake | sellIn -1 | quality 50 -> -2/46 -3/42 -4/38 -5/34 -6/30 -7/26 -8/22 -9/18 -10/14 -11/10 -12/6 -13/2 -14/0 -15/0
+Conjured Mana Cake | sellIn -1 | quality 80 -> -2/76 -3/72 -4/68 -5/64 -6/60 -7/56 -8/52 -9/48 -10/44 -11/40 -12/36 -13/32 -14/28 -15/24
+Conjured Mana Cake | sellIn 0 | quality -1 -> -1/-1 -2/-1 -3/-1 -4/-1 -5/-1 -6/-1 -7/-1 -8/-1 -9/-1 -10/-1 -11/-1 -12/-1 -13/-1 -14/-1
+Conjured Mana Cake | sellIn 0 | quality 0 -> -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0
+Conjured Mana Cake | sellIn 0 | quality 1 -> -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0
+Conjured Mana Cake | sellIn 0 | quality 2 -> -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0
+Conjured Mana Cake | sellIn 0 | quality 48 -> -1/44 -2/40 -3/36 -4/32 -5/28 -6/24 -7/20 -8/16 -9/12 -10/8 -11/4 -12/0 -13/0 -14/0
+Conjured Mana Cake | sellIn 0 | quality 49 -> -1/45 -2/41 -3/37 -4/33 -5/29 -6/25 -7/21 -8/17 -9/13 -10/9 -11/5 -12/1 -13/0 -14/0
+Conjured Mana Cake | sellIn 0 | quality 50 -> -1/46 -2/42 -3/38 -4/34 -5/30 -6/26 -7/22 -8/18 -9/14 -10/10 -11/6 -12/2 -13/0 -14/0
+Conjured Mana Cake | sellIn 0 | quality 80 -> -1/76 -2/72 -3/68 -4/64 -5/60 -6/56 -7/52 -8/48 -9/44 -10/40 -11/36 -12/32 -13/28 -14/24
+Conjured Mana Cake | sellIn 1 | quality -1 -> 0/-1 -1/-1 -2/-1 -3/-1 -4/-1 -5/-1 -6/-1 -7/-1 -8/-1 -9/-1 -10/-1 -11/-1 -12/-1 -13/-1
+Conjured Mana Cake | sellIn 1 | quality 0 -> 0/0 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0
+Conjured Mana Cake | sellIn 1 | quality 1 -> 0/0 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0
+Conjured Mana Cake | sellIn 1 | quality 2 -> 0/0 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0
+Conjured Mana Cake | sellIn 1 | quality 48 -> 0/46 -1/42 -2/38 -3/34 -4/30 -5/26 -6/22 -7/18 -8/14 -9/10 -10/6 -11/2 -12/0 -13/0
+Conjured Mana Cake | sellIn 1 | quality 49 -> 0/47 -1/43 -2/39 -3/35 -4/31 -5/27 -6/23 -7/19 -8/15 -9/11 -10/7 -11/3 -12/0 -13/0
+Conjured Mana Cake | sellIn 1 | quality 50 -> 0/48 -1/44 -2/40 -3/36 -4/32 -5/28 -6/24 -7/20 -8/16 -9/12 -10/8 -11/4 -12/0 -13/0
+Conjured Mana Cake | sellIn 1 | quality 80 -> 0/78 -1/74 -2/70 -3/66 -4/62 -5/58 -6/54 -7/50 -8/46 -9/42 -10/38 -11/34 -12/30 -13/26
+Conjured Mana Cake | sellIn 5 | quality -1 -> 4/-1 3/-1 2/-1 1/-1 0/-1 -1/-1 -2/-1 -3/-1 -4/-1 -5/-1 -6/-1 -7/-1 -8/-1 -9/-1
+Conjured Mana Cake | sellIn 5 | quality 0 -> 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0
+Conjured Mana Cake | sellIn 5 | quality 1 -> 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0
+Conjured Mana Cake | sellIn 5 | quality 2 -> 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0
+Conjured Mana Cake | sellIn 5 | quality 48 -> 4/46 3/44 2/42 1/40 0/38 -1/34 -2/30 -3/26 -4/22 -5/18 -6/14 -7/10 -8/6 -9/2
+Conjured Mana Cake | sellIn 5 | quality 49 -> 4/47 3/45 2/43 1/41 0/39 -1/35 -2/31 -3/27 -4/23 -5/19 -6/15 -7/11 -8/7 -9/3
+Conjured Mana Cake | sellIn 5 | quality 50 -> 4/48 3/46 2/44 1/42 0/40 -1/36 -2/32 -3/28 -4/24 -5/20 -6/16 -7/12 -8/8 -9/4
+Conjured Mana Cake | sellIn 5 | quality 80 -> 4/78 3/76 2/74 1/72 0/70 -1/66 -2/62 -3/58 -4/54 -5/50 -6/46 -7/42 -8/38 -9/34
+Conjured Mana Cake | sellIn 6 | quality -1 -> 5/-1 4/-1 3/-1 2/-1 1/-1 0/-1 -1/-1 -2/-1 -3/-1 -4/-1 -5/-1 -6/-1 -7/-1 -8/-1
+Conjured Mana Cake | sellIn 6 | quality 0 -> 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0
+Conjured Mana Cake | sellIn 6 | quality 1 -> 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0
+Conjured Mana Cake | sellIn 6 | quality 2 -> 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0
+Conjured Mana Cake | sellIn 6 | quality 48 -> 5/46 4/44 3/42 2/40 1/38 0/36 -1/32 -2/28 -3/24 -4/20 -5/16 -6/12 -7/8 -8/4
+Conjured Mana Cake | sellIn 6 | quality 49 -> 5/47 4/45 3/43 2/41 1/39 0/37 -1/33 -2/29 -3/25 -4/21 -5/17 -6/13 -7/9 -8/5
+Conjured Mana Cake | sellIn 6 | quality 50 -> 5/48 4/46 3/44 2/42 1/40 0/38 -1/34 -2/30 -3/26 -4/22 -5/18 -6/14 -7/10 -8/6
+Conjured Mana Cake | sellIn 6 | quality 80 -> 5/78 4/76 3/74 2/72 1/70 0/68 -1/64 -2/60 -3/56 -4/52 -5/48 -6/44 -7/40 -8/36
+Conjured Mana Cake | sellIn 10 | quality -1 -> 9/-1 8/-1 7/-1 6/-1 5/-1 4/-1 3/-1 2/-1 1/-1 0/-1 -1/-1 -2/-1 -3/-1 -4/-1
+Conjured Mana Cake | sellIn 10 | quality 0 -> 9/0 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0
+Conjured Mana Cake | sellIn 10 | quality 1 -> 9/0 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0
+Conjured Mana Cake | sellIn 10 | quality 2 -> 9/0 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0
+Conjured Mana Cake | sellIn 10 | quality 48 -> 9/46 8/44 7/42 6/40 5/38 4/36 3/34 2/32 1/30 0/28 -1/24 -2/20 -3/16 -4/12
+Conjured Mana Cake | sellIn 10 | quality 49 -> 9/47 8/45 7/43 6/41 5/39 4/37 3/35 2/33 1/31 0/29 -1/25 -2/21 -3/17 -4/13
+Conjured Mana Cake | sellIn 10 | quality 50 -> 9/48 8/46 7/44 6/42 5/40 4/38 3/36 2/34 1/32 0/30 -1/26 -2/22 -3/18 -4/14
+Conjured Mana Cake | sellIn 10 | quality 80 -> 9/78 8/76 7/74 6/72 5/70 4/68 3/66 2/64 1/62 0/60 -1/56 -2/52 -3/48 -4/44
+Conjured Mana Cake | sellIn 11 | quality -1 -> 10/-1 9/-1 8/-1 7/-1 6/-1 5/-1 4/-1 3/-1 2/-1 1/-1 0/-1 -1/-1 -2/-1 -3/-1
+Conjured Mana Cake | sellIn 11 | quality 0 -> 10/0 9/0 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0
+Conjured Mana Cake | sellIn 11 | quality 1 -> 10/0 9/0 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0
+Conjured Mana Cake | sellIn 11 | quality 2 -> 10/0 9/0 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0
+Conjured Mana Cake | sellIn 11 | quality 48 -> 10/46 9/44 8/42 7/40 6/38 5/36 4/34 3/32 2/30 1/28 0/26 -1/22 -2/18 -3/14
+Conjured Mana Cake | sellIn 11 | quality 49 -> 10/47 9/45 8/43 7/41 6/39 5/37 4/35 3/33 2/31 1/29 0/27 -1/23 -2/19 -3/15
+Conjured Mana Cake | sellIn 11 | quality 50 -> 10/48 9/46 8/44 7/42 6/40 5/38 4/36 3/34 2/32 1/30 0/28 -1/24 -2/20 -3/16
+Conjured Mana Cake | sellIn 11 | quality 80 -> 10/78 9/76 8/74 7/72 6/70 5/68 4/66 3/64 2/62 1/60 0/58 -1/54 -2/50 -3/46
+Conjured Mana Cake | sellIn 12 | quality -1 -> 11/-1 10/-1 9/-1 8/-1 7/-1 6/-1 5/-1 4/-1 3/-1 2/-1 1/-1 0/-1 -1/-1 -2/-1
+Conjured Mana Cake | sellIn 12 | quality 0 -> 11/0 10/0 9/0 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0
+Conjured Mana Cake | sellIn 12 | quality 1 -> 11/0 10/0 9/0 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0
+Conjured Mana Cake | sellIn 12 | quality 2 -> 11/0 10/0 9/0 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0
+Conjured Mana Cake | sellIn 12 | quality 48 -> 11/46 10/44 9/42 8/40 7/38 6/36 5/34 4/32 3/30 2/28 1/26 0/24 -1/20 -2/16
+Conjured Mana Cake | sellIn 12 | quality 49 -> 11/47 10/45 9/43 8/41 7/39 6/37 5/35 4/33 3/31 2/29 1/27 0/25 -1/21 -2/17
+Conjured Mana Cake | sellIn 12 | quality 50 -> 11/48 10/46 9/44 8/42 7/40 6/38 5/36 4/34 3/32 2/30 1/28 0/26 -1/22 -2/18
+Conjured Mana Cake | sellIn 12 | quality 80 -> 11/78 10/76 9/74 8/72 7/70 6/68 5/66 4/64 3/62 2/60 1/58 0/56 -1/52 -2/48
+Aged Brie | sellIn -1 | quality -1 -> -2/1 -3/3 -4/5 -5/7 -6/9 -7/11 -8/13 -9/15 -10/17 -11/19 -12/21 -13/23 -14/25 -15/27
+Aged Brie | sellIn -1 | quality 0 -> -2/2 -3/4 -4/6 -5/8 -6/10 -7/12 -8/14 -9/16 -10/18 -11/20 -12/22 -13/24 -14/26 -15/28
+Aged Brie | sellIn -1 | quality 1 -> -2/3 -3/5 -4/7 -5/9 -6/11 -7/13 -8/15 -9/17 -10/19 -11/21 -12/23 -13/25 -14/27 -15/29
+Aged Brie | sellIn -1 | quality 2 -> -2/4 -3/6 -4/8 -5/10 -6/12 -7/14 -8/16 -9/18 -10/20 -11/22 -12/24 -13/26 -14/28 -15/30
+Aged Brie | sellIn -1 | quality 48 -> -2/50 -3/50 -4/50 -5/50 -6/50 -7/50 -8/50 -9/50 -10/50 -11/50 -12/50 -13/50 -14/50 -15/50
+Aged Brie | sellIn -1 | quality 49 -> -2/50 -3/50 -4/50 -5/50 -6/50 -7/50 -8/50 -9/50 -10/50 -11/50 -12/50 -13/50 -14/50 -15/50
+Aged Brie | sellIn -1 | quality 50 -> -2/50 -3/50 -4/50 -5/50 -6/50 -7/50 -8/50 -9/50 -10/50 -11/50 -12/50 -13/50 -14/50 -15/50
+Aged Brie | sellIn -1 | quality 80 -> -2/80 -3/80 -4/80 -5/80 -6/80 -7/80 -8/80 -9/80 -10/80 -11/80 -12/80 -13/80 -14/80 -15/80
+Aged Brie | sellIn 0 | quality -1 -> -1/1 -2/3 -3/5 -4/7 -5/9 -6/11 -7/13 -8/15 -9/17 -10/19 -11/21 -12/23 -13/25 -14/27
+Aged Brie | sellIn 0 | quality 0 -> -1/2 -2/4 -3/6 -4/8 -5/10 -6/12 -7/14 -8/16 -9/18 -10/20 -11/22 -12/24 -13/26 -14/28
+Aged Brie | sellIn 0 | quality 1 -> -1/3 -2/5 -3/7 -4/9 -5/11 -6/13 -7/15 -8/17 -9/19 -10/21 -11/23 -12/25 -13/27 -14/29
+Aged Brie | sellIn 0 | quality 2 -> -1/4 -2/6 -3/8 -4/10 -5/12 -6/14 -7/16 -8/18 -9/20 -10/22 -11/24 -12/26 -13/28 -14/30
+Aged Brie | sellIn 0 | quality 48 -> -1/50 -2/50 -3/50 -4/50 -5/50 -6/50 -7/50 -8/50 -9/50 -10/50 -11/50 -12/50 -13/50 -14/50
+Aged Brie | sellIn 0 | quality 49 -> -1/50 -2/50 -3/50 -4/50 -5/50 -6/50 -7/50 -8/50 -9/50 -10/50 -11/50 -12/50 -13/50 -14/50
+Aged Brie | sellIn 0 | quality 50 -> -1/50 -2/50 -3/50 -4/50 -5/50 -6/50 -7/50 -8/50 -9/50 -10/50 -11/50 -12/50 -13/50 -14/50
+Aged Brie | sellIn 0 | quality 80 -> -1/80 -2/80 -3/80 -4/80 -5/80 -6/80 -7/80 -8/80 -9/80 -10/80 -11/80 -12/80 -13/80 -14/80
+Aged Brie | sellIn 1 | quality -1 -> 0/0 -1/2 -2/4 -3/6 -4/8 -5/10 -6/12 -7/14 -8/16 -9/18 -10/20 -11/22 -12/24 -13/26
+Aged Brie | sellIn 1 | quality 0 -> 0/1 -1/3 -2/5 -3/7 -4/9 -5/11 -6/13 -7/15 -8/17 -9/19 -10/21 -11/23 -12/25 -13/27
+Aged Brie | sellIn 1 | quality 1 -> 0/2 -1/4 -2/6 -3/8 -4/10 -5/12 -6/14 -7/16 -8/18 -9/20 -10/22 -11/24 -12/26 -13/28
+Aged Brie | sellIn 1 | quality 2 -> 0/3 -1/5 -2/7 -3/9 -4/11 -5/13 -6/15 -7/17 -8/19 -9/21 -10/23 -11/25 -12/27 -13/29
+Aged Brie | sellIn 1 | quality 48 -> 0/49 -1/50 -2/50 -3/50 -4/50 -5/50 -6/50 -7/50 -8/50 -9/50 -10/50 -11/50 -12/50 -13/50
+Aged Brie | sellIn 1 | quality 49 -> 0/50 -1/50 -2/50 -3/50 -4/50 -5/50 -6/50 -7/50 -8/50 -9/50 -10/50 -11/50 -12/50 -13/50
+Aged Brie | sellIn 1 | quality 50 -> 0/50 -1/50 -2/50 -3/50 -4/50 -5/50 -6/50 -7/50 -8/50 -9/50 -10/50 -11/50 -12/50 -13/50
+Aged Brie | sellIn 1 | quality 80 -> 0/80 -1/80 -2/80 -3/80 -4/80 -5/80 -6/80 -7/80 -8/80 -9/80 -10/80 -11/80 -12/80 -13/80
+Aged Brie | sellIn 5 | quality -1 -> 4/0 3/1 2/2 1/3 0/4 -1/6 -2/8 -3/10 -4/12 -5/14 -6/16 -7/18 -8/20 -9/22
+Aged Brie | sellIn 5 | quality 0 -> 4/1 3/2 2/3 1/4 0/5 -1/7 -2/9 -3/11 -4/13 -5/15 -6/17 -7/19 -8/21 -9/23
+Aged Brie | sellIn 5 | quality 1 -> 4/2 3/3 2/4 1/5 0/6 -1/8 -2/10 -3/12 -4/14 -5/16 -6/18 -7/20 -8/22 -9/24
+Aged Brie | sellIn 5 | quality 2 -> 4/3 3/4 2/5 1/6 0/7 -1/9 -2/11 -3/13 -4/15 -5/17 -6/19 -7/21 -8/23 -9/25
+Aged Brie | sellIn 5 | quality 48 -> 4/49 3/50 2/50 1/50 0/50 -1/50 -2/50 -3/50 -4/50 -5/50 -6/50 -7/50 -8/50 -9/50
+Aged Brie | sellIn 5 | quality 49 -> 4/50 3/50 2/50 1/50 0/50 -1/50 -2/50 -3/50 -4/50 -5/50 -6/50 -7/50 -8/50 -9/50
+Aged Brie | sellIn 5 | quality 50 -> 4/50 3/50 2/50 1/50 0/50 -1/50 -2/50 -3/50 -4/50 -5/50 -6/50 -7/50 -8/50 -9/50
+Aged Brie | sellIn 5 | quality 80 -> 4/80 3/80 2/80 1/80 0/80 -1/80 -2/80 -3/80 -4/80 -5/80 -6/80 -7/80 -8/80 -9/80
+Aged Brie | sellIn 6 | quality -1 -> 5/0 4/1 3/2 2/3 1/4 0/5 -1/7 -2/9 -3/11 -4/13 -5/15 -6/17 -7/19 -8/21
+Aged Brie | sellIn 6 | quality 0 -> 5/1 4/2 3/3 2/4 1/5 0/6 -1/8 -2/10 -3/12 -4/14 -5/16 -6/18 -7/20 -8/22
+Aged Brie | sellIn 6 | quality 1 -> 5/2 4/3 3/4 2/5 1/6 0/7 -1/9 -2/11 -3/13 -4/15 -5/17 -6/19 -7/21 -8/23
+Aged Brie | sellIn 6 | quality 2 -> 5/3 4/4 3/5 2/6 1/7 0/8 -1/10 -2/12 -3/14 -4/16 -5/18 -6/20 -7/22 -8/24
+Aged Brie | sellIn 6 | quality 48 -> 5/49 4/50 3/50 2/50 1/50 0/50 -1/50 -2/50 -3/50 -4/50 -5/50 -6/50 -7/50 -8/50
+Aged Brie | sellIn 6 | quality 49 -> 5/50 4/50 3/50 2/50 1/50 0/50 -1/50 -2/50 -3/50 -4/50 -5/50 -6/50 -7/50 -8/50
+Aged Brie | sellIn 6 | quality 50 -> 5/50 4/50 3/50 2/50 1/50 0/50 -1/50 -2/50 -3/50 -4/50 -5/50 -6/50 -7/50 -8/50
+Aged Brie | sellIn 6 | quality 80 -> 5/80 4/80 3/80 2/80 1/80 0/80 -1/80 -2/80 -3/80 -4/80 -5/80 -6/80 -7/80 -8/80
+Aged Brie | sellIn 10 | quality -1 -> 9/0 8/1 7/2 6/3 5/4 4/5 3/6 2/7 1/8 0/9 -1/11 -2/13 -3/15 -4/17
+Aged Brie | sellIn 10 | quality 0 -> 9/1 8/2 7/3 6/4 5/5 4/6 3/7 2/8 1/9 0/10 -1/12 -2/14 -3/16 -4/18
+Aged Brie | sellIn 10 | quality 1 -> 9/2 8/3 7/4 6/5 5/6 4/7 3/8 2/9 1/10 0/11 -1/13 -2/15 -3/17 -4/19
+Aged Brie | sellIn 10 | quality 2 -> 9/3 8/4 7/5 6/6 5/7 4/8 3/9 2/10 1/11 0/12 -1/14 -2/16 -3/18 -4/20
+Aged Brie | sellIn 10 | quality 48 -> 9/49 8/50 7/50 6/50 5/50 4/50 3/50 2/50 1/50 0/50 -1/50 -2/50 -3/50 -4/50
+Aged Brie | sellIn 10 | quality 49 -> 9/50 8/50 7/50 6/50 5/50 4/50 3/50 2/50 1/50 0/50 -1/50 -2/50 -3/50 -4/50
+Aged Brie | sellIn 10 | quality 50 -> 9/50 8/50 7/50 6/50 5/50 4/50 3/50 2/50 1/50 0/50 -1/50 -2/50 -3/50 -4/50
+Aged Brie | sellIn 10 | quality 80 -> 9/80 8/80 7/80 6/80 5/80 4/80 3/80 2/80 1/80 0/80 -1/80 -2/80 -3/80 -4/80
+Aged Brie | sellIn 11 | quality -1 -> 10/0 9/1 8/2 7/3 6/4 5/5 4/6 3/7 2/8 1/9 0/10 -1/12 -2/14 -3/16
+Aged Brie | sellIn 11 | quality 0 -> 10/1 9/2 8/3 7/4 6/5 5/6 4/7 3/8 2/9 1/10 0/11 -1/13 -2/15 -3/17
+Aged Brie | sellIn 11 | quality 1 -> 10/2 9/3 8/4 7/5 6/6 5/7 4/8 3/9 2/10 1/11 0/12 -1/14 -2/16 -3/18
+Aged Brie | sellIn 11 | quality 2 -> 10/3 9/4 8/5 7/6 6/7 5/8 4/9 3/10 2/11 1/12 0/13 -1/15 -2/17 -3/19
+Aged Brie | sellIn 11 | quality 48 -> 10/49 9/50 8/50 7/50 6/50 5/50 4/50 3/50 2/50 1/50 0/50 -1/50 -2/50 -3/50
+Aged Brie | sellIn 11 | quality 49 -> 10/50 9/50 8/50 7/50 6/50 5/50 4/50 3/50 2/50 1/50 0/50 -1/50 -2/50 -3/50
+Aged Brie | sellIn 11 | quality 50 -> 10/50 9/50 8/50 7/50 6/50 5/50 4/50 3/50 2/50 1/50 0/50 -1/50 -2/50 -3/50
+Aged Brie | sellIn 11 | quality 80 -> 10/80 9/80 8/80 7/80 6/80 5/80 4/80 3/80 2/80 1/80 0/80 -1/80 -2/80 -3/80
+Aged Brie | sellIn 12 | quality -1 -> 11/0 10/1 9/2 8/3 7/4 6/5 5/6 4/7 3/8 2/9 1/10 0/11 -1/13 -2/15
+Aged Brie | sellIn 12 | quality 0 -> 11/1 10/2 9/3 8/4 7/5 6/6 5/7 4/8 3/9 2/10 1/11 0/12 -1/14 -2/16
+Aged Brie | sellIn 12 | quality 1 -> 11/2 10/3 9/4 8/5 7/6 6/7 5/8 4/9 3/10 2/11 1/12 0/13 -1/15 -2/17
+Aged Brie | sellIn 12 | quality 2 -> 11/3 10/4 9/5 8/6 7/7 6/8 5/9 4/10 3/11 2/12 1/13 0/14 -1/16 -2/18
+Aged Brie | sellIn 12 | quality 48 -> 11/49 10/50 9/50 8/50 7/50 6/50 5/50 4/50 3/50 2/50 1/50 0/50 -1/50 -2/50
+Aged Brie | sellIn 12 | quality 49 -> 11/50 10/50 9/50 8/50 7/50 6/50 5/50 4/50 3/50 2/50 1/50 0/50 -1/50 -2/50
+Aged Brie | sellIn 12 | quality 50 -> 11/50 10/50 9/50 8/50 7/50 6/50 5/50 4/50 3/50 2/50 1/50 0/50 -1/50 -2/50
+Aged Brie | sellIn 12 | quality 80 -> 11/80 10/80 9/80 8/80 7/80 6/80 5/80 4/80 3/80 2/80 1/80 0/80 -1/80 -2/80
+Backstage passes to a TAFKAL80ETC concert | sellIn -1 | quality -1 -> -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0 -15/0
+Backstage passes to a TAFKAL80ETC concert | sellIn -1 | quality 0 -> -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0 -15/0
+Backstage passes to a TAFKAL80ETC concert | sellIn -1 | quality 1 -> -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0 -15/0
+Backstage passes to a TAFKAL80ETC concert | sellIn -1 | quality 2 -> -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0 -15/0
+Backstage passes to a TAFKAL80ETC concert | sellIn -1 | quality 48 -> -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0 -15/0
+Backstage passes to a TAFKAL80ETC concert | sellIn -1 | quality 49 -> -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0 -15/0
+Backstage passes to a TAFKAL80ETC concert | sellIn -1 | quality 50 -> -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0 -15/0
+Backstage passes to a TAFKAL80ETC concert | sellIn -1 | quality 80 -> -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0 -15/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 0 | quality -1 -> -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 0 | quality 0 -> -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 0 | quality 1 -> -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 0 | quality 2 -> -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 0 | quality 48 -> -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 0 | quality 49 -> -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 0 | quality 50 -> -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 0 | quality 80 -> -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 1 | quality -1 -> 0/2 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 1 | quality 0 -> 0/3 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 1 | quality 1 -> 0/4 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 1 | quality 2 -> 0/5 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 1 | quality 48 -> 0/50 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 1 | quality 49 -> 0/50 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 1 | quality 50 -> 0/50 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 1 | quality 80 -> 0/80 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 5 | quality -1 -> 4/2 3/5 2/8 1/11 0/14 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 5 | quality 0 -> 4/3 3/6 2/9 1/12 0/15 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 5 | quality 1 -> 4/4 3/7 2/10 1/13 0/16 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 5 | quality 2 -> 4/5 3/8 2/11 1/14 0/17 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 5 | quality 48 -> 4/50 3/50 2/50 1/50 0/50 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 5 | quality 49 -> 4/50 3/50 2/50 1/50 0/50 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 5 | quality 50 -> 4/50 3/50 2/50 1/50 0/50 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 5 | quality 80 -> 4/80 3/80 2/80 1/80 0/80 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 6 | quality -1 -> 5/1 4/4 3/7 2/10 1/13 0/16 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 6 | quality 0 -> 5/2 4/5 3/8 2/11 1/14 0/17 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 6 | quality 1 -> 5/3 4/6 3/9 2/12 1/15 0/18 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 6 | quality 2 -> 5/4 4/7 3/10 2/13 1/16 0/19 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 6 | quality 48 -> 5/50 4/50 3/50 2/50 1/50 0/50 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 6 | quality 49 -> 5/50 4/50 3/50 2/50 1/50 0/50 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 6 | quality 50 -> 5/50 4/50 3/50 2/50 1/50 0/50 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 6 | quality 80 -> 5/80 4/80 3/80 2/80 1/80 0/80 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 10 | quality -1 -> 9/1 8/3 7/5 6/7 5/9 4/12 3/15 2/18 1/21 0/24 -1/0 -2/0 -3/0 -4/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 10 | quality 0 -> 9/2 8/4 7/6 6/8 5/10 4/13 3/16 2/19 1/22 0/25 -1/0 -2/0 -3/0 -4/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 10 | quality 1 -> 9/3 8/5 7/7 6/9 5/11 4/14 3/17 2/20 1/23 0/26 -1/0 -2/0 -3/0 -4/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 10 | quality 2 -> 9/4 8/6 7/8 6/10 5/12 4/15 3/18 2/21 1/24 0/27 -1/0 -2/0 -3/0 -4/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 10 | quality 48 -> 9/50 8/50 7/50 6/50 5/50 4/50 3/50 2/50 1/50 0/50 -1/0 -2/0 -3/0 -4/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 10 | quality 49 -> 9/50 8/50 7/50 6/50 5/50 4/50 3/50 2/50 1/50 0/50 -1/0 -2/0 -3/0 -4/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 10 | quality 50 -> 9/50 8/50 7/50 6/50 5/50 4/50 3/50 2/50 1/50 0/50 -1/0 -2/0 -3/0 -4/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 10 | quality 80 -> 9/80 8/80 7/80 6/80 5/80 4/80 3/80 2/80 1/80 0/80 -1/0 -2/0 -3/0 -4/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 11 | quality -1 -> 10/0 9/2 8/4 7/6 6/8 5/10 4/13 3/16 2/19 1/22 0/25 -1/0 -2/0 -3/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 11 | quality 0 -> 10/1 9/3 8/5 7/7 6/9 5/11 4/14 3/17 2/20 1/23 0/26 -1/0 -2/0 -3/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 11 | quality 1 -> 10/2 9/4 8/6 7/8 6/10 5/12 4/15 3/18 2/21 1/24 0/27 -1/0 -2/0 -3/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 11 | quality 2 -> 10/3 9/5 8/7 7/9 6/11 5/13 4/16 3/19 2/22 1/25 0/28 -1/0 -2/0 -3/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 11 | quality 48 -> 10/49 9/50 8/50 7/50 6/50 5/50 4/50 3/50 2/50 1/50 0/50 -1/0 -2/0 -3/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 11 | quality 49 -> 10/50 9/50 8/50 7/50 6/50 5/50 4/50 3/50 2/50 1/50 0/50 -1/0 -2/0 -3/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 11 | quality 50 -> 10/50 9/50 8/50 7/50 6/50 5/50 4/50 3/50 2/50 1/50 0/50 -1/0 -2/0 -3/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 11 | quality 80 -> 10/80 9/80 8/80 7/80 6/80 5/80 4/80 3/80 2/80 1/80 0/80 -1/0 -2/0 -3/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 12 | quality -1 -> 11/0 10/1 9/3 8/5 7/7 6/9 5/11 4/14 3/17 2/20 1/23 0/26 -1/0 -2/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 12 | quality 0 -> 11/1 10/2 9/4 8/6 7/8 6/10 5/12 4/15 3/18 2/21 1/24 0/27 -1/0 -2/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 12 | quality 1 -> 11/2 10/3 9/5 8/7 7/9 6/11 5/13 4/16 3/19 2/22 1/25 0/28 -1/0 -2/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 12 | quality 2 -> 11/3 10/4 9/6 8/8 7/10 6/12 5/14 4/17 3/20 2/23 1/26 0/29 -1/0 -2/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 12 | quality 48 -> 11/49 10/50 9/50 8/50 7/50 6/50 5/50 4/50 3/50 2/50 1/50 0/50 -1/0 -2/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 12 | quality 49 -> 11/50 10/50 9/50 8/50 7/50 6/50 5/50 4/50 3/50 2/50 1/50 0/50 -1/0 -2/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 12 | quality 50 -> 11/50 10/50 9/50 8/50 7/50 6/50 5/50 4/50 3/50 2/50 1/50 0/50 -1/0 -2/0
+Backstage passes to a TAFKAL80ETC concert | sellIn 12 | quality 80 -> 11/80 10/80 9/80 8/80 7/80 6/80 5/80 4/80 3/80 2/80 1/80 0/80 -1/0 -2/0
+Sulfuras, Hand of Ragnaros | sellIn -1 | quality -1 -> -1/-1 -1/-1 -1/-1 -1/-1 -1/-1 -1/-1 -1/-1 -1/-1 -1/-1 -1/-1 -1/-1 -1/-1 -1/-1 -1/-1
+Sulfuras, Hand of Ragnaros | sellIn -1 | quality 0 -> -1/0 -1/0 -1/0 -1/0 -1/0 -1/0 -1/0 -1/0 -1/0 -1/0 -1/0 -1/0 -1/0 -1/0
+Sulfuras, Hand of Ragnaros | sellIn -1 | quality 1 -> -1/1 -1/1 -1/1 -1/1 -1/1 -1/1 -1/1 -1/1 -1/1 -1/1 -1/1 -1/1 -1/1 -1/1
+Sulfuras, Hand of Ragnaros | sellIn -1 | quality 2 -> -1/2 -1/2 -1/2 -1/2 -1/2 -1/2 -1/2 -1/2 -1/2 -1/2 -1/2 -1/2 -1/2 -1/2
+Sulfuras, Hand of Ragnaros | sellIn -1 | quality 48 -> -1/48 -1/48 -1/48 -1/48 -1/48 -1/48 -1/48 -1/48 -1/48 -1/48 -1/48 -1/48 -1/48 -1/48
+Sulfuras, Hand of Ragnaros | sellIn -1 | quality 49 -> -1/49 -1/49 -1/49 -1/49 -1/49 -1/49 -1/49 -1/49 -1/49 -1/49 -1/49 -1/49 -1/49 -1/49
+Sulfuras, Hand of Ragnaros | sellIn -1 | quality 50 -> -1/50 -1/50 -1/50 -1/50 -1/50 -1/50 -1/50 -1/50 -1/50 -1/50 -1/50 -1/50 -1/50 -1/50
+Sulfuras, Hand of Ragnaros | sellIn -1 | quality 80 -> -1/80 -1/80 -1/80 -1/80 -1/80 -1/80 -1/80 -1/80 -1/80 -1/80 -1/80 -1/80 -1/80 -1/80
+Sulfuras, Hand of Ragnaros | sellIn 0 | quality -1 -> 0/-1 0/-1 0/-1 0/-1 0/-1 0/-1 0/-1 0/-1 0/-1 0/-1 0/-1 0/-1 0/-1 0/-1
+Sulfuras, Hand of Ragnaros | sellIn 0 | quality 0 -> 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0 0/0
+Sulfuras, Hand of Ragnaros | sellIn 0 | quality 1 -> 0/1 0/1 0/1 0/1 0/1 0/1 0/1 0/1 0/1 0/1 0/1 0/1 0/1 0/1
+Sulfuras, Hand of Ragnaros | sellIn 0 | quality 2 -> 0/2 0/2 0/2 0/2 0/2 0/2 0/2 0/2 0/2 0/2 0/2 0/2 0/2 0/2
+Sulfuras, Hand of Ragnaros | sellIn 0 | quality 48 -> 0/48 0/48 0/48 0/48 0/48 0/48 0/48 0/48 0/48 0/48 0/48 0/48 0/48 0/48
+Sulfuras, Hand of Ragnaros | sellIn 0 | quality 49 -> 0/49 0/49 0/49 0/49 0/49 0/49 0/49 0/49 0/49 0/49 0/49 0/49 0/49 0/49
+Sulfuras, Hand of Ragnaros | sellIn 0 | quality 50 -> 0/50 0/50 0/50 0/50 0/50 0/50 0/50 0/50 0/50 0/50 0/50 0/50 0/50 0/50
+Sulfuras, Hand of Ragnaros | sellIn 0 | quality 80 -> 0/80 0/80 0/80 0/80 0/80 0/80 0/80 0/80 0/80 0/80 0/80 0/80 0/80 0/80
+Sulfuras, Hand of Ragnaros | sellIn 1 | quality -1 -> 1/-1 1/-1 1/-1 1/-1 1/-1 1/-1 1/-1 1/-1 1/-1 1/-1 1/-1 1/-1 1/-1 1/-1
+Sulfuras, Hand of Ragnaros | sellIn 1 | quality 0 -> 1/0 1/0 1/0 1/0 1/0 1/0 1/0 1/0 1/0 1/0 1/0 1/0 1/0 1/0
+Sulfuras, Hand of Ragnaros | sellIn 1 | quality 1 -> 1/1 1/1 1/1 1/1 1/1 1/1 1/1 1/1 1/1 1/1 1/1 1/1 1/1 1/1
+Sulfuras, Hand of Ragnaros | sellIn 1 | quality 2 -> 1/2 1/2 1/2 1/2 1/2 1/2 1/2 1/2 1/2 1/2 1/2 1/2 1/2 1/2
+Sulfuras, Hand of Ragnaros | sellIn 1 | quality 48 -> 1/48 1/48 1/48 1/48 1/48 1/48 1/48 1/48 1/48 1/48 1/48 1/48 1/48 1/48
+Sulfuras, Hand of Ragnaros | sellIn 1 | quality 49 -> 1/49 1/49 1/49 1/49 1/49 1/49 1/49 1/49 1/49 1/49 1/49 1/49 1/49 1/49
+Sulfuras, Hand of Ragnaros | sellIn 1 | quality 50 -> 1/50 1/50 1/50 1/50 1/50 1/50 1/50 1/50 1/50 1/50 1/50 1/50 1/50 1/50
+Sulfuras, Hand of Ragnaros | sellIn 1 | quality 80 -> 1/80 1/80 1/80 1/80 1/80 1/80 1/80 1/80 1/80 1/80 1/80 1/80 1/80 1/80
+Sulfuras, Hand of Ragnaros | sellIn 5 | quality -1 -> 5/-1 5/-1 5/-1 5/-1 5/-1 5/-1 5/-1 5/-1 5/-1 5/-1 5/-1 5/-1 5/-1 5/-1
+Sulfuras, Hand of Ragnaros | sellIn 5 | quality 0 -> 5/0 5/0 5/0 5/0 5/0 5/0 5/0 5/0 5/0 5/0 5/0 5/0 5/0 5/0
+Sulfuras, Hand of Ragnaros | sellIn 5 | quality 1 -> 5/1 5/1 5/1 5/1 5/1 5/1 5/1 5/1 5/1 5/1 5/1 5/1 5/1 5/1
+Sulfuras, Hand of Ragnaros | sellIn 5 | quality 2 -> 5/2 5/2 5/2 5/2 5/2 5/2 5/2 5/2 5/2 5/2 5/2 5/2 5/2 5/2
+Sulfuras, Hand of Ragnaros | sellIn 5 | quality 48 -> 5/48 5/48 5/48 5/48 5/48 5/48 5/48 5/48 5/48 5/48 5/48 5/48 5/48 5/48
+Sulfuras, Hand of Ragnaros | sellIn 5 | quality 49 -> 5/49 5/49 5/49 5/49 5/49 5/49 5/49 5/49 5/49 5/49 5/49 5/49 5/49 5/49
+Sulfuras, Hand of Ragnaros | sellIn 5 | quality 50 -> 5/50 5/50 5/50 5/50 5/50 5/50 5/50 5/50 5/50 5/50 5/50 5/50 5/50 5/50
+Sulfuras, Hand of Ragnaros | sellIn 5 | quality 80 -> 5/80 5/80 5/80 5/80 5/80 5/80 5/80 5/80 5/80 5/80 5/80 5/80 5/80 5/80
+Sulfuras, Hand of Ragnaros | sellIn 6 | quality -1 -> 6/-1 6/-1 6/-1 6/-1 6/-1 6/-1 6/-1 6/-1 6/-1 6/-1 6/-1 6/-1 6/-1 6/-1
+Sulfuras, Hand of Ragnaros | sellIn 6 | quality 0 -> 6/0 6/0 6/0 6/0 6/0 6/0 6/0 6/0 6/0 6/0 6/0 6/0 6/0 6/0
+Sulfuras, Hand of Ragnaros | sellIn 6 | quality 1 -> 6/1 6/1 6/1 6/1 6/1 6/1 6/1 6/1 6/1 6/1 6/1 6/1 6/1 6/1
+Sulfuras, Hand of Ragnaros | sellIn 6 | quality 2 -> 6/2 6/2 6/2 6/2 6/2 6/2 6/2 6/2 6/2 6/2 6/2 6/2 6/2 6/2
+Sulfuras, Hand of Ragnaros | sellIn 6 | quality 48 -> 6/48 6/48 6/48 6/48 6/48 6/48 6/48 6/48 6/48 6/48 6/48 6/48 6/48 6/48
+Sulfuras, Hand of Ragnaros | sellIn 6 | quality 49 -> 6/49 6/49 6/49 6/49 6/49 6/49 6/49 6/49 6/49 6/49 6/49 6/49 6/49 6/49
+Sulfuras, Hand of Ragnaros | sellIn 6 | quality 50 -> 6/50 6/50 6/50 6/50 6/50 6/50 6/50 6/50 6/50 6/50 6/50 6/50 6/50 6/50
+Sulfuras, Hand of Ragnaros | sellIn 6 | quality 80 -> 6/80 6/80 6/80 6/80 6/80 6/80 6/80 6/80 6/80 6/80 6/80 6/80 6/80 6/80
+Sulfuras, Hand of Ragnaros | sellIn 10 | quality -1 -> 10/-1 10/-1 10/-1 10/-1 10/-1 10/-1 10/-1 10/-1 10/-1 10/-1 10/-1 10/-1 10/-1 10/-1
+Sulfuras, Hand of Ragnaros | sellIn 10 | quality 0 -> 10/0 10/0 10/0 10/0 10/0 10/0 10/0 10/0 10/0 10/0 10/0 10/0 10/0 10/0
+Sulfuras, Hand of Ragnaros | sellIn 10 | quality 1 -> 10/1 10/1 10/1 10/1 10/1 10/1 10/1 10/1 10/1 10/1 10/1 10/1 10/1 10/1
+Sulfuras, Hand of Ragnaros | sellIn 10 | quality 2 -> 10/2 10/2 10/2 10/2 10/2 10/2 10/2 10/2 10/2 10/2 10/2 10/2 10/2 10/2
+Sulfuras, Hand of Ragnaros | sellIn 10 | quality 48 -> 10/48 10/48 10/48 10/48 10/48 10/48 10/48 10/48 10/48 10/48 10/48 10/48 10/48 10/48
+Sulfuras, Hand of Ragnaros | sellIn 10 | quality 49 -> 10/49 10/49 10/49 10/49 10/49 10/49 10/49 10/49 10/49 10/49 10/49 10/49 10/49 10/49
+Sulfuras, Hand of Ragnaros | sellIn 10 | quality 50 -> 10/50 10/50 10/50 10/50 10/50 10/50 10/50 10/50 10/50 10/50 10/50 10/50 10/50 10/50
+Sulfuras, Hand of Ragnaros | sellIn 10 | quality 80 -> 10/80 10/80 10/80 10/80 10/80 10/80 10/80 10/80 10/80 10/80 10/80 10/80 10/80 10/80
+Sulfuras, Hand of Ragnaros | sellIn 11 | quality -1 -> 11/-1 11/-1 11/-1 11/-1 11/-1 11/-1 11/-1 11/-1 11/-1 11/-1 11/-1 11/-1 11/-1 11/-1
+Sulfuras, Hand of Ragnaros | sellIn 11 | quality 0 -> 11/0 11/0 11/0 11/0 11/0 11/0 11/0 11/0 11/0 11/0 11/0 11/0 11/0 11/0
+Sulfuras, Hand of Ragnaros | sellIn 11 | quality 1 -> 11/1 11/1 11/1 11/1 11/1 11/1 11/1 11/1 11/1 11/1 11/1 11/1 11/1 11/1
+Sulfuras, Hand of Ragnaros | sellIn 11 | quality 2 -> 11/2 11/2 11/2 11/2 11/2 11/2 11/2 11/2 11/2 11/2 11/2 11/2 11/2 11/2
+Sulfuras, Hand of Ragnaros | sellIn 11 | quality 48 -> 11/48 11/48 11/48 11/48 11/48 11/48 11/48 11/48 11/48 11/48 11/48 11/48 11/48 11/48
+Sulfuras, Hand of Ragnaros | sellIn 11 | quality 49 -> 11/49 11/49 11/49 11/49 11/49 11/49 11/49 11/49 11/49 11/49 11/49 11/49 11/49 11/49
+Sulfuras, Hand of Ragnaros | sellIn 11 | quality 50 -> 11/50 11/50 11/50 11/50 11/50 11/50 11/50 11/50 11/50 11/50 11/50 11/50 11/50 11/50
+Sulfuras, Hand of Ragnaros | sellIn 11 | quality 80 -> 11/80 11/80 11/80 11/80 11/80 11/80 11/80 11/80 11/80 11/80 11/80 11/80 11/80 11/80
+Sulfuras, Hand of Ragnaros | sellIn 12 | quality -1 -> 12/-1 12/-1 12/-1 12/-1 12/-1 12/-1 12/-1 12/-1 12/-1 12/-1 12/-1 12/-1 12/-1 12/-1
+Sulfuras, Hand of Ragnaros | sellIn 12 | quality 0 -> 12/0 12/0 12/0 12/0 12/0 12/0 12/0 12/0 12/0 12/0 12/0 12/0 12/0 12/0
+Sulfuras, Hand of Ragnaros | sellIn 12 | quality 1 -> 12/1 12/1 12/1 12/1 12/1 12/1 12/1 12/1 12/1 12/1 12/1 12/1 12/1 12/1
+Sulfuras, Hand of Ragnaros | sellIn 12 | quality 2 -> 12/2 12/2 12/2 12/2 12/2 12/2 12/2 12/2 12/2 12/2 12/2 12/2 12/2 12/2
+Sulfuras, Hand of Ragnaros | sellIn 12 | quality 48 -> 12/48 12/48 12/48 12/48 12/48 12/48 12/48 12/48 12/48 12/48 12/48 12/48 12/48 12/48
+Sulfuras, Hand of Ragnaros | sellIn 12 | quality 49 -> 12/49 12/49 12/49 12/49 12/49 12/49 12/49 12/49 12/49 12/49 12/49 12/49 12/49 12/49
+Sulfuras, Hand of Ragnaros | sellIn 12 | quality 50 -> 12/50 12/50 12/50 12/50 12/50 12/50 12/50 12/50 12/50 12/50 12/50 12/50 12/50 12/50
+Sulfuras, Hand of Ragnaros | sellIn 12 | quality 80 -> 12/80 12/80 12/80 12/80 12/80 12/80 12/80 12/80 12/80 12/80 12/80 12/80 12/80 12/80
+aged brie | sellIn -1 | quality -1 -> -2/-1 -3/-1 -4/-1 -5/-1 -6/-1 -7/-1 -8/-1 -9/-1 -10/-1 -11/-1 -12/-1 -13/-1 -14/-1 -15/-1
+aged brie | sellIn -1 | quality 0 -> -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0 -15/0
+aged brie | sellIn -1 | quality 1 -> -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0 -15/0
+aged brie | sellIn -1 | quality 2 -> -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0 -15/0
+aged brie | sellIn -1 | quality 48 -> -2/46 -3/44 -4/42 -5/40 -6/38 -7/36 -8/34 -9/32 -10/30 -11/28 -12/26 -13/24 -14/22 -15/20
+aged brie | sellIn -1 | quality 49 -> -2/47 -3/45 -4/43 -5/41 -6/39 -7/37 -8/35 -9/33 -10/31 -11/29 -12/27 -13/25 -14/23 -15/21
+aged brie | sellIn -1 | quality 50 -> -2/48 -3/46 -4/44 -5/42 -6/40 -7/38 -8/36 -9/34 -10/32 -11/30 -12/28 -13/26 -14/24 -15/22
+aged brie | sellIn -1 | quality 80 -> -2/78 -3/76 -4/74 -5/72 -6/70 -7/68 -8/66 -9/64 -10/62 -11/60 -12/58 -13/56 -14/54 -15/52
+aged brie | sellIn 0 | quality -1 -> -1/-1 -2/-1 -3/-1 -4/-1 -5/-1 -6/-1 -7/-1 -8/-1 -9/-1 -10/-1 -11/-1 -12/-1 -13/-1 -14/-1
+aged brie | sellIn 0 | quality 0 -> -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0
+aged brie | sellIn 0 | quality 1 -> -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0
+aged brie | sellIn 0 | quality 2 -> -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0
+aged brie | sellIn 0 | quality 48 -> -1/46 -2/44 -3/42 -4/40 -5/38 -6/36 -7/34 -8/32 -9/30 -10/28 -11/26 -12/24 -13/22 -14/20
+aged brie | sellIn 0 | quality 49 -> -1/47 -2/45 -3/43 -4/41 -5/39 -6/37 -7/35 -8/33 -9/31 -10/29 -11/27 -12/25 -13/23 -14/21
+aged brie | sellIn 0 | quality 50 -> -1/48 -2/46 -3/44 -4/42 -5/40 -6/38 -7/36 -8/34 -9/32 -10/30 -11/28 -12/26 -13/24 -14/22
+aged brie | sellIn 0 | quality 80 -> -1/78 -2/76 -3/74 -4/72 -5/70 -6/68 -7/66 -8/64 -9/62 -10/60 -11/58 -12/56 -13/54 -14/52
+aged brie | sellIn 1 | quality -1 -> 0/-1 -1/-1 -2/-1 -3/-1 -4/-1 -5/-1 -6/-1 -7/-1 -8/-1 -9/-1 -10/-1 -11/-1 -12/-1 -13/-1
+aged brie | sellIn 1 | quality 0 -> 0/0 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0
+aged brie | sellIn 1 | quality 1 -> 0/0 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0
+aged brie | sellIn 1 | quality 2 -> 0/1 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0
+aged brie | sellIn 1 | quality 48 -> 0/47 -1/45 -2/43 -3/41 -4/39 -5/37 -6/35 -7/33 -8/31 -9/29 -10/27 -11/25 -12/23 -13/21
+aged brie | sellIn 1 | quality 49 -> 0/48 -1/46 -2/44 -3/42 -4/40 -5/38 -6/36 -7/34 -8/32 -9/30 -10/28 -11/26 -12/24 -13/22
+aged brie | sellIn 1 | quality 50 -> 0/49 -1/47 -2/45 -3/43 -4/41 -5/39 -6/37 -7/35 -8/33 -9/31 -10/29 -11/27 -12/25 -13/23
+aged brie | sellIn 1 | quality 80 -> 0/79 -1/77 -2/75 -3/73 -4/71 -5/69 -6/67 -7/65 -8/63 -9/61 -10/59 -11/57 -12/55 -13/53
+aged brie | sellIn 5 | quality -1 -> 4/-1 3/-1 2/-1 1/-1 0/-1 -1/-1 -2/-1 -3/-1 -4/-1 -5/-1 -6/-1 -7/-1 -8/-1 -9/-1
+aged brie | sellIn 5 | quality 0 -> 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0
+aged brie | sellIn 5 | quality 1 -> 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0
+aged brie | sellIn 5 | quality 2 -> 4/1 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0
+aged brie | sellIn 5 | quality 48 -> 4/47 3/46 2/45 1/44 0/43 -1/41 -2/39 -3/37 -4/35 -5/33 -6/31 -7/29 -8/27 -9/25
+aged brie | sellIn 5 | quality 49 -> 4/48 3/47 2/46 1/45 0/44 -1/42 -2/40 -3/38 -4/36 -5/34 -6/32 -7/30 -8/28 -9/26
+aged brie | sellIn 5 | quality 50 -> 4/49 3/48 2/47 1/46 0/45 -1/43 -2/41 -3/39 -4/37 -5/35 -6/33 -7/31 -8/29 -9/27
+aged brie | sellIn 5 | quality 80 -> 4/79 3/78 2/77 1/76 0/75 -1/73 -2/71 -3/69 -4/67 -5/65 -6/63 -7/61 -8/59 -9/57
+aged brie | sellIn 6 | quality -1 -> 5/-1 4/-1 3/-1 2/-1 1/-1 0/-1 -1/-1 -2/-1 -3/-1 -4/-1 -5/-1 -6/-1 -7/-1 -8/-1
+aged brie | sellIn 6 | quality 0 -> 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0
+aged brie | sellIn 6 | quality 1 -> 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0
+aged brie | sellIn 6 | quality 2 -> 5/1 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0
+aged brie | sellIn 6 | quality 48 -> 5/47 4/46 3/45 2/44 1/43 0/42 -1/40 -2/38 -3/36 -4/34 -5/32 -6/30 -7/28 -8/26
+aged brie | sellIn 6 | quality 49 -> 5/48 4/47 3/46 2/45 1/44 0/43 -1/41 -2/39 -3/37 -4/35 -5/33 -6/31 -7/29 -8/27
+aged brie | sellIn 6 | quality 50 -> 5/49 4/48 3/47 2/46 1/45 0/44 -1/42 -2/40 -3/38 -4/36 -5/34 -6/32 -7/30 -8/28
+aged brie | sellIn 6 | quality 80 -> 5/79 4/78 3/77 2/76 1/75 0/74 -1/72 -2/70 -3/68 -4/66 -5/64 -6/62 -7/60 -8/58
+aged brie | sellIn 10 | quality -1 -> 9/-1 8/-1 7/-1 6/-1 5/-1 4/-1 3/-1 2/-1 1/-1 0/-1 -1/-1 -2/-1 -3/-1 -4/-1
+aged brie | sellIn 10 | quality 0 -> 9/0 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0
+aged brie | sellIn 10 | quality 1 -> 9/0 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0
+aged brie | sellIn 10 | quality 2 -> 9/1 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0
+aged brie | sellIn 10 | quality 48 -> 9/47 8/46 7/45 6/44 5/43 4/42 3/41 2/40 1/39 0/38 -1/36 -2/34 -3/32 -4/30
+aged brie | sellIn 10 | quality 49 -> 9/48 8/47 7/46 6/45 5/44 4/43 3/42 2/41 1/40 0/39 -1/37 -2/35 -3/33 -4/31
+aged brie | sellIn 10 | quality 50 -> 9/49 8/48 7/47 6/46 5/45 4/44 3/43 2/42 1/41 0/40 -1/38 -2/36 -3/34 -4/32
+aged brie | sellIn 10 | quality 80 -> 9/79 8/78 7/77 6/76 5/75 4/74 3/73 2/72 1/71 0/70 -1/68 -2/66 -3/64 -4/62
+aged brie | sellIn 11 | quality -1 -> 10/-1 9/-1 8/-1 7/-1 6/-1 5/-1 4/-1 3/-1 2/-1 1/-1 0/-1 -1/-1 -2/-1 -3/-1
+aged brie | sellIn 11 | quality 0 -> 10/0 9/0 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0
+aged brie | sellIn 11 | quality 1 -> 10/0 9/0 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0
+aged brie | sellIn 11 | quality 2 -> 10/1 9/0 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0
+aged brie | sellIn 11 | quality 48 -> 10/47 9/46 8/45 7/44 6/43 5/42 4/41 3/40 2/39 1/38 0/37 -1/35 -2/33 -3/31
+aged brie | sellIn 11 | quality 49 -> 10/48 9/47 8/46 7/45 6/44 5/43 4/42 3/41 2/40 1/39 0/38 -1/36 -2/34 -3/32
+aged brie | sellIn 11 | quality 50 -> 10/49 9/48 8/47 7/46 6/45 5/44 4/43 3/42 2/41 1/40 0/39 -1/37 -2/35 -3/33
+aged brie | sellIn 11 | quality 80 -> 10/79 9/78 8/77 7/76 6/75 5/74 4/73 3/72 2/71 1/70 0/69 -1/67 -2/65 -3/63
+aged brie | sellIn 12 | quality -1 -> 11/-1 10/-1 9/-1 8/-1 7/-1 6/-1 5/-1 4/-1 3/-1 2/-1 1/-1 0/-1 -1/-1 -2/-1
+aged brie | sellIn 12 | quality 0 -> 11/0 10/0 9/0 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0
+aged brie | sellIn 12 | quality 1 -> 11/0 10/0 9/0 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0
+aged brie | sellIn 12 | quality 2 -> 11/1 10/0 9/0 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0
+aged brie | sellIn 12 | quality 48 -> 11/47 10/46 9/45 8/44 7/43 6/42 5/41 4/40 3/39 2/38 1/37 0/36 -1/34 -2/32
+aged brie | sellIn 12 | quality 49 -> 11/48 10/47 9/46 8/45 7/44 6/43 5/42 4/41 3/40 2/39 1/38 0/37 -1/35 -2/33
+aged brie | sellIn 12 | quality 50 -> 11/49 10/48 9/47 8/46 7/45 6/44 5/43 4/42 3/41 2/40 1/39 0/38 -1/36 -2/34
+aged brie | sellIn 12 | quality 80 -> 11/79 10/78 9/77 8/76 7/75 6/74 5/73 4/72 3/71 2/70 1/69 0/68 -1/66 -2/64
+Backstage passes to another concert | sellIn -1 | quality -1 -> -2/-1 -3/-1 -4/-1 -5/-1 -6/-1 -7/-1 -8/-1 -9/-1 -10/-1 -11/-1 -12/-1 -13/-1 -14/-1 -15/-1
+Backstage passes to another concert | sellIn -1 | quality 0 -> -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0 -15/0
+Backstage passes to another concert | sellIn -1 | quality 1 -> -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0 -15/0
+Backstage passes to another concert | sellIn -1 | quality 2 -> -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0 -15/0
+Backstage passes to another concert | sellIn -1 | quality 48 -> -2/46 -3/44 -4/42 -5/40 -6/38 -7/36 -8/34 -9/32 -10/30 -11/28 -12/26 -13/24 -14/22 -15/20
+Backstage passes to another concert | sellIn -1 | quality 49 -> -2/47 -3/45 -4/43 -5/41 -6/39 -7/37 -8/35 -9/33 -10/31 -11/29 -12/27 -13/25 -14/23 -15/21
+Backstage passes to another concert | sellIn -1 | quality 50 -> -2/48 -3/46 -4/44 -5/42 -6/40 -7/38 -8/36 -9/34 -10/32 -11/30 -12/28 -13/26 -14/24 -15/22
+Backstage passes to another concert | sellIn -1 | quality 80 -> -2/78 -3/76 -4/74 -5/72 -6/70 -7/68 -8/66 -9/64 -10/62 -11/60 -12/58 -13/56 -14/54 -15/52
+Backstage passes to another concert | sellIn 0 | quality -1 -> -1/-1 -2/-1 -3/-1 -4/-1 -5/-1 -6/-1 -7/-1 -8/-1 -9/-1 -10/-1 -11/-1 -12/-1 -13/-1 -14/-1
+Backstage passes to another concert | sellIn 0 | quality 0 -> -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0
+Backstage passes to another concert | sellIn 0 | quality 1 -> -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0
+Backstage passes to another concert | sellIn 0 | quality 2 -> -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0
+Backstage passes to another concert | sellIn 0 | quality 48 -> -1/46 -2/44 -3/42 -4/40 -5/38 -6/36 -7/34 -8/32 -9/30 -10/28 -11/26 -12/24 -13/22 -14/20
+Backstage passes to another concert | sellIn 0 | quality 49 -> -1/47 -2/45 -3/43 -4/41 -5/39 -6/37 -7/35 -8/33 -9/31 -10/29 -11/27 -12/25 -13/23 -14/21
+Backstage passes to another concert | sellIn 0 | quality 50 -> -1/48 -2/46 -3/44 -4/42 -5/40 -6/38 -7/36 -8/34 -9/32 -10/30 -11/28 -12/26 -13/24 -14/22
+Backstage passes to another concert | sellIn 0 | quality 80 -> -1/78 -2/76 -3/74 -4/72 -5/70 -6/68 -7/66 -8/64 -9/62 -10/60 -11/58 -12/56 -13/54 -14/52
+Backstage passes to another concert | sellIn 1 | quality -1 -> 0/-1 -1/-1 -2/-1 -3/-1 -4/-1 -5/-1 -6/-1 -7/-1 -8/-1 -9/-1 -10/-1 -11/-1 -12/-1 -13/-1
+Backstage passes to another concert | sellIn 1 | quality 0 -> 0/0 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0
+Backstage passes to another concert | sellIn 1 | quality 1 -> 0/0 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0
+Backstage passes to another concert | sellIn 1 | quality 2 -> 0/1 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0
+Backstage passes to another concert | sellIn 1 | quality 48 -> 0/47 -1/45 -2/43 -3/41 -4/39 -5/37 -6/35 -7/33 -8/31 -9/29 -10/27 -11/25 -12/23 -13/21
+Backstage passes to another concert | sellIn 1 | quality 49 -> 0/48 -1/46 -2/44 -3/42 -4/40 -5/38 -6/36 -7/34 -8/32 -9/30 -10/28 -11/26 -12/24 -13/22
+Backstage passes to another concert | sellIn 1 | quality 50 -> 0/49 -1/47 -2/45 -3/43 -4/41 -5/39 -6/37 -7/35 -8/33 -9/31 -10/29 -11/27 -12/25 -13/23
+Backstage passes to another concert | sellIn 1 | quality 80 -> 0/79 -1/77 -2/75 -3/73 -4/71 -5/69 -6/67 -7/65 -8/63 -9/61 -10/59 -11/57 -12/55 -13/53
+Backstage passes to another concert | sellIn 5 | quality -1 -> 4/-1 3/-1 2/-1 1/-1 0/-1 -1/-1 -2/-1 -3/-1 -4/-1 -5/-1 -6/-1 -7/-1 -8/-1 -9/-1
+Backstage passes to another concert | sellIn 5 | quality 0 -> 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0
+Backstage passes to another concert | sellIn 5 | quality 1 -> 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0
+Backstage passes to another concert | sellIn 5 | quality 2 -> 4/1 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0
+Backstage passes to another concert | sellIn 5 | quality 48 -> 4/47 3/46 2/45 1/44 0/43 -1/41 -2/39 -3/37 -4/35 -5/33 -6/31 -7/29 -8/27 -9/25
+Backstage passes to another concert | sellIn 5 | quality 49 -> 4/48 3/47 2/46 1/45 0/44 -1/42 -2/40 -3/38 -4/36 -5/34 -6/32 -7/30 -8/28 -9/26
+Backstage passes to another concert | sellIn 5 | quality 50 -> 4/49 3/48 2/47 1/46 0/45 -1/43 -2/41 -3/39 -4/37 -5/35 -6/33 -7/31 -8/29 -9/27
+Backstage passes to another concert | sellIn 5 | quality 80 -> 4/79 3/78 2/77 1/76 0/75 -1/73 -2/71 -3/69 -4/67 -5/65 -6/63 -7/61 -8/59 -9/57
+Backstage passes to another concert | sellIn 6 | quality -1 -> 5/-1 4/-1 3/-1 2/-1 1/-1 0/-1 -1/-1 -2/-1 -3/-1 -4/-1 -5/-1 -6/-1 -7/-1 -8/-1
+Backstage passes to another concert | sellIn 6 | quality 0 -> 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0
+Backstage passes to another concert | sellIn 6 | quality 1 -> 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0
+Backstage passes to another concert | sellIn 6 | quality 2 -> 5/1 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0
+Backstage passes to another concert | sellIn 6 | quality 48 -> 5/47 4/46 3/45 2/44 1/43 0/42 -1/40 -2/38 -3/36 -4/34 -5/32 -6/30 -7/28 -8/26
+Backstage passes to another concert | sellIn 6 | quality 49 -> 5/48 4/47 3/46 2/45 1/44 0/43 -1/41 -2/39 -3/37 -4/35 -5/33 -6/31 -7/29 -8/27
+Backstage passes to another concert | sellIn 6 | quality 50 -> 5/49 4/48 3/47 2/46 1/45 0/44 -1/42 -2/40 -3/38 -4/36 -5/34 -6/32 -7/30 -8/28
+Backstage passes to another concert | sellIn 6 | quality 80 -> 5/79 4/78 3/77 2/76 1/75 0/74 -1/72 -2/70 -3/68 -4/66 -5/64 -6/62 -7/60 -8/58
+Backstage passes to another concert | sellIn 10 | quality -1 -> 9/-1 8/-1 7/-1 6/-1 5/-1 4/-1 3/-1 2/-1 1/-1 0/-1 -1/-1 -2/-1 -3/-1 -4/-1
+Backstage passes to another concert | sellIn 10 | quality 0 -> 9/0 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0
+Backstage passes to another concert | sellIn 10 | quality 1 -> 9/0 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0
+Backstage passes to another concert | sellIn 10 | quality 2 -> 9/1 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0
+Backstage passes to another concert | sellIn 10 | quality 48 -> 9/47 8/46 7/45 6/44 5/43 4/42 3/41 2/40 1/39 0/38 -1/36 -2/34 -3/32 -4/30
+Backstage passes to another concert | sellIn 10 | quality 49 -> 9/48 8/47 7/46 6/45 5/44 4/43 3/42 2/41 1/40 0/39 -1/37 -2/35 -3/33 -4/31
+Backstage passes to another concert | sellIn 10 | quality 50 -> 9/49 8/48 7/47 6/46 5/45 4/44 3/43 2/42 1/41 0/40 -1/38 -2/36 -3/34 -4/32
+Backstage passes to another concert | sellIn 10 | quality 80 -> 9/79 8/78 7/77 6/76 5/75 4/74 3/73 2/72 1/71 0/70 -1/68 -2/66 -3/64 -4/62
+Backstage passes to another concert | sellIn 11 | quality -1 -> 10/-1 9/-1 8/-1 7/-1 6/-1 5/-1 4/-1 3/-1 2/-1 1/-1 0/-1 -1/-1 -2/-1 -3/-1
+Backstage passes to another concert | sellIn 11 | quality 0 -> 10/0 9/0 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0
+Backstage passes to another concert | sellIn 11 | quality 1 -> 10/0 9/0 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0
+Backstage passes to another concert | sellIn 11 | quality 2 -> 10/1 9/0 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0
+Backstage passes to another concert | sellIn 11 | quality 48 -> 10/47 9/46 8/45 7/44 6/43 5/42 4/41 3/40 2/39 1/38 0/37 -1/35 -2/33 -3/31
+Backstage passes to another concert | sellIn 11 | quality 49 -> 10/48 9/47 8/46 7/45 6/44 5/43 4/42 3/41 2/40 1/39 0/38 -1/36 -2/34 -3/32
+Backstage passes to another concert | sellIn 11 | quality 50 -> 10/49 9/48 8/47 7/46 6/45 5/44 4/43 3/42 2/41 1/40 0/39 -1/37 -2/35 -3/33
+Backstage passes to another concert | sellIn 11 | quality 80 -> 10/79 9/78 8/77 7/76 6/75 5/74 4/73 3/72 2/71 1/70 0/69 -1/67 -2/65 -3/63
+Backstage passes to another concert | sellIn 12 | quality -1 -> 11/-1 10/-1 9/-1 8/-1 7/-1 6/-1 5/-1 4/-1 3/-1 2/-1 1/-1 0/-1 -1/-1 -2/-1
+Backstage passes to another concert | sellIn 12 | quality 0 -> 11/0 10/0 9/0 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0
+Backstage passes to another concert | sellIn 12 | quality 1 -> 11/0 10/0 9/0 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0
+Backstage passes to another concert | sellIn 12 | quality 2 -> 11/1 10/0 9/0 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0
+Backstage passes to another concert | sellIn 12 | quality 48 -> 11/47 10/46 9/45 8/44 7/43 6/42 5/41 4/40 3/39 2/38 1/37 0/36 -1/34 -2/32
+Backstage passes to another concert | sellIn 12 | quality 49 -> 11/48 10/47 9/46 8/45 7/44 6/43 5/42 4/41 3/40 2/39 1/38 0/37 -1/35 -2/33
+Backstage passes to another concert | sellIn 12 | quality 50 -> 11/49 10/48 9/47 8/46 7/45 6/44 5/43 4/42 3/41 2/40 1/39 0/38 -1/36 -2/34
+Backstage passes to another concert | sellIn 12 | quality 80 -> 11/79 10/78 9/77 8/76 7/75 6/74 5/73 4/72 3/71 2/70 1/69 0/68 -1/66 -2/64
+Sulfuras | sellIn -1 | quality -1 -> -2/-1 -3/-1 -4/-1 -5/-1 -6/-1 -7/-1 -8/-1 -9/-1 -10/-1 -11/-1 -12/-1 -13/-1 -14/-1 -15/-1
+Sulfuras | sellIn -1 | quality 0 -> -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0 -15/0
+Sulfuras | sellIn -1 | quality 1 -> -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0 -15/0
+Sulfuras | sellIn -1 | quality 2 -> -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0 -15/0
+Sulfuras | sellIn -1 | quality 48 -> -2/46 -3/44 -4/42 -5/40 -6/38 -7/36 -8/34 -9/32 -10/30 -11/28 -12/26 -13/24 -14/22 -15/20
+Sulfuras | sellIn -1 | quality 49 -> -2/47 -3/45 -4/43 -5/41 -6/39 -7/37 -8/35 -9/33 -10/31 -11/29 -12/27 -13/25 -14/23 -15/21
+Sulfuras | sellIn -1 | quality 50 -> -2/48 -3/46 -4/44 -5/42 -6/40 -7/38 -8/36 -9/34 -10/32 -11/30 -12/28 -13/26 -14/24 -15/22
+Sulfuras | sellIn -1 | quality 80 -> -2/78 -3/76 -4/74 -5/72 -6/70 -7/68 -8/66 -9/64 -10/62 -11/60 -12/58 -13/56 -14/54 -15/52
+Sulfuras | sellIn 0 | quality -1 -> -1/-1 -2/-1 -3/-1 -4/-1 -5/-1 -6/-1 -7/-1 -8/-1 -9/-1 -10/-1 -11/-1 -12/-1 -13/-1 -14/-1
+Sulfuras | sellIn 0 | quality 0 -> -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0
+Sulfuras | sellIn 0 | quality 1 -> -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0
+Sulfuras | sellIn 0 | quality 2 -> -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0 -14/0
+Sulfuras | sellIn 0 | quality 48 -> -1/46 -2/44 -3/42 -4/40 -5/38 -6/36 -7/34 -8/32 -9/30 -10/28 -11/26 -12/24 -13/22 -14/20
+Sulfuras | sellIn 0 | quality 49 -> -1/47 -2/45 -3/43 -4/41 -5/39 -6/37 -7/35 -8/33 -9/31 -10/29 -11/27 -12/25 -13/23 -14/21
+Sulfuras | sellIn 0 | quality 50 -> -1/48 -2/46 -3/44 -4/42 -5/40 -6/38 -7/36 -8/34 -9/32 -10/30 -11/28 -12/26 -13/24 -14/22
+Sulfuras | sellIn 0 | quality 80 -> -1/78 -2/76 -3/74 -4/72 -5/70 -6/68 -7/66 -8/64 -9/62 -10/60 -11/58 -12/56 -13/54 -14/52
+Sulfuras | sellIn 1 | quality -1 -> 0/-1 -1/-1 -2/-1 -3/-1 -4/-1 -5/-1 -6/-1 -7/-1 -8/-1 -9/-1 -10/-1 -11/-1 -12/-1 -13/-1
+Sulfuras | sellIn 1 | quality 0 -> 0/0 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0
+Sulfuras | sellIn 1 | quality 1 -> 0/0 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0
+Sulfuras | sellIn 1 | quality 2 -> 0/1 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0 -10/0 -11/0 -12/0 -13/0
+Sulfuras | sellIn 1 | quality 48 -> 0/47 -1/45 -2/43 -3/41 -4/39 -5/37 -6/35 -7/33 -8/31 -9/29 -10/27 -11/25 -12/23 -13/21
+Sulfuras | sellIn 1 | quality 49 -> 0/48 -1/46 -2/44 -3/42 -4/40 -5/38 -6/36 -7/34 -8/32 -9/30 -10/28 -11/26 -12/24 -13/22
+Sulfuras | sellIn 1 | quality 50 -> 0/49 -1/47 -2/45 -3/43 -4/41 -5/39 -6/37 -7/35 -8/33 -9/31 -10/29 -11/27 -12/25 -13/23
+Sulfuras | sellIn 1 | quality 80 -> 0/79 -1/77 -2/75 -3/73 -4/71 -5/69 -6/67 -7/65 -8/63 -9/61 -10/59 -11/57 -12/55 -13/53
+Sulfuras | sellIn 5 | quality -1 -> 4/-1 3/-1 2/-1 1/-1 0/-1 -1/-1 -2/-1 -3/-1 -4/-1 -5/-1 -6/-1 -7/-1 -8/-1 -9/-1
+Sulfuras | sellIn 5 | quality 0 -> 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0
+Sulfuras | sellIn 5 | quality 1 -> 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0
+Sulfuras | sellIn 5 | quality 2 -> 4/1 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0 -9/0
+Sulfuras | sellIn 5 | quality 48 -> 4/47 3/46 2/45 1/44 0/43 -1/41 -2/39 -3/37 -4/35 -5/33 -6/31 -7/29 -8/27 -9/25
+Sulfuras | sellIn 5 | quality 49 -> 4/48 3/47 2/46 1/45 0/44 -1/42 -2/40 -3/38 -4/36 -5/34 -6/32 -7/30 -8/28 -9/26
+Sulfuras | sellIn 5 | quality 50 -> 4/49 3/48 2/47 1/46 0/45 -1/43 -2/41 -3/39 -4/37 -5/35 -6/33 -7/31 -8/29 -9/27
+Sulfuras | sellIn 5 | quality 80 -> 4/79 3/78 2/77 1/76 0/75 -1/73 -2/71 -3/69 -4/67 -5/65 -6/63 -7/61 -8/59 -9/57
+Sulfuras | sellIn 6 | quality -1 -> 5/-1 4/-1 3/-1 2/-1 1/-1 0/-1 -1/-1 -2/-1 -3/-1 -4/-1 -5/-1 -6/-1 -7/-1 -8/-1
+Sulfuras | sellIn 6 | quality 0 -> 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0
+Sulfuras | sellIn 6 | quality 1 -> 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0
+Sulfuras | sellIn 6 | quality 2 -> 5/1 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0 -5/0 -6/0 -7/0 -8/0
+Sulfuras | sellIn 6 | quality 48 -> 5/47 4/46 3/45 2/44 1/43 0/42 -1/40 -2/38 -3/36 -4/34 -5/32 -6/30 -7/28 -8/26
+Sulfuras | sellIn 6 | quality 49 -> 5/48 4/47 3/46 2/45 1/44 0/43 -1/41 -2/39 -3/37 -4/35 -5/33 -6/31 -7/29 -8/27
+Sulfuras | sellIn 6 | quality 50 -> 5/49 4/48 3/47 2/46 1/45 0/44 -1/42 -2/40 -3/38 -4/36 -5/34 -6/32 -7/30 -8/28
+Sulfuras | sellIn 6 | quality 80 -> 5/79 4/78 3/77 2/76 1/75 0/74 -1/72 -2/70 -3/68 -4/66 -5/64 -6/62 -7/60 -8/58
+Sulfuras | sellIn 10 | quality -1 -> 9/-1 8/-1 7/-1 6/-1 5/-1 4/-1 3/-1 2/-1 1/-1 0/-1 -1/-1 -2/-1 -3/-1 -4/-1
+Sulfuras | sellIn 10 | quality 0 -> 9/0 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0
+Sulfuras | sellIn 10 | quality 1 -> 9/0 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0
+Sulfuras | sellIn 10 | quality 2 -> 9/1 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0 -4/0
+Sulfuras | sellIn 10 | quality 48 -> 9/47 8/46 7/45 6/44 5/43 4/42 3/41 2/40 1/39 0/38 -1/36 -2/34 -3/32 -4/30
+Sulfuras | sellIn 10 | quality 49 -> 9/48 8/47 7/46 6/45 5/44 4/43 3/42 2/41 1/40 0/39 -1/37 -2/35 -3/33 -4/31
+Sulfuras | sellIn 10 | quality 50 -> 9/49 8/48 7/47 6/46 5/45 4/44 3/43 2/42 1/41 0/40 -1/38 -2/36 -3/34 -4/32
+Sulfuras | sellIn 10 | quality 80 -> 9/79 8/78 7/77 6/76 5/75 4/74 3/73 2/72 1/71 0/70 -1/68 -2/66 -3/64 -4/62
+Sulfuras | sellIn 11 | quality -1 -> 10/-1 9/-1 8/-1 7/-1 6/-1 5/-1 4/-1 3/-1 2/-1 1/-1 0/-1 -1/-1 -2/-1 -3/-1
+Sulfuras | sellIn 11 | quality 0 -> 10/0 9/0 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0
+Sulfuras | sellIn 11 | quality 1 -> 10/0 9/0 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0
+Sulfuras | sellIn 11 | quality 2 -> 10/1 9/0 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0 -3/0
+Sulfuras | sellIn 11 | quality 48 -> 10/47 9/46 8/45 7/44 6/43 5/42 4/41 3/40 2/39 1/38 0/37 -1/35 -2/33 -3/31
+Sulfuras | sellIn 11 | quality 49 -> 10/48 9/47 8/46 7/45 6/44 5/43 4/42 3/41 2/40 1/39 0/38 -1/36 -2/34 -3/32
+Sulfuras | sellIn 11 | quality 50 -> 10/49 9/48 8/47 7/46 6/45 5/44 4/43 3/42 2/41 1/40 0/39 -1/37 -2/35 -3/33
+Sulfuras | sellIn 11 | quality 80 -> 10/79 9/78 8/77 7/76 6/75 5/74 4/73 3/72 2/71 1/70 0/69 -1/67 -2/65 -3/63
+Sulfuras | sellIn 12 | quality -1 -> 11/-1 10/-1 9/-1 8/-1 7/-1 6/-1 5/-1 4/-1 3/-1 2/-1 1/-1 0/-1 -1/-1 -2/-1
+Sulfuras | sellIn 12 | quality 0 -> 11/0 10/0 9/0 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0
+Sulfuras | sellIn 12 | quality 1 -> 11/0 10/0 9/0 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0
+Sulfuras | sellIn 12 | quality 2 -> 11/1 10/0 9/0 8/0 7/0 6/0 5/0 4/0 3/0 2/0 1/0 0/0 -1/0 -2/0
+Sulfuras | sellIn 12 | quality 48 -> 11/47 10/46 9/45 8/44 7/43 6/42 5/41 4/40 3/39 2/38 1/37 0/36 -1/34 -2/32
+Sulfuras | sellIn 12 | quality 49 -> 11/48 10/47 9/46 8/45 7/44 6/43 5/42 4/41 3/40 2/39 1/38 0/37 -1/35 -2/33
+Sulfuras | sellIn 12 | quality 50 -> 11/49 10/48 9/47 8/46 7/45 6/44 5/43 4/42 3/41 2/40 1/39 0/38 -1/36 -2/34
+Sulfuras | sellIn 12 | quality 80 -> 11/79 10/78 9/77 8/76 7/75 6/74 5/73 4/72 3/71 2/70 1/69 0/68 -1/66 -2/64
