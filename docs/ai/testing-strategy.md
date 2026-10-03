@@ -1,7 +1,7 @@
 # Gilded Rose: testing strategy for the refactoring
 
 Sources: `GildedRoseRequirements.md`, the original `GildedRose.cs`, and
-`docs/behaviour-model.md` (IDs such as `Q5` or `P11` refer to that document).
+`docs/ai/behaviour-model.md` (IDs such as `Q5` or `P11` refer to that document).
 
 ## 1. Goal and principles
 

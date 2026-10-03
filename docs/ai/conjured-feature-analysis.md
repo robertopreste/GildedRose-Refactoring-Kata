@@ -17,7 +17,7 @@ are expected and are **not regressions**.
 | `GildedRoseRequirements.md` (general rules, still apply) | `SellIn` decreases daily; "Once the sell by date has passed, Quality degrades twice as fast"; "The Quality of an item is never negative" |
 | `AGENTS.md` | Conjured is a feature: test-first, in separate commits, only after the refactoring is complete and green |
 | `csharp.xUnit/GildedRose/Program.cs:37-38` | The only example name is `Conjured Mana Cake`, with the comment "this conjured item does not work properly yet" |
-| `docs/behaviour-model.md` (Q2, M4), `csharp.xUnit/README.md`, `LegacyBehaviourTests` (L3) | Pin the current behaviour: Conjured degrades like a normal item |
+| `docs/ai/behaviour-model.md` (Q2, M4), `csharp.xUnit/README.md`, `LegacyBehaviourTests` (L3) | Pin the current behaviour: Conjured degrades like a normal item |
 
 That one requirement line is the entire Conjured specification. It defines
 Conjured items only **relative to normal items**.
@@ -151,7 +151,7 @@ grid after re-approval. No named tests are proposed for them.
 | `ApprovalTest.GoldenMaster.verified.txt` | Re-approve. Only `Conjured Mana Cake` lines may change. | **38 of 512 lines** |
 | `ApprovalTest.ThirtyDays.verified.txt` | Re-approve | **4 lines** (see below) |
 | `csharp.xUnit/README.md`, "Known legacy behaviour" | Remove the Conjured row | 1 row |
-| `docs/behaviour-model.md` (Q2, M4) | Mark as superseded by the feature | 2 entries |
+| `docs/ai/behaviour-model.md` (Q2, M4) | Mark as superseded by the feature | 2 entries |
 | `csharp.xUnit/GildedRose/Program.cs:37` comment "this conjured item does not work properly yet" | Becomes false: remove | 1 line |
 
 **Golden master detail.** The counts come from simulating the new rule

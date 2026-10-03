@@ -51,7 +51,7 @@ statements, 7 negated conditions, 5 arithmetic changes and 1 removed block.
 The same mutations on `GildedRose.cs`, with `ApprovalTest` (`GoldenMaster` and
 `ThirtyDays`) filtered out. This leaves the 37 named test cases from
 `GildedRoseTest` and `LegacyBehaviourTests`. The purpose is to check the claim
-in `docs/testing-strategy.md` §6 that the named tests catch the boundary
+in `docs/ai/testing-strategy.md` §6 that the named tests catch the boundary
 mutants by themselves, so that a failure points to a named rule rather than
 only a golden-master diff.
 

@@ -44,4 +44,4 @@ Each behaviour is pinned by a named test in
 | Sulfuras keeps whatever quality it has. 80 is not enforced. | `Sulfuras, Hand of Ragnaros`: (5, 10) → (5, 10) | `Sulfuras_KeepsQualityOtherThan80` |
 
 For the full analysis, including edge cases covered only by the golden master,
-see `docs/behaviour-model.md`.
+see `docs/ai/behaviour-model.md`.
