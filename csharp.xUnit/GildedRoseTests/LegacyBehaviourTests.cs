@@ -14,7 +14,6 @@ public class LegacyBehaviourTests
     private const string AgedBrie = "Aged Brie";
     private const string BackstagePass = "Backstage passes to a TAFKAL80ETC concert";
     private const string Sulfuras = "Sulfuras, Hand of Ragnaros";
-    private const string ConjuredItem = "Conjured Mana Cake";
 
     [Theory]
     [InlineData(0, 10, 12)]
@@ -36,16 +35,6 @@ public class LegacyBehaviourTests
 
         Assert.Equal(4, item.SellIn);
         Assert.Equal(9, item.Quality);
-    }
-
-    [Theory]
-    [InlineData(3, 6, 5)]
-    [InlineData(0, 6, 4)]
-    public void ConjuredItem_CurrentlyDegradesLikeNormalItem(int sellIn, int quality, int expectedQuality)
-    {
-        var item = UpdateOnce(ConjuredItem, sellIn, quality);
-
-        Assert.Equal(expectedQuality, item.Quality);
     }
 
     [Theory]

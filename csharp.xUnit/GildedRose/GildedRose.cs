@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace GildedRoseKata;
 
@@ -43,6 +44,17 @@ public class GildedRose
                     if (item.SellIn < 0)
                     {
                         item.Quality = 0;
+                    }
+                    break;
+
+                case string name when name.StartsWith("Conjured", StringComparison.Ordinal):
+                    DecreaseQuality(item);
+                    DecreaseQuality(item);
+                    item.SellIn = item.SellIn - 1;
+                    if (item.SellIn < 0)
+                    {
+                        DecreaseQuality(item);
+                        DecreaseQuality(item);
                     }
                     break;
 
