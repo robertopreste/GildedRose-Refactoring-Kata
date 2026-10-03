@@ -4,9 +4,6 @@ namespace GildedRoseKata;
 
 public class GildedRose
 {
-    private const string AgedBrie = "Aged Brie";
-    private const string BackstagePass = "Backstage passes to a TAFKAL80ETC concert";
-
     IList<Item> Items;
 
     public GildedRose(IList<Item> Items)
@@ -23,7 +20,7 @@ public class GildedRose
                 case "Sulfuras, Hand of Ragnaros":
                     break;
 
-                case AgedBrie:
+                case "Aged Brie":
                     IncreaseQuality(item);
                     item.SellIn = item.SellIn - 1;
                     if (item.SellIn < 0)
@@ -32,7 +29,7 @@ public class GildedRose
                     }
                     break;
 
-                case BackstagePass:
+                case "Backstage passes to a TAFKAL80ETC concert":
                     IncreaseQuality(item);
                     if (item.SellIn < 11)
                     {
