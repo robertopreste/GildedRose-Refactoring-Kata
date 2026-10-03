@@ -25,34 +25,22 @@ public class GildedRose
 
             if (item.Name != AgedBrie && item.Name != BackstagePass)
             {
-                if (item.Quality > 0)
-                {
-                    item.Quality = item.Quality - 1;
-                }
+                DecreaseQuality(item);
             }
             else
             {
-                if (item.Quality < 50)
+                IncreaseQuality(item);
+
+                if (item.Name == BackstagePass)
                 {
-                    item.Quality = item.Quality + 1;
-
-                    if (item.Name == BackstagePass)
+                    if (item.SellIn < 11)
                     {
-                        if (item.SellIn < 11)
-                        {
-                            if (item.Quality < 50)
-                            {
-                                item.Quality = item.Quality + 1;
-                            }
-                        }
+                        IncreaseQuality(item);
+                    }
 
-                        if (item.SellIn < 6)
-                        {
-                            if (item.Quality < 50)
-                            {
-                                item.Quality = item.Quality + 1;
-                            }
-                        }
+                    if (item.SellIn < 6)
+                    {
+                        IncreaseQuality(item);
                     }
                 }
             }
@@ -65,10 +53,7 @@ public class GildedRose
                 {
                     if (item.Name != BackstagePass)
                     {
-                        if (item.Quality > 0)
-                        {
-                            item.Quality = item.Quality - 1;
-                        }
+                        DecreaseQuality(item);
                     }
                     else
                     {
@@ -77,12 +62,25 @@ public class GildedRose
                 }
                 else
                 {
-                    if (item.Quality < 50)
-                    {
-                        item.Quality = item.Quality + 1;
-                    }
+                    IncreaseQuality(item);
                 }
             }
+        }
+    }
+
+    private static void IncreaseQuality(Item item)
+    {
+        if (item.Quality < 50)
+        {
+            item.Quality = item.Quality + 1;
+        }
+    }
+
+    private static void DecreaseQuality(Item item)
+    {
+        if (item.Quality > 0)
+        {
+            item.Quality = item.Quality - 1;
         }
     }
 }
