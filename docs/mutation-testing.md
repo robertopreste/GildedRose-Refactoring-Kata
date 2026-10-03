@@ -117,3 +117,9 @@ config file):
 Stryker writes its reports to `StrykerOutput/` in the current directory,
 which is not git-ignored. Use `-O <path>` to write them elsewhere, or delete
 the folder after the run.
+
+Stryker runs the approval tests against mutated code. Each time a mutant makes
+a snapshot test fail, Verify writes `*.received.txt` files next to the test
+files in `GildedRoseTests/`. They are git-ignored, but they contain output from
+mutated code, not from the real implementation, and can be mistaken for a real
+failure. Delete them after a Stryker run.
